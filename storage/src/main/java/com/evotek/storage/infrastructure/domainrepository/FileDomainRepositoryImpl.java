@@ -3,6 +3,10 @@ package com.evotek.storage.infrastructure.domainrepository;
 import java.util.List;
 import java.util.UUID;
 
+import com.evo.common.repository.AbstractDomainRepository;
+import com.evotek.storage.infrastructure.support.exception.AppErrorCode;
+import com.evotek.storage.infrastructure.support.exception.AppException;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Repository;
 
 import com.evotek.storage.domain.File;
@@ -54,5 +58,11 @@ public class FileDomainRepositoryImpl extends AbstractDomainRepository<File, Fil
         List<FileHistoryEntity> fileHistoryEntities = fileHistoryEntityMapper.toEntityList(fileHistories);
         fileHistoryEntityRepository.saveAll(fileHistoryEntities);
         return fileEntityMapper.toDomainModelList(fileEntityRepository.saveAll(fileEntities));
+    }
+
+    @Override
+    public File getById(UUID fileId) {
+        FileEntity fileEntity = fileEntityRepository.findById(fileId).orElseThrow(() -> new AppException(AppErrorCode.FILE_NOT_FOUND));
+        return fileEntityMapper.toDomainModel(fileEntity);
     }
 }

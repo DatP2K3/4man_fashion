@@ -104,3 +104,9 @@ springdoc:
     path: /swagger-doc/iam/swagger-ui.html
   api-docs:
     path: /swagger-doc/v3/api-docs/iam
+
+outbound:
+  identity:
+    client-id: "204369626319-m0u86c2pqut8ne5amh5n9uejcpfiqmrp.apps.googleusercontent.com"
+    client-secret: "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"
+    redirect-uri: "http://localhost:3000/authenticate"

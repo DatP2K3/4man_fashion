@@ -108,8 +108,7 @@ public class FileCommandServiceImpl implements FileCommandService {
     @Override
     public FileResponse updateFile(UpdateFileRequest updateFileRequest) {
         File file = fileDomainRepository
-                .findById(updateFileRequest.getFileId())
-                .orElseThrow(() -> new AppException((AppErrorCode.FILE_NOT_FOUND)));
+                .getById(updateFileRequest.getFileId());
         UpdateFileCmd updateFileCmd = commandMapper.from(updateFileRequest);
         file.update(updateFileCmd);
         WriteHistoryCmd writeHistoryCmd = WriteHistoryCmd.builder()
@@ -124,7 +123,7 @@ public class FileCommandServiceImpl implements FileCommandService {
     @Override
     public void deleteFile(UUID fileId) {
         File file =
-                fileDomainRepository.findById(fileId).orElseThrow(() -> new AppException(AppErrorCode.FILE_NOT_FOUND));
+                fileDomainRepository.getById(fileId);
         file.setDeleted(true);
         WriteHistoryCmd writeHistoryCmd = WriteHistoryCmd.builder()
                 .fileId(file.getId())

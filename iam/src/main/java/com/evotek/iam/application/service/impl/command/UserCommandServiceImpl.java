@@ -6,6 +6,7 @@ import java.util.*;
 
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -55,6 +56,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+
+@RefreshScope
 public class UserCommandServiceImpl implements UserCommandService {
     private final KeycloakService keycloakService;
     private final CommandMapper commandMapper;
@@ -499,5 +502,10 @@ public class UserCommandServiceImpl implements UserCommandService {
                     .refreshToken(refreshToken)
                     .build();
         }
+    }
+
+    @Override
+    public Boolean refreshScope() {
+        return keycloakEnabled;
     }
 }

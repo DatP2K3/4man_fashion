@@ -34,4 +34,6 @@ public interface UserCommandService {
     void testFcm(PushNotificationEvent pushNotificationEvent);
 
     TokenDTO outboundAuthenticate(String code);
+
+    Boolean refreshScope();
 }

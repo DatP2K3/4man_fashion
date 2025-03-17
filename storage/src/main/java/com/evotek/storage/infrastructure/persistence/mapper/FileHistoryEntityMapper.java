@@ -2,6 +2,7 @@ package com.evotek.storage.infrastructure.persistence.mapper;
 
 import org.mapstruct.Mapper;
 
+import com.evo.common.mapper.EntityMapper;
 import com.evotek.storage.domain.FileHistory;
 import com.evotek.storage.infrastructure.persistence.entity.FileHistoryEntity;
 
