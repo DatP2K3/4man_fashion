@@ -1,16 +1,18 @@
 package com.evotek.elasticsearch.infrastructure.domainrepository;
 
-import com.evotek.elasticsearch.infrastructure.persistence.mapper.DocumentMapper;
+import java.util.List;
+
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.evotek.elasticsearch.infrastructure.persistence.mapper.DocumentMapper;
 
 public abstract class AbstractDocumentDomainRepository<D, E, ID> implements DocumentDomainRepository<D, ID> {
     protected final ElasticsearchRepository<E, ID> repository;
     protected final DocumentMapper<D, E> documentMapper;
 
-    protected AbstractDocumentDomainRepository(ElasticsearchRepository<E, ID> repository, DocumentMapper<D, E> documentMapper) {
+    protected AbstractDocumentDomainRepository(
+            ElasticsearchRepository<E, ID> repository, DocumentMapper<D, E> documentMapper) {
         this.repository = repository;
         this.documentMapper = documentMapper;
     }

@@ -19,11 +19,14 @@ public class FeignClientInterceptor implements RequestInterceptor {
     @Value("${oauth.client.iam.client-secret}")
     private String clientSecret;
 
+    @Value("${app.iam.internal-url}")
+    private String baseIamUrl;
+
     @Override
     public void apply(RequestTemplate requestTemplate) {
         try {
             WebClient webClient =
-                    WebClient.builder().baseUrl("http://localhost:8888/api").build();
+                    WebClient.builder().baseUrl(baseIamUrl + "/api").build();
             // Tạo request body cần gửi (ví dụ body chứa clientId và clientSecret)
             String requestBody = "{\"clientSecret\": \"" + clientSecret + "\"}";
             // Sử dụng POST request với body

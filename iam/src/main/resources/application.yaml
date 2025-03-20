@@ -13,18 +13,7 @@ spring:
     hibernate:
     ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${MAIL_USERNAME:testmailsender2k3@gmail.com}
-    password: ${MAIL_PASSWORD:tbfyoopqxhoompgm}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
+
   servlet:
     multipart:
       enabled: true
@@ -35,11 +24,11 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uris:
-            internal: http://localhost:8888/api/certificate/.well-known/jwks.json
-            sso: http://localhost:8180/realms/IamService/protocol/openid-connect/certs
+            internal: ${JWK_INTERNAL_URL:http://localhost:8888/api/certificate/.well-known/jwks.json}
+            sso: ${JWK_SSO_URL:http://keycloak:8180/realms/IamService/protocol/openid-connect/certs}
   cloud:
     consul:
-      host: 127.0.0.1
+      host: ${CONSUL_HOST:localhost}
       port: 8500
       discovery:
         enabled: true
@@ -47,11 +36,9 @@ spring:
         health-check-path: /actuator/health
         health-check-interval: 10s
         prefer-ip-address: true
-  config:
-    import: optional:configserver:http://localhost:6969
   kafka:
     producer:
-      bootstrap-servers: localhost:9094
+      bootstrap-servers: ${KAFKA_HOST:localhost:9094}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
@@ -59,7 +46,7 @@ server:
   port: 8888
 
 redis:
-  host: localhost
+  host: ${REDIS_HOST:localhost}
   port: 6379
 
 jwt:
@@ -70,15 +57,15 @@ jwt:
   refreshable-duration: 36000
 
 idp:
-  url: http://localhost:8180
+  url: ${KEYCLOAK_URL:http://localhost:8180}
   client-id: ${KEYCLOAK_CLIENT_ID:iam_service}
-  client-secret: ${KEYCLOAK_CLIENT_SECRET:FEn2lOqmNgHdAWUAvsvBiOpOdM3PLGHi}
+  client-secret: ${KEYCLOAK_CLIENT_SECRET:nYW29NN8ATLJ7UpQ9kfrAl35SlsTUWS8}
 
 storage-service:
-  url: http://localhost:8080
+  url: ${STORAGE_SERVICE_URL:http://localhost:8080}
 
 notification:
-  url: http://localhost:3333
+  url: ${NOTIFICATION_URL:http://localhost:3333}
 
 auth:
   keycloak-enabled: true
@@ -107,6 +94,6 @@ springdoc:
 
 outbound:
   identity:
-    client-id: "204369626319-m0u86c2pqut8ne5amh5n9uejcpfiqmrp.apps.googleusercontent.com"
-    client-secret: "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"
+    client-id: ${GOOGLE_CLIENT_ID:204369626319-m0u86c2pqut8ne5amh5n9uejcpfiqmrp.apps.googleusercontent.com}
+    client-secret: ${GOOGLE_CLIENT_SECRET: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}
     redirect-uri: "http://localhost:3000/authenticate"

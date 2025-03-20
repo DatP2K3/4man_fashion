@@ -1,6 +1,5 @@
 package com.evotek.iam.infrastructure.adapter.google.impl;
 
-import com.evotek.iam.infrastructure.adapter.google.GoogleUserClient;
 import org.springframework.stereotype.Service;
 
 import com.evotek.iam.application.dto.request.ExchangeTokenRequest;
@@ -8,6 +7,7 @@ import com.evotek.iam.application.dto.response.OutboundUserDTO;
 import com.evotek.iam.application.dto.response.TokenDTO;
 import com.evotek.iam.infrastructure.adapter.google.GoogleIdentityClient;
 import com.evotek.iam.infrastructure.adapter.google.GoogleService;
+import com.evotek.iam.infrastructure.adapter.google.GoogleUserClient;
 
 import lombok.RequiredArgsConstructor;
 

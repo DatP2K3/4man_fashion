@@ -1,11 +1,12 @@
 package com.evotek.elasticsearch.domain;
 
-import com.evotek.elasticsearch.domain.command.SyncUserCmd;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
-
 import java.time.LocalDate;
 import java.util.UUID;
+
+import com.evotek.elasticsearch.domain.command.SyncUserCmd;
+
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
@@ -53,43 +54,43 @@ public class User {
     }
 
     public void update(SyncUserCmd syncUserCmd) {
-        if(syncUserCmd.getEmail() != null) {
+        if (syncUserCmd.getEmail() != null) {
             this.email = syncUserCmd.getEmail();
         }
-        if(syncUserCmd.getFirstName() != null) {
+        if (syncUserCmd.getFirstName() != null) {
             this.firstName = syncUserCmd.getFirstName();
         }
-        if(syncUserCmd.getLastName() != null) {
+        if (syncUserCmd.getLastName() != null) {
             this.lastName = syncUserCmd.getLastName();
         }
-        if(syncUserCmd.getAvatarFileId() != null) {
+        if (syncUserCmd.getAvatarFileId() != null) {
             this.avatarFileId = syncUserCmd.getAvatarFileId();
         }
-        if(syncUserCmd.getDob() != null) {
+        if (syncUserCmd.getDob() != null) {
             this.dob = syncUserCmd.getDob();
         }
-        if(syncUserCmd.getStreet() != null) {
+        if (syncUserCmd.getStreet() != null) {
             this.street = syncUserCmd.getStreet();
         }
-        if(syncUserCmd.getWard() != null) {
+        if (syncUserCmd.getWard() != null) {
             this.ward = syncUserCmd.getWard();
         }
-        if(syncUserCmd.getDistrict() != null) {
+        if (syncUserCmd.getDistrict() != null) {
             this.district = syncUserCmd.getDistrict();
         }
-        if(syncUserCmd.getCity() != null) {
+        if (syncUserCmd.getCity() != null) {
             this.city = syncUserCmd.getCity();
         }
-        if(syncUserCmd.getYearsOfExperience() != 0) {
+        if (syncUserCmd.getYearsOfExperience() != 0) {
             this.yearsOfExperience = syncUserCmd.getYearsOfExperience();
         }
-        if(syncUserCmd.getPassword() != null) {
+        if (syncUserCmd.getPassword() != null) {
             this.password = syncUserCmd.getPassword();
         }
-        if(syncUserCmd.isLocked() != false) {
+        if (syncUserCmd.isLocked() != false) {
             this.locked = syncUserCmd.isLocked();
         }
-        if(syncUserCmd.getRoleId() != null) {
+        if (syncUserCmd.getRoleId() != null) {
             this.roleId = syncUserCmd.getRoleId();
         }
     }

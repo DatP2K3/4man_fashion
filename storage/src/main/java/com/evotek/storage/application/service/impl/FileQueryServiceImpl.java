@@ -52,8 +52,7 @@ public class FileQueryServiceImpl implements FileQueryService {
 
     @Override
     public FileResponse getPrivateFile(UUID filedId) {
-        File file = fileDomainRepository
-                .getById(filedId);
+        File file = fileDomainRepository.getById(filedId);
         String url = "http://localhost:8080/api/uploads/private/" + file.getMd5Name();
         FileResponse fileResponse = fileResponseMapper.domainModelToDTO(file);
         fileResponse.setUrl(url);
@@ -62,8 +61,7 @@ public class FileQueryServiceImpl implements FileQueryService {
 
     @Override
     public FileResponse getPublicFile(UUID filedId) {
-        File file = fileDomainRepository
-                .getById(filedId);
+        File file = fileDomainRepository.getById(filedId);
         String url = "http://localhost:8080/api/uploads/public/" + file.getMd5Name();
         FileResponse fileResponse = fileResponseMapper.domainModelToDTO(file);
         fileResponse.setUrl(url);

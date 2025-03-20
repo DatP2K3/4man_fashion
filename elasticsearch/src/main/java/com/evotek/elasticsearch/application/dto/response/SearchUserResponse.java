@@ -1,13 +1,13 @@
 package com.evotek.elasticsearch.application.dto.response;
 
+import java.util.List;
+
 import com.evotek.elasticsearch.domain.User;
-import com.evotek.elasticsearch.infrastructure.persistence.document.UserDocument;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import java.util.List;
 
 @Getter
 @Setter

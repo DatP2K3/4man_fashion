@@ -8,3 +8,4 @@ gateway/src/main/resources/application.yaml
 elasticsearch/src/main/resources/application.yaml
 storage/src/main/resources/application.yaml
 notification/src/main/resources/application.yaml
+docker-compose.yml

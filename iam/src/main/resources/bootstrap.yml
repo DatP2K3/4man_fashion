@@ -1,8 +1,0 @@
-spring:
-  application:
-    name: iam-service
-  config:
-    import: optional:configserver:http://localhost:6969
-  cloud:
-    config:
-      fail-fast: true

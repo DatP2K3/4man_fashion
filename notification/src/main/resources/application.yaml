@@ -24,7 +24,7 @@ spring:
             required: true
   kafka:
     consumer:
-      bootstrap-servers: localhost:9094
+      bootstrap-servers: ${KAFKA_HOST:localhost:9094}
       group-id: notification-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -34,7 +34,7 @@ spring:
 
   cloud:
     consul:
-      host: 127.0.0.1
+      host: ${CONSUL_HOST:localhost}
       port: 8500
       discovery:
         enabled: true

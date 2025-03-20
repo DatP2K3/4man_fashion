@@ -1,8 +1,9 @@
 package com.evotek.elasticsearch.application.mapper;
 
+import org.mapstruct.Mapper;
+
 import com.evo.common.dto.request.SyncUserRequest;
 import com.evotek.elasticsearch.domain.command.SyncUserCmd;
-import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface CommandMapper {

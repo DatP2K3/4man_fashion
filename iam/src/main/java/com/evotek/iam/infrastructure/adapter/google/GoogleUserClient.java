@@ -1,10 +1,11 @@
 package com.evotek.iam.infrastructure.adapter.google;
 
-import com.evotek.iam.application.dto.response.OutboundUserDTO;
-import com.evotek.iam.infrastructure.adapter.google.config.GoogleClientConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.evotek.iam.application.dto.response.OutboundUserDTO;
+import com.evotek.iam.infrastructure.adapter.google.config.GoogleClientConfiguration;
 
 @FeignClient(
         name = "google-us-client",

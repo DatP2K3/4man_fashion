@@ -1,18 +1,20 @@
 package com.evotek.elasticsearch.presentation.rest;
 
-import com.evo.common.dto.response.PageApiResponse;
-import com.evotek.elasticsearch.application.dto.request.SearchUserRequest;
-import com.evotek.elasticsearch.application.dto.response.SearchUserResponse;
-import com.evotek.elasticsearch.application.service.impl.UserQueryService;
-import com.evotek.elasticsearch.domain.User;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.evo.common.dto.response.PageApiResponse;
+import com.evotek.elasticsearch.application.dto.request.SearchUserRequest;
+import com.evotek.elasticsearch.application.dto.response.SearchUserResponse;
+import com.evotek.elasticsearch.application.service.impl.UserQueryService;
+import com.evotek.elasticsearch.domain.User;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api")
@@ -42,6 +44,5 @@ public class UserController {
                 .timestamp(System.currentTimeMillis())
                 .status("OK")
                 .build();
-
     }
 }

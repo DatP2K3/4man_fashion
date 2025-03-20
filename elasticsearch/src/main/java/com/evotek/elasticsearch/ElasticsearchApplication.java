@@ -8,8 +8,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication(scanBasePackages = {"com.evotek.elasticsearch", "com.evo.common"})
 public class ElasticsearchApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ElasticsearchApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(ElasticsearchApplication.class, args);
+    }
 }

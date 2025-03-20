@@ -6,7 +6,7 @@ spring:
     allow-bean-definition-overriding: true
   kafka:
     consumer:
-      bootstrap-servers: localhost:9094
+      bootstrap-servers: ${KAFKA_HOST:localhost:9094}
       group-id: sync-data-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -18,12 +18,12 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uris:
-            internal: http://localhost:8888/api/certificate/.well-known/jwks.json
-            sso: http://localhost:8180/realms/IamService/protocol/openid-connect/certs
+            internal: ${JWK_INTERNAL_URL:http://localhost:8888/api/certificate/.well-known/jwks.json}
+            sso: ${JWK_SSO_URL:http://localhost:8180/realms/IamService/protocol/openid-connect/certs}
 
   cloud:
     consul:
-      host: 127.0.0.1
+      host: ${CONSUL_HOST:localhost}
       port: 8500
       discovery:
         enabled: true
@@ -31,6 +31,9 @@ spring:
         health-check-path: /actuator/health
         health-check-interval: 10s
         prefer-ip-address: true
+
+  elasticsearch:
+    uris: ${ELASTICSEARCH_URI:http://localhost:9200}
 
 server:
   port: 5555
@@ -45,9 +48,9 @@ oauth:
       client-secret: ${IAM_CLIENT_SECRET:FEn2lOqmNg}
 
 redis:
-  host: localhost
+  host: ${REDIS_HOST:localhost}
   port: 6379
 
 app:
   iam:
-    internal-url: http://localhost:8888
+    internal-url: ${IAM_INTERNAL_URL:http://localhost:8888}

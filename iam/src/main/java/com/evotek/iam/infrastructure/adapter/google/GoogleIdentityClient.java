@@ -2,12 +2,9 @@ package com.evotek.iam.infrastructure.adapter.google;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.evotek.iam.application.dto.request.ExchangeTokenRequest;
-import com.evotek.iam.application.dto.response.OutboundUserDTO;
 import com.evotek.iam.application.dto.response.TokenDTO;
 import com.evotek.iam.infrastructure.adapter.google.config.GoogleClientConfiguration;
 

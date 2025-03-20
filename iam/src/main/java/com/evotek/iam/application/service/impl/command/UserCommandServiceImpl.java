@@ -11,8 +11,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.evo.common.dto.event.PushNotificationEvent;
@@ -56,7 +54,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-
 @RefreshScope
 public class UserCommandServiceImpl implements UserCommandService {
     private final KeycloakService keycloakService;
@@ -92,7 +89,7 @@ public class UserCommandServiceImpl implements UserCommandService {
         try {
             CreateUserCmd createUserCmd = commandMapper.from(request);
 
-            if(request.getProvider() == null) {
+            if (request.getProvider() == null) {
                 if (keycloakEnabled) {
                     createUserCmd.setProvider("keycloak");
                 } else {
@@ -480,7 +477,8 @@ public class UserCommandServiceImpl implements UserCommandService {
                     .firstName(outboundUserDTO.getGivenName())
                     .lastName(outboundUserDTO.getFamilyName())
                     .provider("google")
-                    .providerId(UUID.nameUUIDFromBytes(String.valueOf(outboundUserDTO.getSub()).getBytes()))
+                    .providerId(UUID.nameUUIDFromBytes(
+                            String.valueOf(outboundUserDTO.getSub()).getBytes()))
                     .build();
 
             UserDTO userDTO = createDefaultUser(createUserRequest);

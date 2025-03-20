@@ -7,8 +7,8 @@ WORKDIR /app
 # Copy file JAR đã build vào container
 COPY ./target/*.jar app.jar
 
-# Mở cổng 8888
-EXPOSE 8888
+# Mở cổng 6379
+EXPOSE 6379
 
 # Chạy ứng dụng
 ENTRYPOINT ["java", "-jar", "app.jar"]

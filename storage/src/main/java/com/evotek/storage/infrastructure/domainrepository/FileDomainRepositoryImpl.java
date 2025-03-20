@@ -3,12 +3,9 @@ package com.evotek.storage.infrastructure.domainrepository;
 import java.util.List;
 import java.util.UUID;
 
-import com.evo.common.repository.AbstractDomainRepository;
-import com.evotek.storage.infrastructure.support.exception.AppErrorCode;
-import com.evotek.storage.infrastructure.support.exception.AppException;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Repository;
 
+import com.evo.common.repository.AbstractDomainRepository;
 import com.evotek.storage.domain.File;
 import com.evotek.storage.domain.FileHistory;
 import com.evotek.storage.domain.query.SearchFileQuery;
@@ -19,6 +16,8 @@ import com.evotek.storage.infrastructure.persistence.mapper.FileEntityMapper;
 import com.evotek.storage.infrastructure.persistence.mapper.FileHistoryEntityMapper;
 import com.evotek.storage.infrastructure.persistence.repository.FileEntityRepository;
 import com.evotek.storage.infrastructure.persistence.repository.FileHistoryEntityRepository;
+import com.evotek.storage.infrastructure.support.exception.AppErrorCode;
+import com.evotek.storage.infrastructure.support.exception.AppException;
 
 @Repository
 public class FileDomainRepositoryImpl extends AbstractDomainRepository<File, FileEntity, UUID>
@@ -62,7 +61,8 @@ public class FileDomainRepositoryImpl extends AbstractDomainRepository<File, Fil
 
     @Override
     public File getById(UUID fileId) {
-        FileEntity fileEntity = fileEntityRepository.findById(fileId).orElseThrow(() -> new AppException(AppErrorCode.FILE_NOT_FOUND));
+        FileEntity fileEntity =
+                fileEntityRepository.findById(fileId).orElseThrow(() -> new AppException(AppErrorCode.FILE_NOT_FOUND));
         return fileEntityMapper.toDomainModel(fileEntity);
     }
 }
