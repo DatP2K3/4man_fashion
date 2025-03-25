@@ -1,6 +1,7 @@
 package com.evotek.elasticsearch.domain.command;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import lombok.Getter;
@@ -25,5 +26,5 @@ public class SyncUserCmd {
     private String password;
     private boolean locked;
     private String provider;
-    private UUID roleId;
+    private List<UUID> roleIds;
 }

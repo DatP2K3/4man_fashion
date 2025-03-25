@@ -1,5 +1,6 @@
 package com.evotek.elasticsearch.application.dto.request;
 
+import java.util.List;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;

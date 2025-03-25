@@ -1,6 +1,7 @@
 package com.evotek.iam.domain.command;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,4 +18,5 @@ public class UpdateUserCmd {
     private String district;
     private String city;
     private int yearsOfExperience;
+    private List<CreateUserRoleCmd> userRoles;
 }

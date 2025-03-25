@@ -1,5 +1,7 @@
 package com.evotek.iam.presentation.rest;
 
+import com.evotek.iam.application.service.RoleCommandService;
+import com.evotek.iam.domain.Role;
 import org.springframework.web.bind.annotation.*;
 
 import com.evo.common.dto.event.PushNotificationEvent;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TestController {
     private final UserCommandService userCommandService;
+    private final RoleCommandService roleCommandService;
 
     @GetMapping("/fcm")
     public ApiResponses<Void> testTopic(@RequestBody PushNotificationEvent pushNotificationEvent) {

@@ -6,9 +6,14 @@ import java.util.UUID;
 import com.evo.common.repository.DomainRepository;
 import com.evotek.iam.domain.Permission;
 import com.evotek.iam.domain.Role;
+import com.evotek.iam.infrastructure.persistence.entity.RoleEntity;
 
 public interface RoleDomainRepository extends DomainRepository<Role, UUID> {
     Role findByName(String name);
 
     List<Permission> findPermissionByRoleId(UUID roleId);
+
+    List<Role> findByIdIn(List<UUID> roleIds);
+
+    List<Permission> findPermissionByRoleIdIn(List<UUID> roleIds);
 }

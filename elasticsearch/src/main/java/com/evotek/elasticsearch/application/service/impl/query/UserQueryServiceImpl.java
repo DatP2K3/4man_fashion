@@ -1,6 +1,7 @@
 package com.evotek.elasticsearch.application.service.impl.query;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -46,7 +47,7 @@ public class UserQueryServiceImpl implements UserQueryService {
             // Lọc theo role nếu có
             if (request.getRoleId() != null) {
                 boolBuilder.filter(filterQuery -> filterQuery.term(termQuery ->
-                        termQuery.field("roleId").value(request.getRoleId().toString())));
+                        termQuery.field("roleIds").value(request.getRoleId().toString())));
             }
 
             // Lọc theo trạng thái locked nếu có
@@ -106,5 +107,4 @@ public class UserQueryServiceImpl implements UserQueryService {
                 .build();
     }
 }
-// từ file jarr viết docker file coppy file jarr vào image, viết docker compose(định nghĩa build)
-// c2: viết luôn trong docker file
+

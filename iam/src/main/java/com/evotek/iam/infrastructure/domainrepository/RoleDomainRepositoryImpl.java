@@ -3,6 +3,8 @@ package com.evotek.iam.infrastructure.domainrepository;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.evotek.iam.infrastructure.support.exception.AppErrorCode;
+import com.evotek.iam.infrastructure.support.exception.AppException;
 import jakarta.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
@@ -53,6 +55,18 @@ public class RoleDomainRepositoryImpl extends AbstractDomainRepository<Role, Rol
     @Override
     public List<Permission> findPermissionByRoleId(UUID roleId) {
         List<PermissionEntity> permissionEntities = permissionEntityRepository.findPermissionByRoleId(roleId);
+        return permissionEntityMapper.toDomainModelList(permissionEntities);
+    }
+
+    @Override
+    public List<Role> findByIdIn(List<UUID> roleIds) {
+        List<RoleEntity> roleEntities = roleEntityRepository.findByIdIn(roleIds);
+        return enrichList(roleEntityMapper.toDomainModelList(roleEntities));
+    }
+
+    @Override
+    public List<Permission> findPermissionByRoleIdIn(List<UUID> roleIds) {
+        List<PermissionEntity> permissionEntities = permissionEntityRepository.findPermissionByRoleIdIn(roleIds);
         return permissionEntityMapper.toDomainModelList(permissionEntities);
     }
 

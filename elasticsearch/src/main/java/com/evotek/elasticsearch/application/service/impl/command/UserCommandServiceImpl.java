@@ -21,7 +21,8 @@ public class UserCommandServiceImpl implements UserCommandService {
     @Override
     public void create(SyncUserCmd syncUserCmd) {
         User user = new User(syncUserCmd);
-        userDomainRepository.save(user);
+        user = userDomainRepository.save(user);
+        System.out.println("User created: " + user);
     }
 
     @Override

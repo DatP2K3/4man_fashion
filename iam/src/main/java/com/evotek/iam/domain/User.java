@@ -1,10 +1,13 @@
 package com.evotek.iam.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.evo.common.Auditor;
 import com.evotek.iam.domain.command.CreateUserCmd;
+import com.evotek.iam.domain.command.CreateUserRoleCmd;
 import com.evotek.iam.domain.command.UpdateUserCmd;
 import com.evotek.iam.infrastructure.support.IdUtils;
 
@@ -34,7 +37,7 @@ public class User extends Auditor {
     private String password;
     private boolean locked;
     private String provider;
-    private UserRole userRole;
+    private List<UserRole> userRoles;
     private UserActivityLog userActivityLog;
 
     public User(CreateUserCmd cmd) {
@@ -53,8 +56,8 @@ public class User extends Auditor {
         this.provider = cmd.getProvider();
         this.locked = false;
         this.providerId = cmd.getProviderId();
-        if (cmd.getUserRole() != null) {
-            this.userRole = new UserRole(cmd.getUserRole().getRoleId(), this.selfUserID);
+        if (cmd.getUserRoles() != null) {
+            createOrUpdateUserRole(cmd.getUserRoles());
         }
     }
 
@@ -86,6 +89,9 @@ public class User extends Auditor {
         if (cmd.getYearsOfExperience() != 0) {
             this.yearsOfExperience = cmd.getYearsOfExperience();
         }
+        if (cmd.getUserRoles() != null) {
+            createOrUpdateUserRole(cmd.getUserRoles());
+        }
     }
 
     public void changePassword(String newPassword) {
@@ -94,5 +100,14 @@ public class User extends Auditor {
 
     public void changeAvatar(UUID fileId) {
         this.avatarFileId = fileId;
+    }
+
+    private void createOrUpdateUserRole(List<CreateUserRoleCmd> userRoles) {
+        if (this.userRoles == null) {
+            this.userRoles = new ArrayList<>();
+        }
+        userRoles.forEach(userRole -> {
+            this.userRoles.add(new UserRole(userRole.getRoleId(), this.selfUserID));
+        });
     }
 }

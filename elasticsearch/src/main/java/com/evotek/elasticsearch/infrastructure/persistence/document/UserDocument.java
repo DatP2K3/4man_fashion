@@ -1,6 +1,7 @@
 package com.evotek.elasticsearch.infrastructure.persistence.document;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
@@ -81,5 +82,5 @@ public class UserDocument {
     private String provider;
 
     @Field(type = FieldType.Keyword)
-    private UUID roleId;
+    private List<UUID> roleIds;
 }

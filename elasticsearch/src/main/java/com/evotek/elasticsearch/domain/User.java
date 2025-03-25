@@ -1,6 +1,7 @@
 package com.evotek.elasticsearch.domain;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import com.evotek.elasticsearch.domain.command.SyncUserCmd;
@@ -31,7 +32,7 @@ public class User {
     private String password;
     private boolean locked;
     private String provider;
-    private UUID roleId;
+    private List<UUID> roleIds;
 
     public User(SyncUserCmd syncUserCmd) {
         this.selfUserID = syncUserCmd.getSelfUserID();
@@ -50,7 +51,7 @@ public class User {
         this.password = syncUserCmd.getPassword();
         this.locked = syncUserCmd.isLocked();
         this.provider = syncUserCmd.getProvider();
-        this.roleId = syncUserCmd.getRoleId();
+        this.roleIds = syncUserCmd.getRoleIds();
     }
 
     public void update(SyncUserCmd syncUserCmd) {
@@ -90,8 +91,8 @@ public class User {
         if (syncUserCmd.isLocked() != false) {
             this.locked = syncUserCmd.isLocked();
         }
-        if (syncUserCmd.getRoleId() != null) {
-            this.roleId = syncUserCmd.getRoleId();
+        if (syncUserCmd.getRoleIds() != null) {
+            this.roleIds = syncUserCmd.getRoleIds();
         }
     }
 }

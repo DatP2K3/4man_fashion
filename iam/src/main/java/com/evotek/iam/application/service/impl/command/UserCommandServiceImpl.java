@@ -103,7 +103,7 @@ public class UserCommandServiceImpl implements UserCommandService {
             Role role = roleDomainRepository.findByName("ROLE_USER");
             User user = new User(createUserCmd);
             UserRole userRole = new UserRole(role.getId(), user.getSelfUserID());
-            user.setUserRole(userRole);
+            user.setUserRoles(Collections.singletonList(userRole));
             user = userDomainRepository.save(user);
 
             notificationService.initUserTopic(user.getSelfUserID());

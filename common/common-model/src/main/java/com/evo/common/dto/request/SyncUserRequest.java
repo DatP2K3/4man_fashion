@@ -1,6 +1,7 @@
 package com.evo.common.dto.request;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
@@ -29,5 +30,5 @@ public class SyncUserRequest {
     private String password;
     private boolean locked;
     private String provider;
-    private UUID roleId;
+    private List<UUID> roleIds;
 }

@@ -1,6 +1,7 @@
 package com.evotek.iam.domain.command;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import lombok.*;
@@ -24,5 +25,5 @@ public class CreateUserCmd {
     private String city;
     private int yearsOfExperience;
     private String provider;
-    private CreateUserRoleCmd userRole;
+    private List<CreateUserRoleCmd> userRoles;
 }
