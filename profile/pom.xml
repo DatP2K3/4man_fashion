@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.evotek</groupId>
-	<artifactId>product</artifactId>
+	<artifactId>profile</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>product</name>
+	<name>profile</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
@@ -106,11 +106,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-logging</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.hypersistence</groupId>
-			<artifactId>hypersistence-utils-hibernate-63</artifactId>
-			<version>3.9.2</version>
 		</dependency>
 	</dependencies>
 
