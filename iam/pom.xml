@@ -9,7 +9,7 @@
 		<relativePath/>
 	</parent>
 	<groupId>com.evo</groupId>
-	<artifactId>identity</artifactId>
+	<artifactId>iam</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>iam</name>
 	<description>Demo project for Spring Boot</description>

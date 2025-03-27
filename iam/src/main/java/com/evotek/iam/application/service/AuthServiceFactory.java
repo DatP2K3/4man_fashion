@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class ServiceStrategy {
+public class AuthServiceStrategy {
     private final Map<String, AuthServiceCommand> authServiceCommand;
     private final Map<String, AuthServiceQuery> authServiceQuery;
 
@@ -20,3 +20,7 @@ public class ServiceStrategy {
         return authServiceQuery.get(type);
     }
 }
+
+//*********************************************************************************************************************
+//Áp dụng strategy pattern để chuyển đổi giữa các service command và query tương ứng với việc có bật  keycloak hay không
+//*********************************************************************************************************************

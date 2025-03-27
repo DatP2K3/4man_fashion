@@ -16,14 +16,7 @@ public class CreateUserCmd {
     private String username;
     private String password;
     private String email;
-    private String firstName;
-    private String lastName;
-    private LocalDate dob;
-    private String street;
-    private String ward;
-    private String district;
-    private String city;
-    private int yearsOfExperience;
     private String provider;
+    private boolean twoFactorEnabled;
     private List<CreateUserRoleCmd> userRoles;
 }
