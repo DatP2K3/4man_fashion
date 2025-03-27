@@ -42,6 +42,7 @@ public class ForbiddenTokenFilter
             log.warn("Token is invalid");
             httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             httpServletResponse.getWriter().write("Token is invalid");
+            return;
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }

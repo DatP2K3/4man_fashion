@@ -1,6 +1,7 @@
 package com.evotek.iam.application.dto.request;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
@@ -43,9 +44,7 @@ public class CreateUserRequest {
 
     private String city;
 
-    private int yearsOfExperience;
-
     private String provider;
 
-    private CreateUserRoleRequest userRole;
+    private List<CreateUserRoleRequest> userRoles;
 }
