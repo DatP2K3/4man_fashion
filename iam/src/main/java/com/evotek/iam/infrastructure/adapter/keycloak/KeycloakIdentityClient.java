@@ -38,12 +38,6 @@ public interface KeycloakIdentityClient {
     TokenDTO refreshToken(@QueryMap RefreshTokenRequest refreshTokenRequest);
 
     @PutMapping(value = "/admin/realms/IamService/users/{user_id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    void updateUser(
-            @RequestHeader("authorization") String token,
-            @PathVariable("user_id") String userId,
-            @RequestBody UpdateUserRequest updateUserRequest);
-
-    @PutMapping(value = "/admin/realms/IamService/users/{user_id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     void lockUser(
             @RequestHeader("authorization") String token,
             @PathVariable("user_id") String userId,

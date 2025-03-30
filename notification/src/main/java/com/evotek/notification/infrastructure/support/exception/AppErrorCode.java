@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 public enum AppErrorCode {
-    CANT_SEND_EMAIL(1030, "Can't send Email", HttpStatus.BAD_REQUEST),
+    CANT_SEND_EMAIL(1030, "Can't send Email", HttpStatus.INTERNAL_SERVER_ERROR),
     DEVICE_REGISTRATION_NOT_FOUND(1031, "Device registration not found", HttpStatus.NOT_FOUND),
     FIREBASE_SUBSCRIBE_TOPIC_FAILED(1032, "Failed to subscribe to topic", HttpStatus.INTERNAL_SERVER_ERROR),
     FIREBASE_SEND_NOTIFICATION_FAILED(1033, "Failed to send notification", HttpStatus.INTERNAL_SERVER_ERROR),

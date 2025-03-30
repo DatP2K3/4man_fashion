@@ -1,9 +1,10 @@
 package com.evotek.iam.application.service.impl.command;
 
 import java.io.IOException;
-import java.time.ZoneId;
 import java.util.*;
 
+import com.evo.common.enums.*;
+import com.evotek.iam.application.dto.request.CreateOrUpdateUserRequest;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -17,17 +18,10 @@ import com.evo.common.dto.event.PushNotificationEvent;
 import com.evo.common.dto.event.SendNotificationEvent;
 import com.evo.common.dto.event.SyncUserEvent;
 import com.evo.common.dto.request.SyncUserRequest;
-import com.evo.common.dto.response.FileResponse;
-import com.evo.common.enums.Channel;
-import com.evo.common.enums.KafkaTopic;
-import com.evo.common.enums.SyncUserType;
-import com.evo.common.enums.TemplateCode;
 import com.evo.common.support.SecurityContextUtils;
 import com.evotek.iam.application.dto.mapper.UserDTOMapper;
 import com.evotek.iam.application.dto.request.ChangePasswordRequest;
-import com.evotek.iam.application.dto.request.CreateUserRequest;
 import com.evotek.iam.application.dto.request.ExchangeTokenRequest;
-import com.evotek.iam.application.dto.request.UpdateUserRequest;
 import com.evotek.iam.application.dto.response.OutboundUserDTO;
 import com.evotek.iam.application.dto.response.TokenDTO;
 import com.evotek.iam.application.dto.response.UserDTO;
@@ -85,28 +79,28 @@ public class UserCommandServiceImpl implements UserCommandService {
     protected String grantType = "authorization_code";
 
     @Override
-    public UserDTO createDefaultUser(CreateUserRequest request) {
+    public UserDTO createDefaultUser(CreateOrUpdateUserRequest request) {
         try {
-            CreateUserCmd createUserCmd = commandMapper.from(request);
+            CreateOrUpdateUserCmd createOrUpdateUserCmd = commandMapper.from(request);
 
             if (request.getProvider() == null) {
                 if (keycloakEnabled) {
-                    createUserCmd.setProvider("keycloak");
+                    createOrUpdateUserCmd.setProvider("keycloak");
                 } else {
-                    createUserCmd.setProvider("self_idp");
+                    createOrUpdateUserCmd.setProvider("self_idp");
                 }
-                createUserCmd.setProviderId(UUID.fromString(keycloakService.createKeycloakUser(request)));
-                createUserCmd.setPassword(passwordEncoder.encode(createUserCmd.getPassword()));
+                createOrUpdateUserCmd.setProviderId(UUID.fromString(keycloakService.createKeycloakUser(request)));
+                createOrUpdateUserCmd.setPassword(passwordEncoder.encode(createOrUpdateUserCmd.getPassword()));
             } else {
-                createUserCmd.setProvider(request.getProvider());
+                createOrUpdateUserCmd.setProvider(request.getProvider());
             }
             Role role = roleDomainRepository.findByName("ROLE_USER");
-            User user = new User(createUserCmd);
-            UserRole userRole = new UserRole(role.getId(), user.getSelfUserID());
+            User user = new User(createOrUpdateUserCmd);
+            UserRole userRole = new UserRole(role.getId(), user.getId());
             user.setUserRoles(Collections.singletonList(userRole));
             user = userDomainRepository.save(user);
 
-            notificationService.initUserTopic(user.getSelfUserID());
+            notificationService.initUserTopic(user.getId());
 
             Map<String, Object> params = SecurityContextUtils.getSecurityContextMap();
             params.put("username", user.getUsername());
@@ -124,7 +118,7 @@ public class UserCommandServiceImpl implements UserCommandService {
                     .syncUserType(SyncUserType.USER_CREATED)
                     .syncUserRequest(syncUserRequest)
                     .build();
-            kafkaTemplate.send(KafkaTopic.SYNC_USER_GROUP.getTopicName(), syncUserEvent);
+            kafkaTemplate.send(KafkaTopic.SYNC_USER_PROFILE_GROUP.getTopicName(), syncUserEvent);
 
             return userDTOMapper.domainModelToDTO(user);
         } catch (FeignException e) {
@@ -133,19 +127,19 @@ public class UserCommandServiceImpl implements UserCommandService {
     }
 
     @Override
-    public UserDTO createUser(CreateUserRequest request) {
+    public UserDTO createUser(CreateOrUpdateUserRequest request) {
         UUID keycloakUserId = UUID.fromString(keycloakService.createKeycloakUser(request));
 
-        CreateUserCmd createUserCmd = commandMapper.from(request);
-        createUserCmd.setPassword(passwordEncoder.encode(createUserCmd.getPassword()));
+        CreateOrUpdateUserCmd createOrUpdateUserCmd = commandMapper.from(request);
+        createOrUpdateUserCmd.setPassword(passwordEncoder.encode(createOrUpdateUserCmd.getPassword()));
 
         if (keycloakEnabled) {
-            createUserCmd.setProvider("keycloak");
+            createOrUpdateUserCmd.setProvider("keycloak");
         } else {
-            createUserCmd.setProvider("self_idp");
+            createOrUpdateUserCmd.setProvider("self_idp");
         }
-        createUserCmd.setProviderId(keycloakUserId);
-        User user = new User(createUserCmd);
+        createOrUpdateUserCmd.setProviderId(keycloakUserId);
+        User user = new User(createOrUpdateUserCmd);
         userDomainRepository.save(user);
 
         Map<String, Object> params = SecurityContextUtils.getSecurityContextMap();
@@ -164,7 +158,7 @@ public class UserCommandServiceImpl implements UserCommandService {
                 .syncUserType(SyncUserType.USER_CREATED)
                 .syncUserRequest(syncUserRequest)
                 .build();
-        kafkaTemplate.send(KafkaTopic.SYNC_USER_GROUP.getTopicName(), syncUserEvent);
+        kafkaTemplate.send(KafkaTopic.SYNC_USER_PROFILE_GROUP.getTopicName(), syncUserEvent);
 
         return userDTOMapper.domainModelToDTO(user);
     }
@@ -231,31 +225,6 @@ public class UserCommandServiceImpl implements UserCommandService {
     }
 
     @Override
-    public UUID changeMyAvatar(List<MultipartFile> files) {
-        var context = SecurityContextHolder.getContext();
-        String username = context.getAuthentication().getName();
-
-        User user = userDomainRepository.getByUsername(username);
-        FileResponse fileResponse =
-                fileService.uploadFile(files, true, "avatar").getFirst();
-        UUID avatarId = fileResponse.getId();
-        user.changeAvatar(avatarId);
-
-        WriteLogCmd logCmd = commandMapper.from("Change Avatar");
-        UserActivityLog userActivityLog = new UserActivityLog(logCmd);
-        user.setUserActivityLog(userActivityLog);
-        userDomainRepository.save(user);
-
-        SyncUserRequest syncUserRequest = syncMapper.from(user);
-        SyncUserEvent syncUserEvent = SyncUserEvent.builder()
-                .syncUserType(SyncUserType.USER_UPDATED)
-                .syncUserRequest(syncUserRequest)
-                .build();
-        kafkaTemplate.send(KafkaTopic.SYNC_USER_GROUP.getTopicName(), syncUserEvent);
-        return avatarId;
-    }
-
-    @Override
     public List<UserDTO> importUserFile(MultipartFile file) {
         try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
             Sheet sheet = workbook.getSheetAt(0);
@@ -266,21 +235,18 @@ public class UserCommandServiceImpl implements UserCommandService {
             List<UserDTO> userDTOS = new ArrayList<>();
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                CreateUserRequest.CreateUserRequestBuilder createUserRequestBuilder = CreateUserRequest.builder();
+                CreateOrUpdateUserRequest.CreateOrUpdateUserRequestBuilder builder = CreateOrUpdateUserRequest.builder();
                 List<String> errors = new ArrayList<>();
                 int rowIndex = row.getRowNum() + 1;
 
-                processUsernameCell(row.getCell(0), rowIndex, createUserRequestBuilder, errors);
-                processPasswordCell(row.getCell(1), rowIndex, createUserRequestBuilder, errors);
-                processEmailCell(row.getCell(2), rowIndex, createUserRequestBuilder, errors);
-                processNameCells(row.getCell(3), row.getCell(4), rowIndex, createUserRequestBuilder, errors);
-                processDobCell(row.getCell(5), rowIndex, createUserRequestBuilder, errors);
-                processAddressCells(row, createUserRequestBuilder);
+                processUsernameCell(row.getCell(0), rowIndex, builder, errors);
+                processPasswordCell(row.getCell(1), rowIndex, builder, errors);
+                processEmailCell(row.getCell(2), rowIndex, builder, errors);
 
                 if (!errors.isEmpty()) {
                     logErrors(errors);
                 } else {
-                    CreateUserRequest request = createUserRequestBuilder.build();
+                    CreateOrUpdateUserRequest request = builder.build();
                     userDTOS.add(createDefaultUser(request));
                 }
             }
@@ -291,7 +257,7 @@ public class UserCommandServiceImpl implements UserCommandService {
     }
 
     private void processUsernameCell(
-            Cell cell, int rowIndex, CreateUserRequest.CreateUserRequestBuilder builder, List<String> errors) {
+            Cell cell, int rowIndex, CreateOrUpdateUserRequest.CreateOrUpdateUserRequestBuilder builder, List<String> errors) {
         if (cell != null) {
             String username = cell.getStringCellValue().trim();
             if (username.isEmpty()) {
@@ -307,7 +273,7 @@ public class UserCommandServiceImpl implements UserCommandService {
     }
 
     private void processPasswordCell(
-            Cell cell, int rowIndex, CreateUserRequest.CreateUserRequestBuilder builder, List<String> errors) {
+            Cell cell, int rowIndex, CreateOrUpdateUserRequest.CreateOrUpdateUserRequestBuilder builder, List<String> errors) {
         if (cell != null) {
             String password = cell.getStringCellValue().trim();
             if (password.isEmpty()) {
@@ -321,7 +287,7 @@ public class UserCommandServiceImpl implements UserCommandService {
     }
 
     private void processEmailCell(
-            Cell cell, int rowIndex, CreateUserRequest.CreateUserRequestBuilder builder, List<String> errors) {
+            Cell cell, int rowIndex, CreateOrUpdateUserRequest.CreateOrUpdateUserRequestBuilder builder, List<String> errors) {
         if (cell != null) {
             String email = cell.getStringCellValue().trim();
             if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
@@ -332,54 +298,6 @@ public class UserCommandServiceImpl implements UserCommandService {
         }
     }
 
-    private void processNameCells(
-            Cell firstNameCell,
-            Cell lastNameCell,
-            int rowIndex,
-            CreateUserRequest.CreateUserRequestBuilder builder,
-            List<String> errors) {
-        if (firstNameCell != null && lastNameCell != null) {
-            String firstName = firstNameCell.getStringCellValue().trim();
-            String lastName = lastNameCell.getStringCellValue().trim();
-            if (firstName.isEmpty() || lastName.isEmpty()) {
-                errors.add("Dòng " + rowIndex + ": Họ hoặc Tên bị trống.");
-            } else {
-                builder.firstName(firstName);
-                builder.lastName(lastName);
-            }
-        } else {
-            errors.add("Dòng " + rowIndex + ": Họ hoặc Tên bị trống.");
-        }
-    }
-
-    private void processDobCell(
-            Cell cell, int rowIndex, CreateUserRequest.CreateUserRequestBuilder builder, List<String> errors) {
-        if (cell != null) {
-            try {
-                builder.dob(cell.getDateCellValue()
-                        .toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate());
-            } catch (Exception e) {
-                errors.add("Dòng " + rowIndex + ": Ngày sinh không hợp lệ.");
-            }
-        } else {
-            errors.add("Dòng " + rowIndex + ": Ngày sinh bị trống.");
-        }
-    }
-
-
-    private void processAddressCells(Row row, CreateUserRequest.CreateUserRequestBuilder builder) {
-        if (row.getCell(6) != null)
-            builder.street(row.getCell(6).getStringCellValue().trim());
-        if (row.getCell(7) != null)
-            builder.ward(row.getCell(7).getStringCellValue().trim());
-        if (row.getCell(8) != null)
-            builder.district(row.getCell(8).getStringCellValue().trim());
-        if (row.getCell(9) != null)
-            builder.city(row.getCell(9).getStringCellValue().trim());
-    }
-
     private void logErrors(List<String> errors) {
         for (String error : errors) {
             log.warn(error);
@@ -387,11 +305,11 @@ public class UserCommandServiceImpl implements UserCommandService {
     }
 
     @Override
-    public UserDTO updateMyUser(UpdateUserRequest updateUserRequest) {
+    public UserDTO updateMyUser(CreateOrUpdateUserRequest updateUserRequest) {
         var context = SecurityContextHolder.getContext();
         String username = context.getAuthentication().getName();
 
-        UpdateUserCmd cmd = commandMapper.from(updateUserRequest);
+        CreateOrUpdateUserCmd cmd = commandMapper.from(updateUserRequest);
         User user = userDomainRepository.getByUsername(username);
         user.update(cmd);
 
@@ -404,7 +322,7 @@ public class UserCommandServiceImpl implements UserCommandService {
                 .syncUserType(SyncUserType.USER_UPDATED)
                 .syncUserRequest(syncUserRequest)
                 .build();
-        kafkaTemplate.send(KafkaTopic.SYNC_USER_GROUP.getTopicName(), syncUserEvent);
+        kafkaTemplate.send(KafkaTopic.SYNC_USER_PROFILE_GROUP.getTopicName(), syncUserEvent);
         return userDTOMapper.domainModelToDTO(userDomainRepository.save(user));
     }
 
@@ -430,7 +348,7 @@ public class UserCommandServiceImpl implements UserCommandService {
                     .syncUserType(SyncUserType.USER_UPDATED)
                     .syncUserRequest(syncUserRequest)
                     .build();
-            kafkaTemplate.send(KafkaTopic.SYNC_USER_GROUP.getTopicName(), syncUserEvent);
+            kafkaTemplate.send(KafkaTopic.SYNC_USER_PROFILE_GROUP.getTopicName(), syncUserEvent);
         } catch (FeignException e) {
             throw errorNormalizer.handleKeyCloakException(e);
         }
@@ -458,17 +376,15 @@ public class UserCommandServiceImpl implements UserCommandService {
         boolean isUserExist = userDomainRepository.existsByUsername(outboundUserDTO.getEmail());
 
         if (!isUserExist) {
-            CreateUserRequest createUserRequest = CreateUserRequest.builder()
+            CreateOrUpdateUserRequest createOrUpdateUserRequest = CreateOrUpdateUserRequest.builder()
                     .username(outboundUserDTO.getEmail())
                     .email(outboundUserDTO.getEmail())
-                    .firstName(outboundUserDTO.getGivenName())
-                    .lastName(outboundUserDTO.getFamilyName())
                     .provider("google")
                     .providerId(UUID.nameUUIDFromBytes(
                             String.valueOf(outboundUserDTO.getSub()).getBytes()))
                     .build();
 
-            UserDTO userDTO = createDefaultUser(createUserRequest);
+            UserDTO userDTO = createDefaultUser(createOrUpdateUserRequest);
 
             User user = userDTOMapper.dtoToDomainModel(userDTO);
 

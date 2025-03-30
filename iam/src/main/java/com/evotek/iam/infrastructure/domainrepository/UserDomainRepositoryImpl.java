@@ -90,12 +90,12 @@ public class UserDomainRepositoryImpl extends AbstractDomainRepository<User, Use
     @Override
     protected List<User> enrichList(List<User> users) {
         if (users.isEmpty()) return users;
-        List<UUID> userIds = users.stream().map(User::getSelfUserID).toList();
+        List<UUID> userIds = users.stream().map(User::getId).toList();
 
         Map<UUID, List<UserRole>> userRoleMap = userRoleEntityRepository.findByUserIdInAndDeletedFalse(userIds).stream()
                 .collect(Collectors.groupingBy(UserRoleEntity::getUserId,
                         Collectors.mapping(userRoleEntityMapper::toDomainModel, Collectors.toList())));
-        users.forEach(user -> user.setUserRoles(new ArrayList<>(userRoleMap.getOrDefault(user.getSelfUserID(), Collections.emptyList()))));
+        users.forEach(user -> user.setUserRoles(new ArrayList<>(userRoleMap.getOrDefault(user.getId(), Collections.emptyList()))));
         return users;
     }
 

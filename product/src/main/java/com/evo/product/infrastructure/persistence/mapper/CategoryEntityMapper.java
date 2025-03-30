@@ -1,10 +1,9 @@
-package com.evotek.iam.infrastructure.persistence.mapper;
-
-import org.mapstruct.Mapper;
+package com.evo.product.infrastructure.persistence.mapper;
 
 import com.evo.common.mapper.EntityMapper;
-import com.evotek.iam.domain.OauthClient;
-import com.evotek.iam.infrastructure.persistence.entity.OauthClientEntity;
+import com.evo.product.domain.Category;
+import com.evo.product.infrastructure.persistence.entity.CategoryEntity;
+import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "Spring")
-public interface OauthClientEntityMapper extends EntityMapper<OauthClient, OauthClientEntity> {}
+public interface CategoryEntityMapper extends EntityMapper<Category, CategoryEntity> {}

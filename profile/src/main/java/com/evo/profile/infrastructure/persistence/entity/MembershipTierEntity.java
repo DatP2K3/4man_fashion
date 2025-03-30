@@ -1,13 +1,14 @@
 package com.evo.profile.infrastructure.persistence.entity;
 
+import java.util.UUID;
+
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.UUID;
+import com.evo.common.entity.AuditEntity;
+
+import lombok.*;
 
 @Entity
 @Data
@@ -15,8 +16,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@EqualsAndHashCode(callSuper = false)
 @Table(name = "membership_tiers")
-public class MembershipTier {
+public class MembershipTierEntity extends AuditEntity {
     @Id
     @Column(name = "id")
     private UUID id;
@@ -29,4 +31,10 @@ public class MembershipTier {
 
     @Column(name = "min_points")
     private Integer minPoints;
+
+    @Column(name = "deleted")
+    private boolean deleted;
+
+    @Column(name = "default_tier")
+    private boolean defaultTier;
 }

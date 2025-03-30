@@ -1,30 +1,23 @@
 package com.evo.profile.infrastructure.persistence.entity;
 
-import com.evo.common.entity.AuditEntity;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.time.LocalDate;
 import java.util.UUID;
+
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
+@EqualsAndHashCode(callSuper = false)
 @Table(name = "profiles")
 public class ProfileEntity {
     @Id
     @Column(name = "id")
-    private UUID id;
-
-    @Column(name = "user_id")
-    private UUID userId;
+    private UUID id; // dùng chung id với bảng user,
 
     @Column(name = "email")
     private String email;
@@ -39,17 +32,14 @@ public class ProfileEntity {
     private String phoneNumber;
 
     @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth;
+    private LocalDate dob;
 
     @Column(name = "avatar_file_id")
-    private String avatarFileId;
-
-    @Column(name = "gender")
-    private String gender;
-
-    @Column(name = "address")
-    private String address;
+    private UUID avatarFileId;
 
     @Column(name = "membership_tier_id")
     private UUID membershipTierId;
+
+    @Column(name = "deleted")
+    private Boolean deleted;
 }

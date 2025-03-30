@@ -1,5 +1,6 @@
 package com.evotek.iam.application.mapper;
 
+import com.evotek.iam.application.dto.request.CreateOrUpdateUserRequest;
 import com.evotek.iam.domain.UserRole;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,6 +17,8 @@ import java.util.stream.Collectors;
 public interface SyncMapper {
     @Mapping(source = "userRoles", target = "roleIds", qualifiedByName = "userRolesToRoleIds")
     SyncUserRequest from(User user);
+
+    CreateOrUpdateUserRequest from(SyncUserRequest request);
 
     @Named("userRolesToRoleIds")
     default List<UUID> userRolesToRoleIds(List<UserRole> userRoles) {

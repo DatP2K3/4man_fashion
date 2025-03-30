@@ -23,7 +23,7 @@ public enum AuthErrorCode {
     FILE_NOT_FOUND(1015, "File not found", HttpStatus.BAD_REQUEST),
     INVALID_CLIENT_SECRET(1016, "Invalid client secret", HttpStatus.BAD_REQUEST),
     CLIENT_NOT_EXISTED(1017, "Client not existed", HttpStatus.BAD_REQUEST),
-    CAN_NOT_CREATE_TOKEN(1018, "Can't create token", HttpStatus.BAD_REQUEST),
+    CAN_NOT_CREATE_TOKEN(1018, "Can't create token", HttpStatus.INTERNAL_SERVER_ERROR),
     PASSWORD_ALREADY_SET(1019, "Password already set", HttpStatus.BAD_REQUEST),
     ;
 

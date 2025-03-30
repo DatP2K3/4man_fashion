@@ -1,4 +1,9 @@
 package com.evo.product.domain.repository;
 
-public interface CategoryDomainRepository {
+import com.evo.common.repository.DomainRepository;
+import com.evo.product.domain.Category;
+
+import java.util.UUID;
+
+public interface CategoryDomainRepository extends DomainRepository<Category, UUID> {
 }

@@ -8,26 +8,23 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.evo.common.dto.event.PushNotificationEvent;
 import com.evotek.iam.application.dto.request.ChangePasswordRequest;
-import com.evotek.iam.application.dto.request.CreateUserRequest;
-import com.evotek.iam.application.dto.request.UpdateUserRequest;
+import com.evotek.iam.application.dto.request.CreateOrUpdateUserRequest;
 import com.evotek.iam.application.dto.response.TokenDTO;
 import com.evotek.iam.application.dto.response.UserDTO;
 
 @Service
 public interface UserCommandService {
-    UserDTO createDefaultUser(CreateUserRequest request);
+    UserDTO createDefaultUser(CreateOrUpdateUserRequest request);
 
-    UserDTO createUser(CreateUserRequest request);
+    UserDTO createUser(CreateOrUpdateUserRequest request);
 
     void OverwritePassword(String username, ChangePasswordRequest request);
 
     void changeMyPassword(ChangePasswordRequest request);
 
-    UUID changeMyAvatar(List<MultipartFile> files);
-
     List<UserDTO> importUserFile(MultipartFile file);
 
-    UserDTO updateMyUser(UpdateUserRequest updateUserRequest);
+    UserDTO updateMyUser(CreateOrUpdateUserRequest updateUserRequest);
 
     void lockUser(String username, boolean enabled);
 

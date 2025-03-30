@@ -27,7 +27,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 
     @Override
     public void update(SyncUserCmd syncUserCmd) {
-        User user = userDomainRepository.getById(syncUserCmd.getSelfUserID());
+        User user = userDomainRepository.getById(syncUserCmd.getId());
         user.update(syncUserCmd);
         userDomainRepository.save(user);
     }

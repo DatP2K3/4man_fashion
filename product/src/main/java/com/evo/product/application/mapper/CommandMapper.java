@@ -1,31 +1,13 @@
-package com.evotek.iam.application.mapper;
+package com.evo.product.application.mapper;
 
+import com.evo.product.application.dto.request.CreateOrUpdateCategoryRequest;
+import com.evo.product.application.dto.request.CreateTagDescriptionRequest;
+import com.evo.product.domain.command.CreateOrUpdateCategoryCmd;
+import com.evo.product.domain.command.CreateTagDescriptionCmd;
 import org.mapstruct.Mapper;
-
-import com.evotek.iam.application.dto.request.*;
-import com.evotek.iam.domain.command.*;
 
 @Mapper(componentModel = "spring")
 public interface CommandMapper {
-    CreateOrUpdatePermissionCmd from(CreateOrUpdatePermissionRequest request);
-
-    LoginCmd from(LoginRequest request);
-
-    VerifyOtpCmd from(VerifyOtpRequest request);
-
-    CreateUserCmd from(CreateUserRequest request);
-
-    ChangePasswordCmd from(ChangePasswordRequest request);
-
-    CreateOrUpdateRoleCmd from(CreateOrUpdateRoleRequest request);
-
-    DeleteRolePermissionCmd from(DeleteRolePermissionRequest request);
-
-    CreateRolePermissionCmd from(CreateRolePermissionRequest request);
-
-    CreateUserRoleCmd from(CreateUserRoleRequest request);
-
-    UpdateUserCmd from(UpdateUserRequest request);
-
-    WriteLogCmd from(String activity);
+    CreateOrUpdateCategoryCmd from(CreateOrUpdateCategoryRequest request);
+    CreateTagDescriptionCmd from(CreateTagDescriptionRequest request);
 }

@@ -35,6 +35,4 @@ public class ProductVariantEntity {
 
     @Column(name = "sku")
     private String sku;
-
-
 }

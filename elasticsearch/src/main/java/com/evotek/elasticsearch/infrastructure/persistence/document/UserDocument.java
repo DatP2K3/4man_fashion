@@ -19,7 +19,7 @@ import lombok.*;
 public class UserDocument {
     @Id
     @Field(type = FieldType.Keyword)
-    private UUID selfUserID;
+    private UUID id;
 
     @Field(type = FieldType.Keyword)
     private UUID providerId;
@@ -80,6 +80,9 @@ public class UserDocument {
 
     @Field(type = FieldType.Keyword)
     private String provider;
+
+    @Field(type = FieldType.Keyword)
+    private String phoneNumber;
 
     @Field(type = FieldType.Keyword)
     private List<UUID> roleIds;

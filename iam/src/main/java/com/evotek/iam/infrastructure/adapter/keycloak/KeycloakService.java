@@ -2,13 +2,13 @@ package com.evotek.iam.infrastructure.adapter.keycloak;
 
 import java.util.UUID;
 
-import com.evotek.iam.application.dto.request.CreateUserRequest;
+import com.evotek.iam.application.dto.request.CreateOrUpdateUserRequest;
 import com.evotek.iam.application.dto.request.LoginRequest;
 import com.evotek.iam.application.dto.response.TokenDTO;
 import com.evotek.iam.domain.command.ResetKeycloakPasswordCmd;
 
 public interface KeycloakService {
-    String createKeycloakUser(CreateUserRequest request);
+    String createKeycloakUser(CreateOrUpdateUserRequest request);
 
     void resetPassword(UUID keycloakUserId, ResetKeycloakPasswordCmd resetKeycloakPasswordCmd);
 

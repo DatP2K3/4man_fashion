@@ -1,22 +1,19 @@
 package com.evo.profile.infrastructure.persistence.entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.util.UUID;
+
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
+@EqualsAndHashCode(callSuper = false)
 @Table(name = "user_wallets")
-public class UserWallet {
+public class UserWalletEntity {
     @Id
     @Column(name = "id")
     private UUID id;
@@ -29,5 +26,4 @@ public class UserWallet {
 
     @Column(name = "total_points")
     private Integer totalPoints;
-
 }

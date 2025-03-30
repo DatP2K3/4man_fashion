@@ -19,11 +19,15 @@ import java.util.UUID;
 public class TagDescriptionEntity {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "name")
     private String name;
 
     @Column(name = "category_id")
-    private UUID productTypeId;
+    private UUID categoryId;
+
+    @Column(name = "deleted")
+    private boolean deleted;
 }

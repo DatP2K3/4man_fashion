@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 public enum AppErrorCode {
-    USER_NOT_FOUND(1130, "User not found", HttpStatus.BAD_REQUEST),
+    USER_NOT_FOUND(1130, "User not found", HttpStatus.NOT_FOUND),
     ;
 
     private final int code;

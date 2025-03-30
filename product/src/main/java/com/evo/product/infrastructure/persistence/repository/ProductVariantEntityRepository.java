@@ -1,4 +1,9 @@
 package com.evo.product.infrastructure.persistence.repository;
 
-public interface ProductVariantEntityRepository {
+import com.evo.product.infrastructure.persistence.entity.ProductVariantEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.UUID;
+
+public interface ProductVariantEntityRepository extends JpaRepository<ProductVariantEntity, UUID> {
 }

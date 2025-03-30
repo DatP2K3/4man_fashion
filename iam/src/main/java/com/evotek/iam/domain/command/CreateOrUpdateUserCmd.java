@@ -1,6 +1,5 @@
 package com.evotek.iam.domain.command;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,12 +10,12 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateUserCmd {
+public class CreateOrUpdateUserCmd {
     private UUID providerId;
     private String username;
     private String password;
     private String email;
     private String provider;
-    private boolean twoFactorEnabled;
+    private Boolean twoFactorEnabled;
     private List<CreateUserRoleCmd> userRoles;
 }

@@ -1,20 +1,19 @@
 package com.evo.profile.infrastructure.persistence.entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.UUID;
+
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Table(name = "shipping_addresses")
-public class ShippingAddress {
+public class ShippingAddressEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -24,6 +23,7 @@ public class ShippingAddress {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
     @Column(name = "address_line1")
     private String addressLine1; // Địa chỉ cụ thể (Số nhà, tên đường)
 

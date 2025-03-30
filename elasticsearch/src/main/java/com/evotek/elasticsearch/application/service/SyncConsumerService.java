@@ -18,7 +18,7 @@ public class SyncConsumerService {
     private final UserCommandServiceImpl userCommandServiceImpl;
     private final CommandMapper commandMapper;
 
-    @KafkaListener(topics = "sync-user-group")
+    @KafkaListener(topics = "sync-user-profile-group")
     public void syncUser(SyncUserEvent event) {
         SyncUserCmd syncUserCmd = commandMapper.from(event.getSyncUserRequest());
         switch (event.getSyncUserType()) {
@@ -29,7 +29,7 @@ public class SyncConsumerService {
                 userCommandServiceImpl.update(syncUserCmd);
                 break;
             case USER_DELETED:
-                userCommandServiceImpl.delete(syncUserCmd.getSelfUserID());
+                userCommandServiceImpl.delete(syncUserCmd.getId());
                 break;
             default:
                 log.error("Invalid sync user type: {}", event.getSyncUserType());

@@ -1,11 +1,9 @@
 package com.evotek.iam.application.dto.request;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 
 import lombok.*;
@@ -14,7 +12,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateUserRequest {
+public class CreateOrUpdateUserRequest {
     private UUID providerId;
 
     @NotBlank(message = "UserName cannot be blank")
@@ -29,20 +27,7 @@ public class CreateUserRequest {
     @NotBlank(message = "Email cannot be blank")
     private String email;
 
-    private String firstName;
-
-    private String lastName;
-
-    @Past(message = "Date of birth must be a past date.")
-    private LocalDate dob;
-
-    private String street;
-
-    private String ward;
-
-    private String district;
-
-    private String city;
+    private boolean twoFactorEnabled;
 
     private String provider;
 

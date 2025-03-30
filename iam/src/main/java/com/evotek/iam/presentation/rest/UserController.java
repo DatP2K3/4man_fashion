@@ -3,6 +3,7 @@ package com.evotek.iam.presentation.rest;
 import java.util.List;
 import java.util.UUID;
 
+import com.evotek.iam.application.dto.request.CreateOrUpdateUserRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,9 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.evo.common.UserAuthority;
 import com.evo.common.dto.response.ApiResponses;
 import com.evotek.iam.application.dto.request.ChangePasswordRequest;
-import com.evotek.iam.application.dto.request.CreateUserRequest;
 import com.evotek.iam.application.dto.request.SearchUserRequest;
-import com.evotek.iam.application.dto.request.UpdateUserRequest;
 import com.evotek.iam.application.dto.response.TokenDTO;
 import com.evotek.iam.application.dto.response.UserDTO;
 import com.evotek.iam.application.service.UserCommandService;
@@ -81,11 +80,11 @@ public class UserController {
                     @io.swagger.v3.oas.annotations.parameters.RequestBody(
                             description = "Thông tin của người dùng cần tạo mới",
                             required = true,
-                            content = @Content(schema = @Schema(implementation = CreateUserRequest.class))),
+                            content = @Content(schema = @Schema(implementation = CreateOrUpdateUserRequest.class))),
             responses = {@ApiResponse(responseCode = "201", description = "Người dùng đã được tạo mới")})
     @PostMapping("/users")
-    public ApiResponses<UserDTO> createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
-        UserDTO userDTO = userCommandService.createDefaultUser(createUserRequest);
+    public ApiResponses<UserDTO> createUser(@RequestBody @Valid CreateOrUpdateUserRequest createOrUpdateUserRequest) {
+        UserDTO userDTO = userCommandService.createDefaultUser(createOrUpdateUserRequest);
         return ApiResponses.<UserDTO>builder()
                 .data(userDTO)
                 .success(true)
@@ -103,12 +102,12 @@ public class UserController {
                     @io.swagger.v3.oas.annotations.parameters.RequestBody(
                             description = "Thông tin của người quản trị cần tạo mới",
                             required = true,
-                            content = @Content(schema = @Schema(implementation = CreateUserRequest.class))),
+                            content = @Content(schema = @Schema(implementation = CreateOrUpdateUserRequest.class))),
             responses = {@ApiResponse(responseCode = "201", description = "Người quản trị đã được tạo mới")})
     @PreAuthorize("hasPermission(null, 'user.admin')")
     @PostMapping("/administers")
-    public ApiResponses<UserDTO> createAdminister(@RequestBody @Valid CreateUserRequest createUserRequest) {
-        UserDTO userDTO = userCommandService.createUser(createUserRequest);
+    public ApiResponses<UserDTO> createAdminister(@RequestBody @Valid CreateOrUpdateUserRequest createOrUpdateUserRequest) {
+        UserDTO userDTO = userCommandService.createUser(createOrUpdateUserRequest);
         return ApiResponses.<UserDTO>builder()
                 .data(userDTO)
                 .success(true)
@@ -144,11 +143,11 @@ public class UserController {
                     @io.swagger.v3.oas.annotations.parameters.RequestBody(
                             description = "Thông tin của người dùng cần cập nhật",
                             required = true,
-                            content = @Content(schema = @Schema(implementation = UpdateUserRequest.class))),
+                            content = @Content(schema = @Schema(implementation = CreateOrUpdateUserRequest.class))),
             responses = {@ApiResponse(responseCode = "200", description = "Thông tin người dùng sau khi cập nhật")})
     @PreAuthorize("hasPermission(null, 'user.update')")
     @PutMapping("/users")
-    public ApiResponses<UserDTO> updateUser(@RequestBody UpdateUserRequest updateUserRequest) {
+    public ApiResponses<UserDTO> updateUser(@RequestBody CreateOrUpdateUserRequest updateUserRequest) {
         UserDTO userDTO = userCommandService.updateMyUser(updateUserRequest);
         return ApiResponses.<UserDTO>builder()
                 .data(userDTO)
@@ -199,32 +198,6 @@ public class UserController {
                 .success(true)
                 .code(200)
                 .message("Password successfully changed")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
-
-    @Operation(
-            summary = "Đổi avatar",
-            description = "API này giành cho người dùng đổi avatar.",
-            requestBody =
-                    @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                            description = "Tệp hình ảnh để đổi avatar.",
-                            required = true,
-                            content =
-                                    @Content(
-                                            mediaType = "multipart/form-data",
-                                            schema = @Schema(type = "string", format = "binary", name = "files"))),
-            responses = {@ApiResponse(responseCode = "200", description = "Avatar đã được đổi thành công")})
-    @PutMapping("/users/avatar")
-    public ApiResponses<UUID> changeAvatar(
-            @Parameter(description = "Tệp hình ảnh", required = true) @RequestPart List<MultipartFile> files) {
-        UUID avatarId = userCommandService.changeMyAvatar(files);
-        return ApiResponses.<UUID>builder()
-                .data(avatarId)
-                .success(true)
-                .code(200)
-                .message("Avatar successfully changed")
                 .timestamp(System.currentTimeMillis())
                 .status("OK")
                 .build();

@@ -1,4 +1,4 @@
-package com.evotek.iam.infrastructure.support.exception;
+package com.evo.product.infrastructure.support.exception;
 
 import lombok.Getter;
 import lombok.Setter;

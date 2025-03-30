@@ -1,4 +1,4 @@
-package com.evotek.iam.application.configuration;
+package com.evotek.iam.application.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;

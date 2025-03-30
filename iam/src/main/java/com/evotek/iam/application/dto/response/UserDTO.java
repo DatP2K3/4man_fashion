@@ -9,18 +9,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-    private UUID selfUserID;
+    private UUID id;
     private String provider;
     private UUID providerId;
     private String email;
     private String username;
-    private String firstName;
-    private String lastName;
-    private String dob;
-    private String street;
-    private String ward;
-    private String district;
-    private String city;
-    private int yearsOfExperience;
-    private UUID avatarFileId;
 }

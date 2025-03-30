@@ -1,13 +1,14 @@
 package com.evo.profile.infrastructure.persistence.entity;
 
+import java.util.UUID;
+
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.UUID;
+import com.evo.profile.domain.enums.CashbackTransactionType;
+
+import lombok.*;
 
 @Entity
 @Data
@@ -15,8 +16,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@EqualsAndHashCode(callSuper = false)
 @Table(name = "cashback_transactions")
-public class CashbackTransaction {
+public class CashbackTransactionEntity {
     @Id
     @Column(name = "id")
     private UUID id;

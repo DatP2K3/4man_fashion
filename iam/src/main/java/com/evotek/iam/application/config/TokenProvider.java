@@ -1,4 +1,4 @@
-package com.evotek.iam.application.configuration;
+package com.evotek.iam.application.config;
 
 import java.security.KeyPair;
 import java.security.interfaces.RSAPublicKey;

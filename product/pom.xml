@@ -112,6 +112,10 @@
 			<artifactId>hypersistence-utils-hibernate-63</artifactId>
 			<version>3.9.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>

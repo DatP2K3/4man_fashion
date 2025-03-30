@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SyncUserCmd {
-    private UUID selfUserID;
+    private UUID id;
     private UUID providerId;
     private String username;
     private String email;
@@ -26,5 +26,6 @@ public class SyncUserCmd {
     private String password;
     private boolean locked;
     private String provider;
+    private String phoneNumber;
     private List<UUID> roleIds;
 }

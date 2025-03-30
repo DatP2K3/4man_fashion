@@ -1,5 +1,7 @@
 package com.evotek.iam.application.service;
 
+import com.evotek.iam.application.dto.request.VerifyOtpRequest;
+import com.nimbusds.jwt.SignedJWT;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
@@ -12,11 +14,14 @@ import com.evotek.iam.domain.command.ResetKeycloakPasswordCmd;
 public interface AuthServiceCommand {
     TokenDTO authenticate(LoginRequest loginRequest);
 
+    TokenDTO verifyOtp(VerifyOtpRequest verifyOtpRequest);
+
     void logoutIam(HttpServletRequest request, String refreshToken);
 
     TokenDTO refresh(String refreshToken);
 
     void requestPasswordReset(String username, ResetKeycloakPasswordCmd resetKeycloakPasswordCmd);
 
-    void resetPassword(String token, ResetKeycloakPasswordCmd resetKeycloakPasswordCmd);
+    void resetPassword(ResetKeycloakPasswordCmd resetKeycloakPasswordCmd);
+
 }

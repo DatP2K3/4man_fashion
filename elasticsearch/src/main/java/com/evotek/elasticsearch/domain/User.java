@@ -16,26 +16,26 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @Getter
 public class User {
-    private UUID selfUserID;
+    private UUID id;
     private UUID providerId;
     private String username;
     private String email;
     private String firstName;
     private String lastName;
+    private String phoneNumber;
     private UUID avatarFileId;
     private LocalDate dob;
     private String street;
     private String ward;
     private String district;
     private String city;
-    private int yearsOfExperience;
     private String password;
     private boolean locked;
     private String provider;
     private List<UUID> roleIds;
 
     public User(SyncUserCmd syncUserCmd) {
-        this.selfUserID = syncUserCmd.getSelfUserID();
+        this.id = syncUserCmd.getId();
         this.providerId = syncUserCmd.getProviderId();
         this.username = syncUserCmd.getUsername();
         this.email = syncUserCmd.getEmail();
@@ -47,7 +47,6 @@ public class User {
         this.ward = syncUserCmd.getWard();
         this.district = syncUserCmd.getDistrict();
         this.city = syncUserCmd.getCity();
-        this.yearsOfExperience = syncUserCmd.getYearsOfExperience();
         this.password = syncUserCmd.getPassword();
         this.locked = syncUserCmd.isLocked();
         this.provider = syncUserCmd.getProvider();
@@ -82,9 +81,6 @@ public class User {
         if (syncUserCmd.getCity() != null) {
             this.city = syncUserCmd.getCity();
         }
-        if (syncUserCmd.getYearsOfExperience() != 0) {
-            this.yearsOfExperience = syncUserCmd.getYearsOfExperience();
-        }
         if (syncUserCmd.getPassword() != null) {
             this.password = syncUserCmd.getPassword();
         }
@@ -93,6 +89,9 @@ public class User {
         }
         if (syncUserCmd.getRoleIds() != null) {
             this.roleIds = syncUserCmd.getRoleIds();
+        }
+        if(syncUserCmd.getPhoneNumber() != null) {
+            this.phoneNumber = syncUserCmd.getPhoneNumber();
         }
     }
 }

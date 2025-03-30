@@ -91,12 +91,12 @@ public class UserQueryServiceImpl implements UserQueryService {
         List<String> grantedPermissions = List.of();
         if (permissions != null && !permissions.isEmpty()) {
             grantedPermissions = permissions.stream()
-                    .filter(Objects::nonNull) // Lọc các phần tử null nếu có
+                    .filter(Objects::nonNull)
                     .map(permission -> permission.getResourceId() + "." + permission.getScope())
                     .toList();
         }
         return UserAuthority.builder()
-                .userId(user.getSelfUserID())
+                .userId(user.getId())
                 .isRoot(isRoot)
                 .isClient(false)
                 .grantedPermissions(grantedPermissions)
