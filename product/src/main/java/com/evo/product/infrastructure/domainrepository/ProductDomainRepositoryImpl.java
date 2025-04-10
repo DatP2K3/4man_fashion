@@ -50,7 +50,7 @@ public class ProductDomainRepositoryImpl extends AbstractDomainRepository<Produc
         productImageEntityRepository.saveAll(productImageEntities);
 
         ProductEntity productEntity = productEntityMapper.toEntity(product);
-        return productEntityMapper.toDomainModel(productEntityRepository.save(productEntity));
+        return this.enrich(productEntityMapper.toDomainModel(productEntityRepository.save(productEntity)));
     }
 
     @Override
