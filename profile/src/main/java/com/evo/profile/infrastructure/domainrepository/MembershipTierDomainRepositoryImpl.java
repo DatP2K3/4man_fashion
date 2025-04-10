@@ -40,4 +40,11 @@ public class MembershipTierDomainRepositoryImpl
         return membershipTierEntityMapper.toDomainModel(
                 membershipTierEntityRepository.findByDefaultTierTrue().orElse(null));
     }
+
+    @Override
+    public MembershipTier getNextTier(Integer minPoints) {
+        return membershipTierEntityMapper.toDomainModel(membershipTierEntityRepository
+                .findNextTierByMinPoints(minPoints)
+                .getFirst());
+    }
 }

@@ -1,7 +1,9 @@
 package com.evo.product.application.service.impl.command;
 
+import com.evo.product.application.dto.mapper.CategoryDTOMapper;
 import com.evo.product.application.dto.request.CreateOrUpdateCategoryRequest;
 import com.evo.product.application.dto.request.CreateTagDescriptionRequest;
+import com.evo.product.application.dto.response.CategoryDTO;
 import com.evo.product.application.mapper.CommandMapper;
 import com.evo.product.application.service.impl.CategoryCommandService;
 import com.evo.product.domain.Category;
@@ -10,6 +12,7 @@ import com.evo.product.domain.repository.CategoryDomainRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -17,19 +20,26 @@ import java.util.UUID;
 public class CategoryCommandServiceImpl implements CategoryCommandService {
     private final CommandMapper commandMapper;
     private final CategoryDomainRepository categoryDomainRepository;
+    private final CategoryDTOMapper categoryDTOMapper;
 
     @Override
-    public Category createCategory(CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest) {
+    public CategoryDTO createCategory(CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest) {
         CreateOrUpdateCategoryCmd createOrUpdateCategoryCmd = commandMapper.from(createOrUpdateCategoryRequest);
         Category category = new Category(createOrUpdateCategoryCmd);
-        return categoryDomainRepository.save(category);
+        return categoryDTOMapper.domainModelToDTO(categoryDomainRepository.save(category));
     }
 
     @Override
-    public Category updateCategory(CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest) {
+    public CategoryDTO updateCategory(CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest) {
         CreateOrUpdateCategoryCmd createOrUpdateCategoryCmd = commandMapper.from(createOrUpdateCategoryRequest);
         Category category = categoryDomainRepository.getById(createOrUpdateCategoryRequest.getId());
         category.update(createOrUpdateCategoryCmd);
-        return categoryDomainRepository.save(category);
+        return categoryDTOMapper.domainModelToDTO(categoryDomainRepository.save(category));
+    }
+
+    @Override
+    public List<CategoryDTO> getCategories() {
+        List<Category> categories = categoryDomainRepository.getAll();
+        return categoryDTOMapper.domainModelsToDTOs(categories);
     }
 }

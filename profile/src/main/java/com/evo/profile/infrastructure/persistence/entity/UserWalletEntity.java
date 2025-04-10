@@ -16,14 +16,18 @@ import lombok.*;
 public class UserWalletEntity {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "user_id")
-    private UUID userId;
+    private UUID profileId;
 
     @Column(name = "cashback_balance")
     private Long cashbackBalance;
 
     @Column(name = "total_points")
     private Integer totalPoints;
+
+    @Column(name = "total_coins")
+    private Long totalCoins;
 }

@@ -28,17 +28,4 @@ public class TestController {
                 .status("OK")
                 .build();
     }
-
-    @GetMapping("refreshScope")
-    public ApiResponses<Boolean> refresh() {
-        Boolean result = userCommandService.refreshScope();
-        return ApiResponses.<Boolean>builder()
-                .data(result)
-                .success(true)
-                .code(200)
-                .message("Refresh successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.evo.profile.domain.query.SearchProfileQuery;
 import org.springframework.stereotype.Repository;
 
 import com.evo.common.repository.AbstractDomainRepository;
@@ -59,11 +60,11 @@ public class ProfileDomainRepositoryImpl extends AbstractDomainRepository<Profil
         Map<UUID, List<ShippingAddress>> shippingAddressMap =
                 shippingAddressEntityRepository.findByProfileIdIn(profileIds).stream()
                         .collect(Collectors.groupingBy(
-                                ShippingAddressEntity::getUserId,
+                                ShippingAddressEntity::getProfileId,
                                 Collectors.mapping(shippingAdressEntityMapper::toDomainModel, Collectors.toList())));
 
         Map<UUID, UserWallet> userWalletMap = userWalletEntityRepository.findByProfileIdIn(profileIds).stream()
-                .collect(Collectors.toMap(UserWalletEntity::getUserId, userWalletEntityMapper::toDomainModel));
+                .collect(Collectors.toMap(UserWalletEntity::getProfileId, userWalletEntityMapper::toDomainModel));
 
         profiles.forEach(profile -> {
             profile.setListShippingAddress(shippingAddressMap.get(profile.getId()));
@@ -83,13 +84,37 @@ public class ProfileDomainRepositoryImpl extends AbstractDomainRepository<Profil
             shippingAddressEntityRepository.saveAll(shippingAdressEntityMapper.toEntityList(listShippingAddress));
         }
 
-        return profileEntityMapper.toDomainModel(profileEntityRepository.save(profileEntityMapper.toEntity(profile)));
+        return this.enrich(
+                profileEntityMapper.toDomainModel(profileEntityRepository.save(profileEntityMapper.toEntity(profile))));
     }
 
     @Override
     public Profile getById(UUID profileId) {
-        return profileEntityMapper.toDomainModel(profileEntityRepository
+        return this.enrich(profileEntityMapper.toDomainModel(profileEntityRepository
                 .findById(profileId)
-                .orElseThrow(() -> new AppException(AppErrorCode.PROFILE_NOT_FOUND)));
+                .orElseThrow(() -> new AppException(AppErrorCode.PROFILE_NOT_FOUND))));
+    }
+
+    @Override
+    public Profile getByIdOrNull(UUID profileId) {
+        return this.enrich(profileEntityMapper.toDomainModel(
+                profileEntityRepository.findById(profileId).orElse(null)));
+    }
+
+    @Override
+    public ShippingAddress getDefaultShippingAddress() {
+        return shippingAdressEntityMapper.toDomainModel(
+                shippingAddressEntityRepository.findByDefaultAddressTrue().orElse(null));
+    }
+
+    @Override
+    public List<Profile> search(SearchProfileQuery searchUserQuery) {
+        List<ProfileEntity> profileEntities = profileEntityRepository.search(searchUserQuery);
+        return this.enrichList(profileEntityMapper.toDomainModelList(profileEntities));
+    }
+
+    @Override
+    public Long count(SearchProfileQuery searchUserQuery) {
+        return profileEntityRepository.count(searchUserQuery);
     }
 }

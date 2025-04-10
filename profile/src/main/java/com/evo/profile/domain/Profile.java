@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.evo.profile.domain.command.CreateOrUpdateProfileCmd;
 import com.evo.profile.domain.command.CreateOrUpdateShippingAddressCmd;
+import com.evo.profile.domain.command.UpdateProfileInfoCmd;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -19,6 +19,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class Profile {
     private UUID id;
+    private String username;
     private String email;
     private String firstName;
     private String lastName;
@@ -30,14 +31,23 @@ public class Profile {
     private UserWallet userWallet;
     private boolean deleted;
 
-    public Profile(CreateOrUpdateProfileCmd syncUserCmd) {
-        this.id = syncUserCmd.getId();
-        this.email = syncUserCmd.getEmail();
-        this.membershipTierId = syncUserCmd.getMembershipTierId();
-        this.userWallet = new UserWallet(syncUserCmd.getId());
+    public Profile(UpdateProfileInfoCmd cmd) {
+        if (cmd.getId() != null) {
+            this.id = cmd.getId();
+        }
+
+        if (cmd.getUsername() != null) {
+            this.username = cmd.getUsername();
+        }
+
+        if (cmd.getEmail() != null) {
+            this.email = cmd.getEmail();
+        }
+        this.membershipTierId = cmd.getMembershipTierId();
+        this.userWallet = new UserWallet(cmd.getId());
     }
 
-    public void update(CreateOrUpdateProfileCmd updateProfileCmd) {
+    public void update(UpdateProfileInfoCmd updateProfileCmd) {
         if (updateProfileCmd.getEmail() != null) {
             this.email = updateProfileCmd.getEmail();
         }
@@ -58,28 +68,36 @@ public class Profile {
         }
     }
 
-    public ShippingAddress addShippingAddress(CreateOrUpdateShippingAddressCmd cmd) {
-        ShippingAddress shippingAddress = new ShippingAddress(cmd);
+    public void addShippingAddress(CreateOrUpdateShippingAddressCmd cmd) {
+        ShippingAddress newShippingAddress = new ShippingAddress(cmd);
         if (this.listShippingAddress == null) {
             this.listShippingAddress = new ArrayList<>();
         }
-        this.listShippingAddress.add(shippingAddress);
-        return shippingAddress;
+        if (newShippingAddress.getDefaultAddress()) {
+            for (ShippingAddress address : this.listShippingAddress) {
+                address.setDefaultAddress(false);
+            }
+            newShippingAddress.setDefaultAddress(true);
+        }
+
+        this.listShippingAddress.add(newShippingAddress);
     }
 
-    public ShippingAddress updateShippingAddress(CreateOrUpdateShippingAddressCmd cmd) {
-        for (ShippingAddress shippingAddress : this.listShippingAddress) {
-            if (shippingAddress.getId().equals(cmd.getId())) {
-                shippingAddress.setRecipientName(cmd.getRecipientName());
-                shippingAddress.setPhoneNumber(cmd.getPhoneNumber());
-                shippingAddress.setAddressLine1(cmd.getAddressLine1());
-                shippingAddress.setAddressLine2(cmd.getAddressLine2());
-                shippingAddress.setWard(cmd.getWard());
-                shippingAddress.setDistrict(cmd.getDistrict());
-                shippingAddress.setCity(cmd.getCity());
-                return shippingAddress;
+    public void updateShippingAddress(CreateOrUpdateShippingAddressCmd cmd) {
+        if (cmd.getDefaultAddress()) {
+            for (ShippingAddress shippingAddress : this.listShippingAddress) {
+                shippingAddress.setDefaultAddress(false);
+                if (shippingAddress.getId().equals(cmd.getId())) {
+                    shippingAddress.setRecipientName(cmd.getRecipientName());
+                    shippingAddress.setPhoneNumber(cmd.getPhoneNumber());
+                    shippingAddress.setAddressLine1(cmd.getAddressLine1());
+                    shippingAddress.setAddressLine2(cmd.getAddressLine2());
+                    shippingAddress.setWard(cmd.getWard());
+                    shippingAddress.setDistrict(cmd.getDistrict());
+                    shippingAddress.setCity(cmd.getCity());
+                    shippingAddress.setDefaultAddress(cmd.getDefaultAddress());
+                }
             }
         }
-        return null;
     }
 }

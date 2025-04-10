@@ -3,10 +3,10 @@ package com.evotek.elasticsearch.application.service;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import com.evo.common.dto.event.SyncUserEvent;
+import com.evo.common.dto.event.SyncProductEvent;
 import com.evotek.elasticsearch.application.mapper.CommandMapper;
-import com.evotek.elasticsearch.application.service.impl.command.UserCommandServiceImpl;
-import com.evotek.elasticsearch.domain.command.SyncUserCmd;
+import com.evotek.elasticsearch.application.service.impl.command.ProductCommandServiceImpl;
+import com.evotek.elasticsearch.domain.command.SyncProductCmd;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,24 +15,24 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class SyncConsumerService {
-    private final UserCommandServiceImpl userCommandServiceImpl;
+    private final ProductCommandServiceImpl userCommandServiceImpl;
     private final CommandMapper commandMapper;
 
-    @KafkaListener(topics = "sync-user-profile-group")
-    public void syncUser(SyncUserEvent event) {
-        SyncUserCmd syncUserCmd = commandMapper.from(event.getSyncUserRequest());
-        switch (event.getSyncUserType()) {
-            case USER_CREATED:
-                userCommandServiceImpl.create(syncUserCmd);
+    @KafkaListener(topics = "sync-product-group")
+    public void syncProduct(SyncProductEvent event) {
+        SyncProductCmd syncProductCmd = commandMapper.from(event.getSyncProductRequest());
+        switch (event.getSyncProductType()) {
+            case PRODUCT_CREATED:
+                userCommandServiceImpl.create(syncProductCmd);
                 break;
-            case USER_UPDATED:
-                userCommandServiceImpl.update(syncUserCmd);
+            case PRODUCT_UPDATED:
+                userCommandServiceImpl.update(syncProductCmd);
                 break;
-            case USER_DELETED:
-                userCommandServiceImpl.delete(syncUserCmd.getId());
+            case PRODUCT_DELETED:
+                userCommandServiceImpl.delete(syncProductCmd.getId());
                 break;
             default:
-                log.error("Invalid sync user type: {}", event.getSyncUserType());
+                log.error("Invalid sync product type: {}", event.getSyncProductType());
         }
     }
 }

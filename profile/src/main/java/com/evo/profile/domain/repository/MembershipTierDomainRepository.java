@@ -9,4 +9,6 @@ public interface MembershipTierDomainRepository extends DomainRepository<Members
     MembershipTier getById(UUID membershipTierId);
 
     MembershipTier getDefaultMembershipTier();
+
+    MembershipTier getNextTier(Integer minPoints);
 }

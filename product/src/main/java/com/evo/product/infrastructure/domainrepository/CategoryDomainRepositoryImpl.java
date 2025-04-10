@@ -65,4 +65,10 @@ public class CategoryDomainRepositoryImpl extends AbstractDomainRepository<Categ
                 new ArrayList<>(tagDescriptionMap.getOrDefault(category.getId(), Collections.emptyList()))));
         return categories;
     }
+
+    @Override
+    public List<Category> getAll() {
+        List<CategoryEntity> categoryEntities = categoryEntityRepository.findAll();
+        return this.enrichList(categoryEntityMapper.toDomainModelList(categoryEntities));
+    }
 }

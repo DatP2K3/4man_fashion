@@ -1,7 +1,7 @@
 package com.evotek.iam.application.service;
 
-import com.evo.common.dto.event.SyncUserEvent;
-import com.evo.common.dto.request.SyncUserRequest;
+import com.evo.common.dto.event.SyncProductEvent;
+import com.evo.common.dto.request.SyncProductRequest;
 import com.evotek.iam.application.dto.request.CreateOrUpdateUserRequest;
 import com.evotek.iam.application.mapper.SyncMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,16 +17,16 @@ public class SyncConsumerService {
 private final SyncMapper syncMapper;
 
     @KafkaListener(topics = "sync-user-profile-group")
-    public void syncUser(SyncUserEvent event) {
-        SyncUserRequest syncUserRequest = event.getSyncUserRequest();
-        CreateOrUpdateUserRequest request = syncMapper.from(syncUserRequest);
+    public void syncUser(SyncProductEvent event) {
+        SyncProductRequest syncProductRequest = event.getSyncProductRequest();
+        CreateOrUpdateUserRequest request = syncMapper.from(syncProductRequest);
 
-        switch (event.getSyncUserType()) {
+        switch (event.getSyncProductType()) {
             case USER_UPDATED:
                 userCommandService.updateMyUser(request);
                 break;
             default:
-                log.error("Invalid sync user type: {}", event.getSyncUserType());
+                log.error("Invalid sync user type: {}", event.getSyncProductType());
         }
     }
 }

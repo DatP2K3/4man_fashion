@@ -15,10 +15,11 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "comments")
+@Table(name = "product_images")
 public class ProductImageEntity {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "product_id")
@@ -27,6 +28,6 @@ public class ProductImageEntity {
     @Column(name = "file_id")
     private UUID fileId;
 
-    @Column(name = "thumbnail")
-    private String thumbnail;
+    @Column(name = "avatar")
+    private Boolean avatar;
 }

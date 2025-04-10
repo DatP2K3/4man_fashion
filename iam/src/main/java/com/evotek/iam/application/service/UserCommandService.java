@@ -14,23 +14,9 @@ import com.evotek.iam.application.dto.response.UserDTO;
 
 @Service
 public interface UserCommandService {
-    UserDTO createDefaultUser(CreateOrUpdateUserRequest request);
-
-    UserDTO createUser(CreateOrUpdateUserRequest request);
-
-    void OverwritePassword(String username, ChangePasswordRequest request);
-
-    void changeMyPassword(ChangePasswordRequest request);
-
-    List<UserDTO> importUserFile(MultipartFile file);
-
     UserDTO updateMyUser(CreateOrUpdateUserRequest updateUserRequest);
 
     void lockUser(String username, boolean enabled);
 
     void testFcm(PushNotificationEvent pushNotificationEvent);
-
-    TokenDTO outboundAuthenticate(String code);
-
-    Boolean refreshScope();
 }

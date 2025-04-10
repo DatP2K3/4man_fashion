@@ -39,6 +39,9 @@ public class ShippingAddressEntity {
     @Column(name = "city")
     private String city;
 
-    @Column(name = "user_id")
-    private UUID userId;
+    @Column(name = "profile_id")
+    private UUID profileId;
+
+    @Column(name = "default_address")
+    private Boolean defaultAddress; // Địa chỉ mặc định
 }

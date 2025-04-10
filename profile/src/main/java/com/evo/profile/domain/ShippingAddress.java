@@ -22,7 +22,8 @@ public class ShippingAddress {
     private String ward; // Phường/Xã
     private String district; // Quận/Huyện
     private String city;
-    private UUID userId;
+    private UUID profileId;
+    private Boolean defaultAddress;
 
     public ShippingAddress(CreateOrUpdateShippingAddressCmd cmd) {
         this.recipientName = cmd.getRecipientName();
@@ -32,6 +33,11 @@ public class ShippingAddress {
         this.ward = cmd.getWard();
         this.district = cmd.getDistrict();
         this.city = cmd.getCity();
-        this.userId = cmd.getUserId();
+        this.profileId = cmd.getProfileId();
+        if(cmd.getDefaultAddress() != null) {
+            this.defaultAddress = cmd.getDefaultAddress();
+        } else {
+            this.defaultAddress = false;
+        }
     }
 }

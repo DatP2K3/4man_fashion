@@ -33,19 +33,6 @@ public class UserController {
     private final UserCommandService userCommandService;
     private final UserQueryService userQueryService;
 
-    @PostMapping("/outbound/authentication")
-    ApiResponses<TokenDTO> outboundAuthenticate(@RequestParam("code") String code) {
-        TokenDTO tokenDTO = userCommandService.outboundAuthenticate(code);
-        return ApiResponses.<TokenDTO>builder()
-                .data(tokenDTO)
-                .success(true)
-                .code(201)
-                .message("User created successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
-
     @PreAuthorize("hasPermission(null, 'user.admin')")
     @GetMapping("/users/authorities-by-username/{username}")
     public ApiResponses<UserAuthority> getUserAuthority(@PathVariable String username) {
@@ -60,70 +47,13 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping("/client/authorities/{clientId}")
-    public ApiResponses<UserAuthority> getClientAuthority(@PathVariable String clientId) {
-        UserAuthority userAuthority = userQueryService.getClientAuthority(clientId);
-        return ApiResponses.<UserAuthority>builder()
-                .data(userAuthority)
-                .success(true)
-                .code(200)
-                .message("Get client authority successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
-
-    @Operation(
-            summary = "Tạo mới người dùng",
-            description = "API này sẽ tạo mới một người dùng trong hệ thống và trả về thông tin.",
-            requestBody =
-                    @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                            description = "Thông tin của người dùng cần tạo mới",
-                            required = true,
-                            content = @Content(schema = @Schema(implementation = CreateOrUpdateUserRequest.class))),
-            responses = {@ApiResponse(responseCode = "201", description = "Người dùng đã được tạo mới")})
-    @PostMapping("/users")
-    public ApiResponses<UserDTO> createUser(@RequestBody @Valid CreateOrUpdateUserRequest createOrUpdateUserRequest) {
-        UserDTO userDTO = userCommandService.createDefaultUser(createOrUpdateUserRequest);
-        return ApiResponses.<UserDTO>builder()
-                .data(userDTO)
-                .success(true)
-                .code(201)
-                .message("User created successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
-
-    @Operation(
-            summary = "Tạo mới người quản trị",
-            description = "API này sẽ tạo mới một người quản trị trong hệ thống và trả về thông tin.",
-            requestBody =
-                    @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                            description = "Thông tin của người quản trị cần tạo mới",
-                            required = true,
-                            content = @Content(schema = @Schema(implementation = CreateOrUpdateUserRequest.class))),
-            responses = {@ApiResponse(responseCode = "201", description = "Người quản trị đã được tạo mới")})
-    @PreAuthorize("hasPermission(null, 'user.admin')")
-    @PostMapping("/administers")
-    public ApiResponses<UserDTO> createAdminister(@RequestBody @Valid CreateOrUpdateUserRequest createOrUpdateUserRequest) {
-        UserDTO userDTO = userCommandService.createUser(createOrUpdateUserRequest);
-        return ApiResponses.<UserDTO>builder()
-                .data(userDTO)
-                .success(true)
-                .code(201)
-                .message("User created successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
-
     @Operation(
             summary = "Lấy thông tin người dùng",
             description = "API này sẽ trả về thông tin người dùng trong hệ thống.",
             responses = {@ApiResponse(responseCode = "200", description = "Thông tin người dùng")})
-    @PreAuthorize("hasPermission(null, 'user.read')")
+//    @PreAuthorize("hasPermission(null, 'user.read')")
     @GetMapping("/users/my-info")
+    @PreAuthorize("hasRole('USER')")
     public ApiResponses<UserDTO> getMyInfo() {
         UserDTO userDTO = userQueryService.getMyUserInfo();
         return ApiResponses.<UserDTO>builder()
@@ -181,27 +111,6 @@ public class UserController {
                 .build();
     }
 
-    @Operation(
-            summary = "Đổi mật khẩu",
-            description = "API này sẽ đổi mật khẩu của người dùng.",
-            requestBody =
-                    @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                            description = "Thông tin mật khẩu",
-                            required = true,
-                            content = @Content(schema = @Schema(implementation = ChangePasswordRequest.class))),
-            responses = {@ApiResponse(responseCode = "200", description = "Mật khẩu đã được đổi")})
-    @PreAuthorize("hasPermission(null, 'user.update')")
-    @PatchMapping("/users/change-password")
-    public ApiResponses<Void> changeMyPassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
-        userCommandService.changeMyPassword(changePasswordRequest);
-        return ApiResponses.<Void>builder()
-                .success(true)
-                .code(200)
-                .message("Password successfully changed")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
 
     @GetMapping("/users/export")
     public ApiResponses<Void> exportUserListToExcel(@RequestBody SearchUserRequest searchUserRequest) {
@@ -215,30 +124,4 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping("/users/import")
-    public ApiResponses<List<UserDTO>> importUserFile(@RequestParam MultipartFile file) {
-        List<UserDTO> userResponse = userCommandService.importUserFile(file);
-        return ApiResponses.<List<UserDTO>>builder()
-                .data(userResponse)
-                .success(true)
-                .code(200)
-                .message("Import user file successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
-
-    @PreAuthorize("hasPermission(null, 'user.admin')")
-    @PutMapping("/users/overwrite-password")
-    ApiResponses<Void> resetPassword(
-            @RequestParam String username, @RequestBody ChangePasswordRequest changePasswordRequest) {
-        userCommandService.OverwritePassword(username, changePasswordRequest);
-        return ApiResponses.<Void>builder()
-                .success(true)
-                .code(200)
-                .message("Reset password successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
 }

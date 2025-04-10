@@ -16,5 +16,6 @@ public class CreateOrUpdateShippingAddressCmd {
     private String ward; // Phường/Xã
     private String district; // Quận/Huyện
     private String city;
-    private UUID userId;
+    private Boolean defaultAddress; // Địa chỉ mặc định
+    private UUID profileId;
 }

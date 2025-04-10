@@ -1,6 +1,7 @@
 package com.evo.profile.application.dto.response;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -22,5 +23,11 @@ public class ProfileDTO {
     private String phoneNumber;
     private LocalDate dob;
     private UUID avatarFileId;
-    private UUID membershipTierId;
+    private String membershipTierName;
+    private String nextMembershipTierName;
+    private List<ShippingAddressDTO> listShippingAddress;
+    private int pointsToNextLevel;
+    private Long totalPoints;
+    private Long totalCoins;
+    private int percent;
 }

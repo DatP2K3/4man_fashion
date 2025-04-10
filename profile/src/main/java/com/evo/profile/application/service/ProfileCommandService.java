@@ -2,20 +2,22 @@ package com.evo.profile.application.service;
 
 import java.util.UUID;
 
-import com.evo.profile.application.dto.request.CreateOrUpdateProfileRequest;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.evo.profile.application.dto.request.CreateOrUpdateAddressRequest;
+import com.evo.profile.application.dto.request.UpdateProfileInfoRequest;
 import com.evo.profile.application.dto.response.ProfileDTO;
-import com.evo.profile.application.dto.response.ShippingAddressDTO;
 
 public interface ProfileCommandService {
-    void syncCreate(CreateOrUpdateProfileRequest createProfileRequest);
+    ProfileDTO getOrInitProfile();
 
-    ProfileDTO updateProfile(CreateOrUpdateProfileRequest updateProfileRequest);
+    ProfileDTO updateProfile(UpdateProfileInfoRequest updateProfileInfoRequest);
+
+    ProfileDTO changeAvatar(MultipartFile file);
 
     void delete(UUID id, boolean deleted);
 
-    ShippingAddressDTO createShippingAddress(CreateOrUpdateProfileRequest request);
+    ProfileDTO createShippingAddress(CreateOrUpdateAddressRequest request);
 
-    ShippingAddressDTO updateShippingAddress(CreateOrUpdateProfileRequest request);
-
-    void syncUpdate(CreateOrUpdateProfileRequest request);
+    ProfileDTO updateShippingAddress(CreateOrUpdateAddressRequest request);
 }

@@ -1,6 +1,7 @@
 package com.evo.common;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -13,6 +14,6 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class Auditor {
     protected String createdBy;
-    protected String lastModifiedBy;
+    protected UUID lastModifiedBy;
     protected Instant createdAt;
 }
