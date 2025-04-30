@@ -1,5 +1,6 @@
 package com.evo.product.application.service.impl.command;
 
+import com.evo.common.dto.event.ProductSync;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,8 @@ import com.evo.product.infrastructure.adapter.rabbitmq.ProductEventRabbitMQServi
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 class ProductCommandServiceImpl implements ProductCommandService {
@@ -35,7 +38,8 @@ class ProductCommandServiceImpl implements ProductCommandService {
         Product product = new Product(createOrUpdateProductCmd);
         product = productDomainRepository.save(product);
 
-        ProductEvent productEvent = syncMapper.from(product);
+        ProductSync productSync = syncMapper.from(product);
+        ProductEvent productEvent = new ProductEvent(List.of(productSync));
         productEventRabbitMQService.publishProductCreatedEvent(productEvent);
         return productDTOMapper.domainModelToDTO(product);
     }
@@ -47,7 +51,8 @@ class ProductCommandServiceImpl implements ProductCommandService {
         product.update(createOrUpdateProductCmd);
         product = productDomainRepository.save(product);
 
-        ProductEvent productEvent = syncMapper.from(product);
+        ProductSync productSync = syncMapper.from(product);
+        ProductEvent productEvent = new ProductEvent(List.of(productSync));
         productEventRabbitMQService.publishProductUpdatedEvent(productEvent);
         return productDTOMapper.domainModelToDTO(product);
     }
@@ -59,7 +64,8 @@ class ProductCommandServiceImpl implements ProductCommandService {
         product.createDiscount(createOrUpdateDiscountCmd);
         product = productDomainRepository.save(product);
 
-        ProductEvent productEvent = syncMapper.from(product);
+        ProductSync productSync = syncMapper.from(product);
+        ProductEvent productEvent = new ProductEvent(List.of(productSync));
         productEventRabbitMQService.publishProductUpdatedEvent(productEvent);
         return productDTOMapper.domainModelToDTO(product);
     }
@@ -71,8 +77,8 @@ class ProductCommandServiceImpl implements ProductCommandService {
         product.updateDiscount(createOrUpdateDiscountCmd);
         product = productDomainRepository.save(product);
 
-        ProductEvent productEvent = syncMapper.from(product);
-        productEventRabbitMQService.publishProductUpdatedEvent(productEvent);
+        ProductSync productSync = syncMapper.from(product);
+        ProductEvent productEvent = new ProductEvent(List.of(productSync));
         return productDTOMapper.domainModelToDTO(product);
     }
 }
