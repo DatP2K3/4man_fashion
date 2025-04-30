@@ -1,11 +1,12 @@
 package com.evo.product.domain;
 
+import java.util.UUID;
+
+import com.evo.common.Auditor;
 import com.evo.product.domain.command.CreateOrUpdateProductVariantCmd;
-import jakarta.persistence.Column;
+
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
@@ -13,20 +14,24 @@ import java.util.UUID;
 @SuperBuilder
 @Setter
 @Getter
-public class ProductVariant {
+public class ProductVariant extends Auditor {
     private UUID id;
     private UUID productId;
     private String size;
     private String color;
     private int quantity;
     private String sku;
+    private Boolean deleted;
 
     public ProductVariant(CreateOrUpdateProductVariantCmd cmd) {
-        this.id = cmd.getId();
+        if (cmd.getId() != null) {
+            this.id = cmd.getId();
+        }
         this.productId = cmd.getProductId();
         this.size = cmd.getSize();
         this.color = cmd.getColor();
         this.quantity = cmd.getQuantity();
         this.sku = cmd.getSku();
+        this.deleted = false;
     }
 }

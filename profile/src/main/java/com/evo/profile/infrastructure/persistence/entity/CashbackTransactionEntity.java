@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.evo.profile.domain.enums.CashbackTransactionType;
+import com.evo.profile.infrastructure.support.enums.CashbackTransactionType;
 
 import lombok.*;
 

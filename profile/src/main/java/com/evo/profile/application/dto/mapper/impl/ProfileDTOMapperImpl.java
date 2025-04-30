@@ -1,5 +1,9 @@
 package com.evo.profile.application.dto.mapper.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.evo.profile.infrastructure.persistence.entity.ProfileEntity;
 import org.springframework.stereotype.Component;
 
 import com.evo.profile.application.dto.mapper.ProfileDTOMapper;
@@ -10,9 +14,6 @@ import com.evo.profile.domain.Profile;
 import com.evo.profile.domain.repository.MembershipTierDomainRepository;
 
 import lombok.RequiredArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -76,6 +77,16 @@ public class ProfileDTOMapperImpl implements ProfileDTOMapper {
     }
 
     @Override
+    public ProfileDTO entityToDTO(ProfileEntity entity) {
+        return null;
+    }
+
+    @Override
+    public List<ProfileDTO> entitiesToDTOs(List<ProfileEntity> entities) {
+        return List.of();
+    }
+
+    @Override
     public Profile dtoToDomainModel(ProfileDTO dto) {
         if (dto == null) {
             return null;
@@ -100,9 +111,9 @@ public class ProfileDTOMapperImpl implements ProfileDTOMapper {
     @Override
     public List<ProfileDTO> domainModelsToDTOs(List<Profile> models) {
         List<ProfileDTO> dtos = new ArrayList<>();
-        for( Profile model : models) {
+        for (Profile model : models) {
             dtos.add(domainModelToDTO(model));
         }
-    return dtos;
+        return dtos;
     }
 }

@@ -6,6 +6,8 @@ import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.*;
 
+import com.evo.common.enums.DiscountType;
+
 import lombok.*;
 
 @Document(indexName = "product")
@@ -31,6 +33,15 @@ public class ProductDocumentEntity {
 
     @Field(type = FieldType.Keyword)
     private Long originPrice;
+
+    @Field(type = FieldType.Keyword)
+    private Long discountPrice;
+
+    @Field(type = FieldType.Keyword)
+    private int discountPercentage;
+
+    @Field(type = FieldType.Keyword)
+    private DiscountType discountType;
 
     @Field(type = FieldType.Keyword)
     private UUID categoryId;

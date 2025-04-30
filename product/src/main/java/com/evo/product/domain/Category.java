@@ -1,16 +1,18 @@
 package com.evo.product.domain;
 
-import com.evo.product.domain.command.CreateOrUpdateCategoryCmd;
-import com.evo.product.domain.command.CreateTagDescriptionCmd;
-import com.evo.product.infrastructure.support.IdUtils;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import com.evo.common.Auditor;
+import com.evo.product.domain.command.CreateOrUpdateCategoryCmd;
+import com.evo.product.domain.command.CreateTagDescriptionCmd;
+import com.evo.product.infrastructure.support.IdUtils;
+
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
 @SuperBuilder
 @Setter
 @Getter
-public class Category {
+public class Category extends Auditor {
     private UUID id;
     private String name;
     private String productType;
@@ -30,23 +32,23 @@ public class Category {
         this.name = cmd.getName();
         this.productType = cmd.getProductType();
         this.description = cmd.getDescription();
-        if(cmd.getTagDescriptions() != null) {
+        if (cmd.getTagDescriptions() != null) {
             createOrUpdateTagDescription(cmd.getTagDescriptions());
         }
     }
 
     private void createOrUpdateTagDescription(List<CreateTagDescriptionCmd> tagDescriptionCmds) {
-        if(this.tagDescriptions == null) {
+        if (this.tagDescriptions == null) {
             this.tagDescriptions = new ArrayList<>();
         }
 
         Map<String, TagDescription> tagDescriptionMap = this.tagDescriptions.stream()
                 .peek(rp -> rp.setDeleted(true))
-                .collect(Collectors.toMap(TagDescription::getName, t ->t));
+                .collect(Collectors.toMap(TagDescription::getName, t -> t));
 
-        for(CreateTagDescriptionCmd tagDescriptionCmd : tagDescriptionCmds) {
+        for (CreateTagDescriptionCmd tagDescriptionCmd : tagDescriptionCmds) {
             String name = tagDescriptionCmd.getName();
-            if(tagDescriptionMap.containsKey(name)) {
+            if (tagDescriptionMap.containsKey(name)) {
                 tagDescriptionMap.get(name).setDeleted(false);
             } else {
                 tagDescriptionCmd.setCategoryId(this.id);
@@ -60,7 +62,7 @@ public class Category {
         this.name = cmd.getName();
         this.productType = cmd.getProductType();
         this.description = cmd.getDescription();
-        if(cmd.getTagDescriptions() != null) {
+        if (cmd.getTagDescriptions() != null) {
             createOrUpdateTagDescription(cmd.getTagDescriptions());
         }
     }

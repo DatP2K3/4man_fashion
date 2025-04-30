@@ -1,18 +1,20 @@
 package com.evo.profile.infrastructure.persistence.repository.impl;
 
-import com.evo.profile.domain.query.SearchProfileQuery;
-import com.evo.profile.infrastructure.persistence.entity.ProfileEntity;
-import com.evo.profile.infrastructure.persistence.repository.custom.ProfileEntityRepositoryCustom;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.evo.profile.domain.query.SearchProfileQuery;
+import com.evo.profile.infrastructure.persistence.entity.ProfileEntity;
+import com.evo.profile.infrastructure.persistence.repository.custom.ProfileEntityRepositoryCustom;
 
 @Repository
 public class ProfileEntityRepositoryImpl implements ProfileEntityRepositoryCustom {
@@ -34,7 +36,7 @@ public class ProfileEntityRepositoryImpl implements ProfileEntityRepositoryCusto
     private String createWhereQuery(String keyword, Map<String, Object> values) {
         StringBuilder sql = new StringBuilder();
         if (!keyword.isBlank()) {
-            sql.append(" and ( lower(e.username) like :keyword" + " or lower(e.email) like :keyword )");
+            sql.append(" where ( lower(e.username) like :keyword" + " or lower(e.email) like :keyword )");
             values.put("keyword", encodeKeyword(keyword));
         }
         return sql.toString();
@@ -59,7 +61,8 @@ public class ProfileEntityRepositoryImpl implements ProfileEntityRepositoryCusto
     @Override
     public Long count(SearchProfileQuery searchProfileQuery) {
         Map<String, Object> values = new HashMap<>();
-        String sql = "select count(e) from ProfileEntity e " + createWhereQuery(searchProfileQuery.getKeyword(), values);
+        String sql =
+                "select count(e) from ProfileEntity e " + createWhereQuery(searchProfileQuery.getKeyword(), values);
         Query query = entityManager.createQuery(sql, Long.class);
         values.forEach(query::setParameter);
         return (Long) query.getSingleResult();

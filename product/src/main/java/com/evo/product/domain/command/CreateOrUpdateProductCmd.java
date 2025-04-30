@@ -1,12 +1,12 @@
 package com.evo.product.domain.command;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -26,4 +26,5 @@ public class CreateOrUpdateProductCmd {
     private Boolean hidden;
     List<CreateOrUpdateProductVariantCmd> productVariants;
     List<CreateOrUpdateProductImageCmd> productImages;
+    List<CreateOrUpdateDiscountCmd> discounts;
 }

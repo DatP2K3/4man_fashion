@@ -1,5 +1,9 @@
 package com.evo.profile.application.service.impl.query;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.evo.profile.application.dto.mapper.ProfileDTOMapper;
 import com.evo.profile.application.dto.request.SearchProfileRequest;
 import com.evo.profile.application.dto.response.ProfileDTO;
@@ -8,10 +12,8 @@ import com.evo.profile.application.service.ProfileQueryService;
 import com.evo.profile.domain.Profile;
 import com.evo.profile.domain.query.SearchProfileQuery;
 import com.evo.profile.domain.repository.ProfileDomainRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

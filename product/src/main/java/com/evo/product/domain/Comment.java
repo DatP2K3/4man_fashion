@@ -1,10 +1,11 @@
 package com.evo.product.domain;
 
-import jakarta.persistence.Column;
+import java.util.UUID;
+
+import com.evo.common.Auditor;
+
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
@@ -12,7 +13,7 @@ import java.util.UUID;
 @SuperBuilder
 @Setter
 @Getter
-public class Comment {
+public class Comment extends Auditor {
     private UUID id;
     private UUID productId;
     private UUID userId;

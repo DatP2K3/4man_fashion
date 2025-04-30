@@ -2,6 +2,8 @@ package com.evo.profile.application.dto.request;
 
 import java.util.UUID;
 
+import com.evo.profile.infrastructure.support.enums.MembershipTierType;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateOrUpdateMembershipTierRequest {
     private UUID id;
-    private String name;
+    private MembershipTierType name;
     private Double cashbackPercentage;
     private Integer minPoints;
     private boolean defaultTier;

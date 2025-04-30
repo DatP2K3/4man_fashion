@@ -1,6 +1,7 @@
 package com.evo.profile.domain.query;
 
 import com.evo.common.query.PagingQuery;
+
 import lombok.Getter;
 import lombok.Setter;
 

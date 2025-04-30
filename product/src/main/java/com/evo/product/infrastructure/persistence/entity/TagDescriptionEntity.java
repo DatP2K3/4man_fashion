@@ -1,13 +1,17 @@
 package com.evo.product.infrastructure.persistence.entity;
 
+import java.util.UUID;
+
 import jakarta.persistence.*;
+
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.evo.common.entity.AuditEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.util.UUID;
 
 @Entity
 @Data
@@ -16,7 +20,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "tag_descriptions")
-public class TagDescriptionEntity {
+public class TagDescriptionEntity extends AuditEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.UUID)

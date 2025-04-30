@@ -1,10 +1,10 @@
 package com.evo.product.application.dto.request;
 
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -16,4 +16,5 @@ public class CreateOrUpdateProductVariantRequest {
     private String color;
     private int quantity;
     private String sku;
+    private Boolean deleted;
 }

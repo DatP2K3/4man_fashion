@@ -3,8 +3,6 @@ package com.evotek.iam.infrastructure.domainrepository;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.evotek.iam.infrastructure.support.exception.AppErrorCode;
-import com.evotek.iam.infrastructure.support.exception.AppException;
 import jakarta.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;

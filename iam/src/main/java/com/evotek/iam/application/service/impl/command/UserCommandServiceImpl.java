@@ -2,9 +2,6 @@ package com.evotek.iam.application.service.impl.command;
 
 import java.util.*;
 
-import com.evo.common.dto.request.SyncProductRequest;
-import com.evo.common.enums.*;
-import com.evotek.iam.application.dto.request.CreateOrUpdateUserRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -14,8 +11,11 @@ import org.springframework.stereotype.Service;
 import com.evo.common.dto.event.PushNotificationEvent;
 import com.evo.common.dto.event.SendNotificationEvent;
 import com.evo.common.dto.event.SyncProductEvent;
+import com.evo.common.dto.request.SyncProductRequest;
+import com.evo.common.enums.*;
 import com.evo.common.support.SecurityContextUtils;
 import com.evotek.iam.application.dto.mapper.UserDTOMapper;
+import com.evotek.iam.application.dto.request.CreateOrUpdateUserRequest;
 import com.evotek.iam.application.dto.response.UserDTO;
 import com.evotek.iam.application.mapper.CommandMapper;
 import com.evotek.iam.application.mapper.SyncMapper;
@@ -120,5 +120,4 @@ public class UserCommandServiceImpl implements UserCommandService {
     public void testFcm(PushNotificationEvent pushNotificationEvent) {
         kafkaTemplate.send(KafkaTopic.PUSH_NOTIFICATION_GROUP.getTopicName(), pushNotificationEvent);
     }
-
 }

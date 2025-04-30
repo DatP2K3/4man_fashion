@@ -1,17 +1,17 @@
 package com.evotek.iam.application.mapper;
 
-import com.evo.common.dto.request.SyncProductRequest;
-import com.evotek.iam.application.dto.request.CreateOrUpdateUserRequest;
-import com.evotek.iam.domain.UserRole;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-
-import com.evotek.iam.domain.User;
-import org.mapstruct.Named;
-
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
+import com.evo.common.dto.request.SyncProductRequest;
+import com.evotek.iam.application.dto.request.CreateOrUpdateUserRequest;
+import com.evotek.iam.domain.User;
+import com.evotek.iam.domain.UserRole;
 
 @Mapper(componentModel = "spring")
 public interface SyncMapper {
@@ -25,8 +25,6 @@ public interface SyncMapper {
         if (userRoles == null) {
             return null;
         }
-        return userRoles.stream()
-                .map(UserRole::getRoleId)
-                .collect(Collectors.toList());
+        return userRoles.stream().map(UserRole::getRoleId).collect(Collectors.toList());
     }
 }

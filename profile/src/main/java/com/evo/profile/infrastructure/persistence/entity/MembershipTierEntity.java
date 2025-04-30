@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.evo.common.entity.AuditEntity;
+import com.evo.profile.infrastructure.support.enums.MembershipTierType;
 
 import lombok.*;
 
@@ -24,7 +25,8 @@ public class MembershipTierEntity extends AuditEntity {
     private UUID id;
 
     @Column(name = "name")
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private MembershipTierType name;
 
     @Column(name = "cashback_percentage")
     private Double cashbackPercentage;

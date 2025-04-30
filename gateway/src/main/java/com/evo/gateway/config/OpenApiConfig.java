@@ -11,6 +11,9 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("API for 4Man Fashion").version("1.0").description("OpenAPI documentation for 4Man Fashion"));
+                .info(new Info()
+                        .title("API for 4Man Fashion")
+                        .version("1.0")
+                        .description("OpenAPI documentation for 4Man Fashion"));
     }
 }

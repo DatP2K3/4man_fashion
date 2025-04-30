@@ -2,8 +2,10 @@ package com.evo.profile.domain;
 
 import java.util.UUID;
 
+import com.evo.common.Auditor;
 import com.evo.profile.domain.command.CreateOrUpdateMembershipTierCmd;
 import com.evo.profile.infrastructure.support.IdUtils;
+import com.evo.profile.infrastructure.support.enums.MembershipTierType;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -14,9 +16,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Setter
 @Getter
-public class MembershipTier {
+public class MembershipTier extends Auditor {
     private UUID id;
-    private String name;
+    private MembershipTierType name;
     private Double cashbackPercentage;
     private Integer minPoints;
     private boolean deleted;

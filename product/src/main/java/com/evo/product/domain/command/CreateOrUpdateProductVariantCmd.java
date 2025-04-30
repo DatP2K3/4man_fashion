@@ -1,9 +1,9 @@
 package com.evo.product.domain.command;
 
+import java.util.UUID;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -14,4 +14,5 @@ public class CreateOrUpdateProductVariantCmd {
     private String color;
     private int quantity;
     private String sku;
+    private Boolean deleted;
 }

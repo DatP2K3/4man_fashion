@@ -50,7 +50,7 @@ public class User extends Auditor {
         }
 
         if (cmd.getTwoFactorEnabled() != null) {
-            this.twoFactorEnabled = cmd.getTwoFactorEnabled() ;
+            this.twoFactorEnabled = cmd.getTwoFactorEnabled();
         }
 
         if (cmd.getUserRoles() != null) {

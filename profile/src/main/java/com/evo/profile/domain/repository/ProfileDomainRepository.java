@@ -7,7 +7,6 @@ import com.evo.common.repository.DomainRepository;
 import com.evo.profile.domain.Profile;
 import com.evo.profile.domain.ShippingAddress;
 import com.evo.profile.domain.query.SearchProfileQuery;
-import com.evo.profile.infrastructure.persistence.entity.ProfileEntity;
 
 public interface ProfileDomainRepository extends DomainRepository<Profile, UUID> {
     Profile getById(UUID profileId);

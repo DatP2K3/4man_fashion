@@ -32,9 +32,6 @@ public class ProductEntity extends AuditEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "origin_price")
-    private Long originPrice;
-
     @Column(name = "category_id")
     private UUID categoryId;
 
@@ -47,6 +44,9 @@ public class ProductEntity extends AuditEntity {
 
     @Column(name = "average_rating", precision = 2, scale = 1)
     private BigDecimal averageRating;
+
+    @Column(name = "origin_price")
+    private Long originPrice;
 
     @Column(name = "weight")
     private Double weight;
@@ -68,5 +68,5 @@ public class ProductEntity extends AuditEntity {
 }
 
 /* TODO: Không cập nhật average_rating liên tục, nếu có đánh giá mới thì lưu lại product_id vào redis, sau 1 khoảng thời
-    gian nhất định thì cập nhật average_rating để tránh việc cập nhật liên tục, kêt shợp với kafka để bắt sự kiện đánh
-    giá mới, (việc cập nhật như vậy gọi là batch update) */
+gian nhất định thì cập nhật average_rating để tránh việc cập nhật liên tục, kêt shợp với kafka để bắt sự kiện đánh
+giá mới, (việc cập nhật như vậy gọi là batch update) */

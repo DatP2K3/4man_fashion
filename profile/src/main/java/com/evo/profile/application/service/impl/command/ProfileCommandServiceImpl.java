@@ -3,7 +3,6 @@ package com.evo.profile.application.service.impl.command;
 import java.util.List;
 import java.util.UUID;
 
-import com.evo.profile.infrastructure.adapter.keycloak.KeycloakService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -23,6 +22,7 @@ import com.evo.profile.domain.Profile;
 import com.evo.profile.domain.command.CreateOrUpdateShippingAddressCmd;
 import com.evo.profile.domain.command.UpdateProfileInfoCmd;
 import com.evo.profile.domain.repository.ProfileDomainRepository;
+import com.evo.profile.infrastructure.adapter.keycloak.KeycloakService;
 import com.evo.profile.infrastructure.adapter.storage.FileService;
 
 import lombok.RequiredArgsConstructor;

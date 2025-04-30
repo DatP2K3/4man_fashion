@@ -1,5 +1,21 @@
 package com.evotek.iam.application.service;
 
+import java.security.SecureRandom;
+import java.security.interfaces.RSAPublicKey;
+import java.text.ParseException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.evo.common.dto.event.SendNotificationEvent;
 import com.evo.common.enums.Channel;
 import com.evo.common.enums.KafkaTopic;
@@ -26,22 +42,8 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.security.SecureRandom;
-import java.security.interfaces.RSAPublicKey;
-import java.text.ParseException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public abstract class AuthAbstractServiceCommand implements AuthServiceCommand {
@@ -97,11 +99,15 @@ public abstract class AuthAbstractServiceCommand implements AuthServiceCommand {
         LoginCmd loginCmd = commandMapper.from(loginRequest);
         User user = userDomainRepository.getByUsername((loginCmd.getUsername()));
         TokenDTO tokenDTO = performLogin(loginRequest);
-        if(user.getTwoFactorEnabled() == false) {
+        if (user.getTwoFactorEnabled() == false) {
             return tokenDTO;
         }
-        redisTemplate.opsForValue().set("ACCESS_TOKEN:" + user.getUsername(), tokenDTO.getAccessToken(), 300, TimeUnit.SECONDS);
-        redisTemplate.opsForValue().set("REFRESH_TOKEN:" + user.getUsername(), tokenDTO.getRefreshToken(), 300, TimeUnit.SECONDS);
+        redisTemplate
+                .opsForValue()
+                .set("ACCESS_TOKEN:" + user.getUsername(), tokenDTO.getAccessToken(), 300, TimeUnit.SECONDS);
+        redisTemplate
+                .opsForValue()
+                .set("REFRESH_TOKEN:" + user.getUsername(), tokenDTO.getRefreshToken(), 300, TimeUnit.SECONDS);
 
         SecureRandom random = new SecureRandom();
         int otp = random.nextInt(900000) + 100000;
@@ -149,8 +155,14 @@ public abstract class AuthAbstractServiceCommand implements AuthServiceCommand {
                 .build();
         kafkaTemplate.send(KafkaTopic.SEND_NOTIFICATION_GROUP.getTopicName(), mailAlert);
 
-        String accessToken = redisTemplate.opsForValue().get("ACCESS_TOKEN:" + user.getUsername()).toString();
-        String refreshToken = redisTemplate.opsForValue().get("REFRESH_TOKEN:" + user.getUsername()).toString();
+        String accessToken = redisTemplate
+                .opsForValue()
+                .get("ACCESS_TOKEN:" + user.getUsername())
+                .toString();
+        String refreshToken = redisTemplate
+                .opsForValue()
+                .get("REFRESH_TOKEN:" + user.getUsername())
+                .toString();
 
         TokenDTO tokenDTO = TokenDTO.builder()
                 .accessToken(accessToken)
@@ -199,11 +211,11 @@ public abstract class AuthAbstractServiceCommand implements AuthServiceCommand {
             boolean isRefresh = signedJWT.getJWTClaimsSet().getExpirationTime() == null;
             Date expiryTime = isRefresh
                     ? new Date(signedJWT
-                    .getJWTClaimsSet()
-                    .getIssueTime()
-                    .toInstant()
-                    .plus(refreshableDuration, ChronoUnit.SECONDS)
-                    .toEpochMilli())
+                            .getJWTClaimsSet()
+                            .getIssueTime()
+                            .toInstant()
+                            .plus(refreshableDuration, ChronoUnit.SECONDS)
+                            .toEpochMilli())
                     : signedJWT.getJWTClaimsSet().getExpirationTime();
             var verified = signedJWT.verify(verifier);
             if (!(verified && expiryTime.after(new Date()))) throw new AuthException(AuthErrorCode.UNAUTHENTICATED);

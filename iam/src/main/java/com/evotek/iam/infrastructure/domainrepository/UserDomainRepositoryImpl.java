@@ -93,9 +93,11 @@ public class UserDomainRepositoryImpl extends AbstractDomainRepository<User, Use
         List<UUID> userIds = users.stream().map(User::getId).toList();
 
         Map<UUID, List<UserRole>> userRoleMap = userRoleEntityRepository.findByUserIdInAndDeletedFalse(userIds).stream()
-                .collect(Collectors.groupingBy(UserRoleEntity::getUserId,
+                .collect(Collectors.groupingBy(
+                        UserRoleEntity::getUserId,
                         Collectors.mapping(userRoleEntityMapper::toDomainModel, Collectors.toList())));
-        users.forEach(user -> user.setUserRoles(new ArrayList<>(userRoleMap.getOrDefault(user.getId(), Collections.emptyList()))));
+        users.forEach(user ->
+                user.setUserRoles(new ArrayList<>(userRoleMap.getOrDefault(user.getId(), Collections.emptyList()))));
         return users;
     }
 
@@ -108,6 +110,4 @@ public class UserDomainRepositoryImpl extends AbstractDomainRepository<User, Use
     public Long count(SearchUserQuery searchUserQuery) {
         return userEntityRepository.count(searchUserQuery);
     }
-
-
 }

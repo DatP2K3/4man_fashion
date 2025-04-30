@@ -1,5 +1,10 @@
 package com.evo.product.infrastructure.domainrepository;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Repository;
+
 import com.evo.common.repository.AbstractDomainRepository;
 import com.evo.product.domain.Category;
 import com.evo.product.domain.TagDescription;
@@ -12,10 +17,6 @@ import com.evo.product.infrastructure.persistence.repository.CategoryEntityRepos
 import com.evo.product.infrastructure.persistence.repository.TagDescriptionEntityRepository;
 import com.evo.product.infrastructure.support.exception.AppErrorCode;
 import com.evo.product.infrastructure.support.exception.AppException;
-import org.springframework.stereotype.Repository;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 public class CategoryDomainRepositoryImpl extends AbstractDomainRepository<Category, CategoryEntity, UUID>
@@ -24,6 +25,7 @@ public class CategoryDomainRepositoryImpl extends AbstractDomainRepository<Categ
     private final CategoryEntityRepository categoryEntityRepository;
     private final TagDescriptionEntityRepository tagDescriptionEntityRepository;
     private final TagDescriptionEntityMapper tagDescriptionEntityMapper;
+
     public CategoryDomainRepositoryImpl(
             CategoryEntityMapper categoryEntityMapper,
             CategoryEntityRepository categoryEntityRepository,
@@ -38,14 +40,17 @@ public class CategoryDomainRepositoryImpl extends AbstractDomainRepository<Categ
 
     @Override
     public Category getById(UUID uuid) {
-        CategoryEntity categoryEntity = categoryEntityRepository.findById(uuid).orElseThrow(() -> new AppException(AppErrorCode.CATEGORY_NOT_FOUND));
+        CategoryEntity categoryEntity = categoryEntityRepository
+                .findById(uuid)
+                .orElseThrow(() -> new AppException(AppErrorCode.CATEGORY_NOT_FOUND));
         return enrich(categoryEntityMapper.toDomainModel(categoryEntity));
     }
 
     @Override
     public Category save(Category category) {
         CategoryEntity categoryEntity = categoryEntityMapper.toEntity(category);
-        List<TagDescriptionEntity> tagDescriptionEntities = tagDescriptionEntityMapper.toEntityList(category.getTagDescriptions());
+        List<TagDescriptionEntity> tagDescriptionEntities =
+                tagDescriptionEntityMapper.toEntityList(category.getTagDescriptions());
         tagDescriptionEntityRepository.saveAll(tagDescriptionEntities);
         return categoryEntityMapper.toDomainModel(categoryEntityRepository.save(categoryEntity));
     }

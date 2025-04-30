@@ -1,13 +1,15 @@
 package com.evo.product.application.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import com.evo.product.domain.Discount;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -26,6 +28,7 @@ public class CreateOrUpdateProductRequest {
     private BigDecimal averageRating;
     private Double height;
     private Boolean hidden;
+    List<Discount> discounts;
     List<CreateOrUpdateProductVariantRequest> productVariants;
     List<CreateOrUpdateProductImageRequest> productImages;
 }

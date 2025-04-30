@@ -2,19 +2,14 @@ package com.evotek.elasticsearch.application.dto.response;
 
 import java.util.List;
 
-import com.evotek.elasticsearch.domain.ProductDocument;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-
-@Getter
-@Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@SuperBuilder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SearchProductDTO {
-    List<ProductDocument> users;
+    List<ProductDocumentDTO> products;
     private int pageIndex;
     private int pageSize;
     private int totalPages;

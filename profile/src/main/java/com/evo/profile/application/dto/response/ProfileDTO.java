@@ -4,8 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.evo.profile.infrastructure.support.enums.MembershipTierType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +13,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ProfileDTO {
     private UUID id;
     private String email;
@@ -23,8 +21,8 @@ public class ProfileDTO {
     private String phoneNumber;
     private LocalDate dob;
     private UUID avatarFileId;
-    private String membershipTierName;
-    private String nextMembershipTierName;
+    private MembershipTierType membershipTierName;
+    private MembershipTierType nextMembershipTierName;
     private List<ShippingAddressDTO> listShippingAddress;
     private int pointsToNextLevel;
     private Long totalPoints;

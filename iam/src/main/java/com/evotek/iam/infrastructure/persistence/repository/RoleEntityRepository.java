@@ -12,5 +12,4 @@ public interface RoleEntityRepository extends JpaRepository<RoleEntity, UUID> {
     Optional<RoleEntity> findByName(String name);
 
     List<RoleEntity> findByIdIn(List<UUID> roleIds);
-
 }

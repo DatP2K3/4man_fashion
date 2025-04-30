@@ -16,8 +16,8 @@ import com.evotek.iam.application.dto.request.LoginRequest;
 import com.evotek.iam.application.dto.request.VerifyOtpRequest;
 import com.evotek.iam.application.dto.response.TokenDTO;
 import com.evotek.iam.application.service.AuthServiceCommand;
-import com.evotek.iam.application.service.AuthServiceQuery;
 import com.evotek.iam.application.service.AuthServiceFactory;
+import com.evotek.iam.application.service.AuthServiceQuery;
 import com.evotek.iam.domain.command.ResetKeycloakPasswordCmd;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -61,7 +61,8 @@ public class AuthController {
 
     @Operation(
             summary = "Đăng nhập",
-            description = "API này sẽ xác thực thông tin đăng nhập và chuyển sang xác thực 2 bước bằng mã Otp nếu bật 2fa.",
+            description =
+                    "API này sẽ xác thực thông tin đăng nhập và chuyển sang xác thực 2 bước bằng mã Otp nếu bật 2fa.",
             requestBody =
                     @io.swagger.v3.oas.annotations.parameters.RequestBody(
                             description = "Thông tin đăng nhập của người dùng",

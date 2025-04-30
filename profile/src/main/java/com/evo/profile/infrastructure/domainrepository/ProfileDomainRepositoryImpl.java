@@ -5,13 +5,13 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.evo.profile.domain.query.SearchProfileQuery;
 import org.springframework.stereotype.Repository;
 
 import com.evo.common.repository.AbstractDomainRepository;
 import com.evo.profile.domain.Profile;
 import com.evo.profile.domain.ShippingAddress;
 import com.evo.profile.domain.UserWallet;
+import com.evo.profile.domain.query.SearchProfileQuery;
 import com.evo.profile.domain.repository.ProfileDomainRepository;
 import com.evo.profile.infrastructure.persistence.entity.ProfileEntity;
 import com.evo.profile.infrastructure.persistence.entity.ShippingAddressEntity;

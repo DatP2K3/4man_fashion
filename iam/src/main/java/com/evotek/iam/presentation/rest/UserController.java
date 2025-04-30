@@ -1,20 +1,12 @@
 package com.evotek.iam.presentation.rest;
 
-import java.util.List;
-import java.util.UUID;
-
-import com.evotek.iam.application.dto.request.CreateOrUpdateUserRequest;
-import jakarta.validation.Valid;
-
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.evo.common.UserAuthority;
 import com.evo.common.dto.response.ApiResponses;
-import com.evotek.iam.application.dto.request.ChangePasswordRequest;
+import com.evotek.iam.application.dto.request.CreateOrUpdateUserRequest;
 import com.evotek.iam.application.dto.request.SearchUserRequest;
-import com.evotek.iam.application.dto.response.TokenDTO;
 import com.evotek.iam.application.dto.response.UserDTO;
 import com.evotek.iam.application.service.UserCommandService;
 import com.evotek.iam.application.service.UserQueryService;
@@ -51,7 +43,7 @@ public class UserController {
             summary = "Lấy thông tin người dùng",
             description = "API này sẽ trả về thông tin người dùng trong hệ thống.",
             responses = {@ApiResponse(responseCode = "200", description = "Thông tin người dùng")})
-//    @PreAuthorize("hasPermission(null, 'user.read')")
+    //    @PreAuthorize("hasPermission(null, 'user.read')")
     @GetMapping("/users/my-info")
     @PreAuthorize("hasRole('USER')")
     public ApiResponses<UserDTO> getMyInfo() {
@@ -111,7 +103,6 @@ public class UserController {
                 .build();
     }
 
-
     @GetMapping("/users/export")
     public ApiResponses<Void> exportUserListToExcel(@RequestBody SearchUserRequest searchUserRequest) {
         userQueryService.exportUserListToExcel(searchUserRequest);
@@ -123,5 +114,4 @@ public class UserController {
                 .status("OK")
                 .build();
     }
-
 }

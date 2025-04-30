@@ -1,15 +1,15 @@
 package com.evo.product.presentation.rest;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.*;
+
 import com.evo.common.dto.response.ApiResponses;
 import com.evo.product.application.dto.request.CreateOrUpdateCategoryRequest;
 import com.evo.product.application.dto.response.CategoryDTO;
-import com.evo.product.application.service.impl.CategoryCommandService;
-import com.evo.product.domain.Category;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import com.evo.product.application.service.CategoryCommandService;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api")
@@ -17,9 +17,9 @@ import java.util.List;
 public class CategoryController {
     private final CategoryCommandService categoryCommandService;
 
-     @PostMapping("/category")
+    @PostMapping("/category")
     ApiResponses<CategoryDTO> createCategory(@RequestBody CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest) {
-         CategoryDTO categoryDTO = categoryCommandService.createCategory(createOrUpdateCategoryRequest);
+        CategoryDTO categoryDTO = categoryCommandService.createCategory(createOrUpdateCategoryRequest);
         return ApiResponses.<CategoryDTO>builder()
                 .data(categoryDTO)
                 .success(true)

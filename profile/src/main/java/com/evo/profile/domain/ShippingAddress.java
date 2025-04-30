@@ -34,7 +34,7 @@ public class ShippingAddress {
         this.district = cmd.getDistrict();
         this.city = cmd.getCity();
         this.profileId = cmd.getProfileId();
-        if(cmd.getDefaultAddress() != null) {
+        if (cmd.getDefaultAddress() != null) {
             this.defaultAddress = cmd.getDefaultAddress();
         } else {
             this.defaultAddress = false;

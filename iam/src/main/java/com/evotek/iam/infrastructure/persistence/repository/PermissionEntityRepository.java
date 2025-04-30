@@ -22,9 +22,8 @@ public interface PermissionEntityRepository
             + "WHERE r.id = :roleId")
     List<PermissionEntity> findPermissionByRoleId(@Param("roleId") UUID roleId);
 
-    @Query("SELECT DISTINCT p FROM RoleEntity r " +
-            "LEFT JOIN RolePermissionEntity rp ON r.id = rp.roleId " +
-            "LEFT JOIN PermissionEntity p ON rp.permissionId = p.id " +
-            "WHERE r.id IN :roleIds AND p.deleted = false")
+    @Query("SELECT DISTINCT p FROM RoleEntity r " + "LEFT JOIN RolePermissionEntity rp ON r.id = rp.roleId "
+            + "LEFT JOIN PermissionEntity p ON rp.permissionId = p.id "
+            + "WHERE r.id IN :roleIds AND p.deleted = false")
     List<PermissionEntity> findPermissionByRoleIdIn(@Param("roleIds") List<UUID> roleIds);
 }

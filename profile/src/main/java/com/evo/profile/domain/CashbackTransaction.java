@@ -2,7 +2,7 @@ package com.evo.profile.domain;
 
 import java.util.UUID;
 
-import com.evo.profile.domain.enums.CashbackTransactionType;
+import com.evo.profile.infrastructure.support.enums.CashbackTransactionType;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;

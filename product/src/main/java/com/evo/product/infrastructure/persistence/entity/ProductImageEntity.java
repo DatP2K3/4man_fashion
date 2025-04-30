@@ -1,13 +1,17 @@
 package com.evo.product.infrastructure.persistence.entity;
 
+import java.util.UUID;
+
 import jakarta.persistence.*;
+
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.evo.common.entity.AuditEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.util.UUID;
 
 @Entity
 @Data
@@ -16,7 +20,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "product_images")
-public class ProductImageEntity {
+public class ProductImageEntity extends AuditEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -30,4 +34,7 @@ public class ProductImageEntity {
 
     @Column(name = "avatar")
     private Boolean avatar;
+
+    @Column(name = "deleted")
+    private Boolean deleted;
 }
