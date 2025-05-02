@@ -2,6 +2,7 @@ package com.evo.product.infrastructure.domainrepository;
 
 import java.util.*;
 
+import com.evo.common.enums.DiscountStatus;
 import org.springframework.stereotype.Repository;
 
 import com.evo.common.repository.AbstractDomainRepository;
@@ -37,6 +38,13 @@ public class DiscountDomainRepositoryImpl extends AbstractDomainRepository<Disco
     @Override
     public List<Discount> getAll() {
         List<DiscountEntity> discountEntities = discountEntityRepository.findAll();
+        return discountEntityMapper.toDomainModelList(discountEntities);
+    }
+
+    @Override
+    public List<Discount> getAllNotIn(List<DiscountStatus> discountStatuses) {
+        List<DiscountEntity> discountEntities = discountEntityRepository
+                .findAllByStatusNotIn(discountStatuses);
         return discountEntityMapper.toDomainModelList(discountEntities);
     }
 }

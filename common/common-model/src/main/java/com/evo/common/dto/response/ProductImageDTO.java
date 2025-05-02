@@ -1,4 +1,4 @@
-package com.evo.product.application.dto.response;
+package com.evo.common.dto.response;
 
 import java.util.UUID;
 

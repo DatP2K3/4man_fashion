@@ -1,4 +1,4 @@
-package com.evo.product.infrastructure.support.exception;
+package com.evo.cart.infrastructure.support.exception;
 
 import lombok.Getter;
 import lombok.Setter;

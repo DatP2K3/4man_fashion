@@ -16,11 +16,15 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class CartItem extends AuditEntity {
+@Table(name = "cart_items")
+public class CartItemEntity extends AuditEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(name = "product_id")
+    private UUID productId;
 
     @Column(name = "product_variant_id")
     private UUID productVariantId;
@@ -31,6 +35,6 @@ public class CartItem extends AuditEntity {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "price")
-    private Long price;
+    @Column(name = "deleted")
+    private Boolean deleted;
 }

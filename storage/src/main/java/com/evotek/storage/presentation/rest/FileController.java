@@ -99,4 +99,4 @@ public class FileController {
     }
 }
 
-// TODO: Chiuển đổi get private file không trả về url nữa mà gender ảnh luôn//tham khảo Quân
+// TODO: Chuyển đổi get private file không trả về url nữa mà gender ảnh luôn//tham khảo Quân

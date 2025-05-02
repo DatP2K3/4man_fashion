@@ -8,4 +8,5 @@ import com.evo.product.domain.Product;
 
 public interface ProductDomainRepository extends DomainRepository<Product, UUID> {
     List<Product> getAllProductsWithNoDiscount();
+    List<Product> getAll();
 }

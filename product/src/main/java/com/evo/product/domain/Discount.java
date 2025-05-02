@@ -33,11 +33,12 @@ public class Discount extends Auditor {
         this.productId = createOrUpdateDiscountCmd.getProductId();
         this.startDate = createOrUpdateDiscountCmd.getStartDate();
         this.endDate = createOrUpdateDiscountCmd.getEndDate();
-        if(this.startDate.isBefore(Instant.now())) {
+        Instant now = Instant.now();
+        if(this.startDate.isAfter(now)) {
             this.status = DiscountStatus.SCHEDULED;
-        } else if(this.endDate.isBefore(Instant.now())) {
+        } else if(this.endDate.isBefore(now)) {
             this.status = DiscountStatus.EXPIRED;
-        } else if(this.startDate.isAfter(Instant.now()) && Instant.now().isBefore(this.endDate)) {
+        } else if(this.startDate.isAfter(now) && now.isBefore(this.endDate)) {
             this.status = DiscountStatus.ACTIVE;
         }
         this.discountType = createOrUpdateDiscountCmd.getDiscountType();

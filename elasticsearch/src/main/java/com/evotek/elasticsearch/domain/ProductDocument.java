@@ -43,35 +43,15 @@ public class ProductDocument {
     }
 
     public void update(SyncProductCmd syncProductCmd) {
-        if (syncProductCmd.getName() != null) {
-            this.name = syncProductCmd.getName();
-        }
-        if (syncProductCmd.getOriginPrice() != null) {
-            this.originPrice = syncProductCmd.getOriginPrice();
-        }
-        if (syncProductCmd.getCategoryId() != null) {
-            this.categoryId = syncProductCmd.getCategoryId();
-        }
-        if (syncProductCmd.getTotalSold() != null) {
-            this.totalSold = syncProductCmd.getTotalSold();
-        }
-        if (syncProductCmd.getDiscountPrice() != null) {
-            this.discountPrice = syncProductCmd.getDiscountPrice();
-        }
-        if (syncProductCmd.getDiscountPercent() != null) {
-            this.discountPercentage = syncProductCmd.getDiscountPercent();
-        }
-        if (syncProductCmd.getDiscountType() != null) {
-            this.discountType = syncProductCmd.getDiscountType();
-        }
-        if (syncProductCmd.getAverageRating() != null) {
-            this.averageRating = syncProductCmd.getAverageRating();
-        }
-        if (syncProductCmd.getHidden() != null) {
-            this.hidden = syncProductCmd.getHidden();
-        }
-        if (syncProductCmd.getAvatarId() != null) {
-            this.avatarId = syncProductCmd.getAvatarId();
-        }
+        this.name = syncProductCmd.getName();
+        this.originPrice = syncProductCmd.getOriginPrice();
+        this.categoryId = syncProductCmd.getCategoryId();
+        this.totalSold = syncProductCmd.getTotalSold();
+        this.discountPrice = syncProductCmd.getDiscountPrice();
+        this.discountPercentage = syncProductCmd.getDiscountPercent();
+        this.discountType = syncProductCmd.getDiscountType();
+        this.averageRating = syncProductCmd.getAverageRating();
+        this.hidden = syncProductCmd.getHidden();
+        this.avatarId = syncProductCmd.getAvatarId();
     }
 }

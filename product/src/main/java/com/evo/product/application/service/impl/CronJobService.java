@@ -33,7 +33,7 @@ public class CronJobService {
         for (Discount discount : discounts) {
             if (discount.getStartDate().isBefore(now) && discount.getEndDate().isAfter(now)) {
                 discount.setStatus(DiscountStatus.ACTIVE);
-            } else {
+            } else if (discount.getEndDate().isBefore(now)) {
                 discount.setStatus(DiscountStatus.EXPIRED);
             }
         }

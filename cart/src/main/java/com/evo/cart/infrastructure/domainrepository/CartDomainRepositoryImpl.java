@@ -1,129 +1,119 @@
-package com.evo.product.infrastructure.domainrepository;
+package com.evo.cart.infrastructure.domainrepository;
+
+import com.evo.cart.domain.Cart;
+import com.evo.cart.domain.CartItem;
+import com.evo.cart.domain.repository.CartDomainRepository;
+import com.evo.cart.infrastructure.adapter.Product.client.ProductClient;
+import com.evo.cart.infrastructure.persistence.entity.CartEntity;
+import com.evo.cart.infrastructure.persistence.entity.CartItemEntity;
+import com.evo.cart.infrastructure.persistence.mapper.CartEntityMapper;
+import com.evo.cart.infrastructure.persistence.mapper.CartItemEntityMapper;
+import com.evo.cart.infrastructure.persistence.repository.CartEntityRepository;
+import com.evo.cart.infrastructure.persistence.repository.CartItemEntityRepository;
+import com.evo.cart.infrastructure.support.exception.AppErrorCode;
+import com.evo.cart.infrastructure.support.exception.AppException;
+import com.evo.common.dto.response.ProductDTO;
+import com.evo.common.dto.response.ProductVariantDTO;
+import com.evo.common.repository.AbstractDomainRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.evo.common.enums.DiscountStatus;
-import org.springframework.stereotype.Repository;
-
-import com.evo.common.repository.AbstractDomainRepository;
-import com.evo.product.domain.*;
-import com.evo.product.domain.repository.ProductDomainRepository;
-import com.evo.product.infrastructure.persistence.entity.*;
-import com.evo.product.infrastructure.persistence.mapper.*;
-import com.evo.product.infrastructure.persistence.repository.*;
-import com.evo.product.infrastructure.support.exception.AppErrorCode;
-import com.evo.product.infrastructure.support.exception.AppException;
-
 @Repository
-public class ProductDomainRepositoryImpl extends AbstractDomainRepository<Product, ProductEntity, UUID>
-        implements ProductDomainRepository {
-    private final ProductEntityMapper productEntityMapper;
-    private final ProductEntityRepository productEntityRepository;
-    private final ProductVariantEntityRepository productVariantEntityRepository;
-    private final ProductVariantEntityMapper productVariantEntityMapper;
-    private final ProductImageEntityRepository productImageEntityRepository;
-    private final ProductImageEntityMapper productImageEntityMapper;
-    private final DiscountEntityRepository discountEntityRepository;
-    private final DiscountEntityMapper discountEntityMapper;
+public class CartDomainRepositoryImpl extends AbstractDomainRepository<Cart, CartEntity, UUID>
+        implements CartDomainRepository {
+    private final CartEntityMapper cartEntityMapper;
+    private final CartEntityRepository cartEntityRepository;
+    private final CartItemEntityRepository cartItemEntityRepository;
+    private final CartItemEntityMapper cartItemEntityMapper;
+    private final ProductClient productClient;
 
-    public ProductDomainRepositoryImpl(
-            ProductEntityMapper productEntityMapper,
-            ProductEntityRepository productEntityRepository,
-            ProductVariantEntityRepository productVariantEntityRepository,
-            ProductVariantEntityMapper productVariantEntityMapper,
-            ProductImageEntityRepository productImageEntityRepository,
-            ProductImageEntityMapper productImageEntityMapper,
-            DiscountEntityRepository discountEntityRepository,
-            DiscountEntityMapper discountEntityMapper) {
-        super(productEntityRepository, productEntityMapper);
-        this.productEntityRepository = productEntityRepository;
-        this.productEntityMapper = productEntityMapper;
-        this.productVariantEntityRepository = productVariantEntityRepository;
-        this.productVariantEntityMapper = productVariantEntityMapper;
-        this.productImageEntityRepository = productImageEntityRepository;
-        this.productImageEntityMapper = productImageEntityMapper;
-        this.discountEntityRepository = discountEntityRepository;
-        this.discountEntityMapper = discountEntityMapper;
+    public CartDomainRepositoryImpl( CartEntityMapper cartEntityMapper,
+                                        CartEntityRepository cartEntityRepository,
+                                        CartItemEntityRepository cartItemEntityRepository,
+                                        CartItemEntityMapper cartItemEntityMapper,
+                                        ProductClient productClient) {
+        super(cartEntityRepository, cartEntityMapper);
+        this.cartEntityMapper = cartEntityMapper;
+        this.cartEntityRepository = cartEntityRepository;
+        this.cartItemEntityRepository = cartItemEntityRepository;
+        this.cartItemEntityMapper = cartItemEntityMapper;
+        this.productClient = productClient;
     }
 
     @Override
-    public Product save(Product product) {
-        List<ProductVariant> productVariants = product.getProductVariants();
-        List<ProductVariantEntity> productVariantEntities = productVariantEntityMapper.toEntityList(productVariants);
-        productVariantEntityRepository.saveAll(productVariantEntities);
-
-        List<ProductImage> productImages = product.getProductImages();
-        List<ProductImageEntity> productImageEntities = productImageEntityMapper.toEntityList(productImages);
-        productImageEntityRepository.saveAll(productImageEntities);
-
-        List<Discount> discounts = product.getDiscounts();
-        List<DiscountEntity> discountEntities = discountEntityMapper.toEntityList(discounts);
-        discountEntityRepository.saveAll(discountEntities);
-
-        ProductEntity productEntity = productEntityMapper.toEntity(product);
-        return this.enrich(productEntityMapper.toDomainModel(productEntityRepository.save(productEntity)));
+    public Cart save(Cart cart) {
+        List<CartItem> cartItems = cart.getCartItems();
+        if (cartItems != null && !cartItems.isEmpty()) {
+            List<CartItemEntity> cartItemEntities = this.cartItemEntityMapper.toEntityList(cartItems);
+            cartItemEntityRepository.saveAll(cartItemEntities);
+        }
+        CartEntity cartEntity = this.cartEntityMapper.toEntity(cart);
+        cartEntity = this.cartEntityRepository.save(cartEntity);
+        return this.enrich(this.cartEntityMapper.toDomainModel(cartEntity));
     }
 
     @Override
-    public Product getById(UUID uuid) {
-        ProductEntity productEntity = productEntityRepository
-                .findById(uuid)
-                .orElseThrow(() -> new AppException(AppErrorCode.PRODUCT_NOT_FOUND));
-        return this.enrich(productEntityMapper.toDomainModel(productEntity));
+    public List<Cart> getAll() {
+        List<CartEntity> cartEntities = this.cartEntityRepository.findAll();
+        return this.enrichList(this.cartEntityMapper.toDomainModelList(cartEntities));
     }
 
     @Override
-    protected List<Product> enrichList(List<Product> products) {
-        if (products.isEmpty()) return products;
+    public Cart getByUserIdOrNull(UUID userId) {
+        CartEntity cartEntity = this.cartEntityRepository.findByUserId(userId).orElse(null);
+        return this.enrich(this.cartEntityMapper.toDomainModel(cartEntity));
+    }
 
-        List<UUID> productIds = products.stream().map(Product::getId).toList();
+    @Override
+    public Cart getById(UUID uuid) {
+       CartEntity cartEntity = this.cartEntityRepository.findById(uuid).orElseThrow(() -> new AppException(AppErrorCode.CART_NOT_FOUND));
+        return this.enrich(this.cartEntityMapper.toDomainModel(cartEntity));
+    }
 
-        Map<UUID, List<ProductVariant>> productVariantMap =
-                productVariantEntityRepository.findByProductIdIn(productIds).stream()
+    @Override
+    protected List<Cart> enrichList(List<Cart> carts) {
+        if (carts.isEmpty()) return carts;
+
+        List<UUID> cartIds = carts.stream().map(Cart::getId).toList();
+
+        Map<UUID, List<CartItem>> cartItemMap =
+                this.cartItemEntityRepository.findByCartIdIn(cartIds).stream()
                         .collect(Collectors.groupingBy(
-                                ProductVariantEntity::getProductId,
-                                Collectors.mapping(productVariantEntityMapper::toDomainModel, Collectors.toList())));
+                                CartItemEntity::getCartId,
+                                Collectors.mapping(this.cartItemEntityMapper::toDomainModel, Collectors.toList())));
 
-        Map<UUID, List<ProductImage>> productImageMap =
-                productImageEntityRepository.findByProductIdIn(productIds).stream()
-                        .collect(Collectors.groupingBy(
-                                ProductImageEntity::getProductId,
-                                Collectors.mapping(productImageEntityMapper::toDomainModel, Collectors.toList())));
-
-        List<DiscountStatus> discountStatuses = Arrays.asList(DiscountStatus.CANCELED, DiscountStatus.EXPIRED);
-        Map<UUID, List<Discount>> discountMap = discountEntityRepository.findByProductIdsAndStatusNotIn(productIds, discountStatuses).stream()
-                .collect(Collectors.groupingBy(
-                        DiscountEntity::getProductId,
-                        Collectors.mapping(discountEntityMapper::toDomainModel, Collectors.toList())));
-
-        products.forEach(product -> {
-            product.setProductVariants(
-                    new ArrayList<>(productVariantMap.getOrDefault(product.getId(), Collections.emptyList())));
-            product.setProductImages(
-                    new ArrayList<>(productImageMap.getOrDefault(product.getId(), Collections.emptyList())));
-            product.setDiscounts(new ArrayList<>(discountMap.getOrDefault(product.getId(), Collections.emptyList())));
-            product.enrichDiscountInfo();
+        carts.forEach(cart -> {
+            cart.setCartItems(cartItemMap.get(cart.getId()));
         });
 
-        return products;
+        return this.enrichListCartItemInfo(carts);
     }
 
-    @Override
-    public List<Product> getAllProductsWithNoDiscount() {
-        List<ProductEntity> productEntities = productEntityRepository.findAll();
-        List<Product> products = this.enrichList(productEntityMapper.toDomainModelList(productEntities));
-        return products.stream()
-                .filter(product -> product.getDiscounts() == null || product.getDiscounts().isEmpty())
-                .collect(Collectors.toList());
+    private List<Cart>  enrichListCartItemInfo(List<Cart> carts) {
+        if (carts.isEmpty()) return carts;
+        for (Cart cart : carts) {
+            if (cart.getCartItems() == null || cart.getCartItems().isEmpty()) continue;
+            for (CartItem cartItem : cart.getCartItems()) {
+                Object o = productClient.getProduct(cartItem.getProductId());
+                ProductDTO productDTO = productClient.getProduct(cartItem.getProductId()).getData();
+                cartItem.setName(productDTO.getName());
+                cartItem.setAvatarId(productDTO.getAvatarId());
+                cartItem.setDiscountPercent(productDTO.getDiscountPercent());
+                cartItem.setDiscountPrice(productDTO.getDiscountPrice());
+                cartItem.setDiscountType(productDTO.getDiscountType());
+                cartItem.setOriginPrice(productDTO.getOriginPrice());
+
+                List<ProductVariantDTO> productVariantDTOs = productDTO.getProductVariants();
+                for (ProductVariantDTO productVariantDTO : productVariantDTOs) {
+                    if (productVariantDTO.getId().equals(cartItem.getProductVariantId())) {
+                        cartItem.setSize(productVariantDTO.getSize());
+                        cartItem.setColor(productVariantDTO.getColor());
+                    }
+                }
+            }
+        }
+        return carts;
     }
-
-    @Override
-    public List<Product> getAll() {
-        List<ProductEntity> productEntities = productEntityRepository.getAll();
-       return this.enrichList(productEntityMapper.toDomainModelList(productEntities));
-
-    }
-
-
 }

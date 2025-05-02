@@ -1,10 +1,12 @@
 package com.evo.cart.infrastructure.persistence.repository;
 
 import com.evo.cart.infrastructure.persistence.entity.CartItemEntity;
-import com.evo.common.repository.DomainRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
-public interface CartItemRepository extends JpaRepository<CartItemEntity, UUID> {
+public interface CartItemEntityRepository extends JpaRepository<CartItemEntity, UUID> {
+    List<CartItemEntity> findByCartIdIn(List<UUID> cartIds);
 }

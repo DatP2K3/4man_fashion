@@ -31,7 +31,6 @@ public class RabbitMQPublisherConfig {
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate template = new RabbitTemplate(connectionFactory);
         template.setMessageConverter(jsonMessageConverter());
-        // Tùy chọn bổ sung cho xác nhận message được gửi thành công
         template.setConfirmCallback((correlationData, ack, cause) -> {
             if (!ack) {
                 log.info("Message không thể gửi đến exchange:  {}", cause);

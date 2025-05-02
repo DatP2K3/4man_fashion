@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.evo.common.dto.response.DTOMapper;
-import com.evo.product.application.dto.response.ProductDTO;
+import com.evo.common.dto.response.ProductDTO;
 import com.evo.product.domain.Product;
 import com.evo.product.domain.ProductImage;
 

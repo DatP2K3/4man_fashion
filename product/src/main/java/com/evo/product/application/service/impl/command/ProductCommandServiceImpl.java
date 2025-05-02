@@ -1,14 +1,13 @@
 package com.evo.product.application.service.impl.command;
 
 import com.evo.common.dto.event.ProductSync;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.evo.common.dto.event.ProductEvent;
 import com.evo.product.application.dto.mapper.ProductDTOMapper;
 import com.evo.product.application.dto.request.CreateOrUpdateDiscountRequest;
 import com.evo.product.application.dto.request.CreateOrUpdateProductRequest;
-import com.evo.product.application.dto.response.ProductDTO;
+import com.evo.common.dto.response.ProductDTO;
 import com.evo.product.application.mapper.CommandMapper;
 import com.evo.product.application.mapper.SyncMapper;
 import com.evo.product.application.service.ProductCommandService;
@@ -29,7 +28,6 @@ class ProductCommandServiceImpl implements ProductCommandService {
     private final CommandMapper commandMapper;
     private final SyncMapper syncMapper;
     private final ProductDTOMapper productDTOMapper;
-    private final KafkaTemplate<String, Object> kafkaTemplate;
     private final ProductEventRabbitMQService productEventRabbitMQService;
 
     @Override

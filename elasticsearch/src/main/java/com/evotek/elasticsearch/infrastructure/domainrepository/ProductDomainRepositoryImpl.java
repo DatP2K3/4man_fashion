@@ -3,6 +3,7 @@ package com.evotek.elasticsearch.infrastructure.domainrepository;
 import java.util.List;
 import java.util.UUID;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import com.evotek.elasticsearch.domain.ProductDocument;
@@ -14,6 +15,7 @@ import com.evotek.elasticsearch.infrastructure.support.exception.AppErrorCode;
 import com.evotek.elasticsearch.infrastructure.support.exception.AppException;
 
 @Repository
+@Slf4j
 public class ProductDomainRepositoryImpl
         extends AbstractDocumentDomainRepository<ProductDocument, ProductDocumentEntity, UUID>
         implements ProductDomainRepository {
@@ -38,8 +40,7 @@ public class ProductDomainRepositoryImpl
     @Override
     public ProductDocument getById(UUID userId) {
         ProductDocumentEntity productDocumentEntity = productDocumentEntityRepository
-                .findById(userId)
-                .orElseThrow(() -> new AppException(AppErrorCode.PRODUCT_NOT_FOUND));
+                .findById(userId).orElse(null);
         return productDocumentMapper.toDomainModel(productDocumentEntity);
     }
 

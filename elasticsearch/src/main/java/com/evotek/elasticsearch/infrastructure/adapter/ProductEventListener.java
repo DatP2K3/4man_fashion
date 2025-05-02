@@ -20,14 +20,21 @@ public class ProductEventListener {
 
     @RabbitListener(queues = "${rabbitmq.queue.product.create}")
     public void handleProductCreated(ProductEvent event) {
-        SyncProductCmd syncProductCmd = commandMapper.from(event);
+        SyncProductCmd syncProductCmd = commandMapper.from(event.getProductSyncs().getFirst());
         productCommandService.create(syncProductCmd);
     }
 
     @RabbitListener(queues = "${rabbitmq.queue.product.update}")
     public void handleProductUpdated(ProductEvent event) {
-        SyncProductCmd syncProductCmd = commandMapper.from(event);
+        SyncProductCmd syncProductCmd = commandMapper.from(event.getProductSyncs().getFirst());
         productCommandService.update(syncProductCmd);
+    }
+
+    @RabbitListener(queues = "${rabbitmq.queue.product.update-all}")
+    public void handleProductUpdatedAll(ProductEvent event) {
+        event.getProductSyncs().forEach(syncProduct -> {
+            productCommandService.update(commandMapper.from(syncProduct));
+        });
     }
 
     @RabbitListener(queues = "${rabbitmq.queue.product.delete}")

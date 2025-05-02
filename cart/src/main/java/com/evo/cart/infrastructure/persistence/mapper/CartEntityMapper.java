@@ -1,10 +1,9 @@
-package com.evo.product.infrastructure.persistence.mapper;
+package com.evo.cart.infrastructure.persistence.mapper;
 
+import com.evo.cart.domain.Cart;
+import com.evo.cart.infrastructure.persistence.entity.CartEntity;
+import com.evo.common.mapper.EntityMapper;
 import org.mapstruct.Mapper;
 
-import com.evo.common.mapper.EntityMapper;
-import com.evo.product.domain.Category;
-import com.evo.product.infrastructure.persistence.entity.CategoryEntity;
-
 @Mapper(componentModel = "Spring")
-public interface CategoryEntityMapper extends EntityMapper<Category, CategoryEntity> {}
+public interface CartEntityMapper extends EntityMapper<Cart, CartEntity> {}

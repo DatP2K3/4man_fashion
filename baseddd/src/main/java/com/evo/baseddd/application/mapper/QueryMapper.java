@@ -1,4 +1,4 @@
-package com.evotek.notification.application.mapper;
+package com.evo.baseddd.application.mapper;
 
 import org.mapstruct.Mapper;
 

@@ -44,6 +44,12 @@ public class RabbitMQConsumerConfig {
     @Value("${rabbitmq.routing.product.dlk}")
     private String deadLetterRoutingKey;
 
+    @Value("${rabbitmq.queue.product.update-all}")
+    private String productUpdateAllQueue;
+
+    @Value("${rabbitmq.routing.product.update-all}")
+    private String productUpdateAllRoutingKey;
+
     @Bean
     public DirectExchange productExchange() {
         return new DirectExchange(productExchange);
@@ -81,6 +87,14 @@ public class RabbitMQConsumerConfig {
     }
 
     @Bean
+    public Queue productUpdateAllQueue() {
+        return QueueBuilder.durable(productUpdateAllQueue)
+                .withArgument("x-dead-letter-exchange", deadLetterExchange)
+                .withArgument("x-dead-letter-routing-key", deadLetterRoutingKey)
+                .build();
+    }
+
+    @Bean
     public Queue productDeleteQueue() {
         return QueueBuilder.durable(productDeleteQueue)
                 .withArgument("x-dead-letter-exchange", deadLetterExchange)
@@ -96,6 +110,11 @@ public class RabbitMQConsumerConfig {
     @Bean
     public Binding productUpdateBinding() {
         return BindingBuilder.bind(productUpdateQueue()).to(productExchange()).with(productUpdateRoutingKey);
+    }
+
+    @Bean
+    public Binding productUpdateAllBinding() {
+        return BindingBuilder.bind(productUpdateAllQueue()).to(productExchange()).with(productUpdateAllRoutingKey);
     }
 
     @Bean

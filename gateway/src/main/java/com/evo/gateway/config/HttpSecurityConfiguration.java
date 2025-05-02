@@ -20,32 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @EnableWebFluxSecurity
 public class HttpSecurityConfiguration {
     private final String[] PUBLIC_ENDPOINTS = {
-        "/api/users",
-        "/api/auth/login_iam",
-        "/api/auth/verify-otp",
-        "/api/auth/forgot-password",
-        "/api/auth/reset-password",
-        "/api/certificate/.well-known/jwks.json",
-        "/users/authorities/**",
-        "/api/public/**",
-        "/api/client/authorities/**",
-        "/api/client/token/**",
-        "/api/uploads/**",
-        "/actuator/**",
-        "/swagger-ui/**",
-        "/v3/api-docs/**",
-        "/swagger-config",
-        "/swagger-ui.html",
-        "favicon.ico",
-        "/swagger-resources/**",
-        "/webjars/**",
-        "/swagger-resources/**",
-        "/swagger-doc/**",
-        "/api/test-retry",
-        "api/test/refresh",
-        "/api/config/reload",
-        "/api/test/**",
-        "/api/outbound/authentication"
+        "/elasticsearch/**",
     };
 
     @Bean

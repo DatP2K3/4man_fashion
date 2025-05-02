@@ -3,6 +3,7 @@ package com.evo.product.infrastructure.domainrepository;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.evo.common.enums.DiscountStatus;
 import org.springframework.stereotype.Repository;
 
 import com.evo.common.repository.AbstractDomainRepository;
@@ -90,7 +91,8 @@ public class ProductDomainRepositoryImpl extends AbstractDomainRepository<Produc
                                 ProductImageEntity::getProductId,
                                 Collectors.mapping(productImageEntityMapper::toDomainModel, Collectors.toList())));
 
-        Map<UUID, List<Discount>> discountMap = discountEntityRepository.findByProductIdIn(productIds).stream()
+        List<DiscountStatus> discountStatuses = Arrays.asList(DiscountStatus.CANCELED, DiscountStatus.EXPIRED);
+        Map<UUID, List<Discount>> discountMap = discountEntityRepository.findByProductIdsAndStatusNotIn(productIds, discountStatuses).stream()
                 .collect(Collectors.groupingBy(
                         DiscountEntity::getProductId,
                         Collectors.mapping(discountEntityMapper::toDomainModel, Collectors.toList())));
@@ -115,4 +117,13 @@ public class ProductDomainRepositoryImpl extends AbstractDomainRepository<Produc
                 .filter(product -> product.getDiscounts() == null || product.getDiscounts().isEmpty())
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Product> getAll() {
+        List<ProductEntity> productEntities = productEntityRepository.getAll();
+       return this.enrichList(productEntityMapper.toDomainModelList(productEntities));
+
+    }
+
+
 }

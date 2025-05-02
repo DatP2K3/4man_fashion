@@ -27,6 +27,9 @@ public class ProductEventRabbitMQService {
     @Value("${rabbitmq.routing.key.product.delete}")
     private String productDeleteRoutingKey;
 
+    @Value(("${rabbitmq.routing.key.product.update-all}"))
+    private String productUpdateAllRoutingKey;
+
     public void publishProductCreatedEvent(ProductEvent event) {
         log.info("Sending product CREATED event: {}", event);
         rabbitTemplate.convertAndSend(productExchange, productCreateRoutingKey, event);
@@ -35,6 +38,11 @@ public class ProductEventRabbitMQService {
     public void publishProductUpdatedEvent(ProductEvent event) {
         log.info("Sending product UPDATED event: {}", event);
         rabbitTemplate.convertAndSend(productExchange, productUpdateRoutingKey, event);
+    }
+
+    public void publishUpdateAllProductEvent(ProductEvent event) {
+        log.info("Sending product UPDATE-ALL event: {}", event);
+        rabbitTemplate.convertAndSend(productExchange, productUpdateAllRoutingKey, event);
     }
 
     public void publishProductDeletedEvent(ProductEvent event) {

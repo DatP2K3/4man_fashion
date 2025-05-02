@@ -1,12 +1,13 @@
-package com.evo.product.domain.repository;
+package com.evo.cart.domain.repository;
+
+import com.evo.cart.domain.Cart;
+import com.evo.common.repository.DomainRepository;
 
 import java.util.List;
 import java.util.UUID;
 
-import com.evo.common.repository.DomainRepository;
-import com.evo.product.domain.Product;
+public interface CartDomainRepository extends DomainRepository<Cart, UUID> {
+    List<Cart> getAll();
 
-public interface ProductDomainRepository extends DomainRepository<Product, UUID> {
-    List<Product> getAllProductsWithNoDiscount();
-    List<Product> getAll();
+    Cart getByUserIdOrNull(java.util.UUID userId);
 }

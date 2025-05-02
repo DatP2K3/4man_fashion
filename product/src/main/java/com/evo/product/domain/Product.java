@@ -206,20 +206,26 @@ public class Product extends Auditor {
     public void enrichDiscountInfo() {
         if (this.discounts != null && !this.discounts.isEmpty()) {
             for (Discount discount : this.discounts) {
-                if (discount.getDiscountPrice() != null && discount.getDiscountPrice() > 0) {
-                    this.caculateByDiscountPrice(discount.getDiscountPrice());
-                } else if (discount.getDiscountPercentage() != null && discount.getDiscountPercentage() > 0) {
-                    this.caculateByDiscountPercent(discount.getDiscountPercentage());
-                } else {
-                    throw new AppException(AppErrorCode.DISCOUNT_PRICE_OR_PERCENT_IS_REQUIRED);
-                }
-                if (discount.getDiscountType() != null) {
-                    this.discountType = discount.getDiscountType();
-                }
-                if (this.discountType == DiscountType.FLASH_SALE) {
-                    return;
+                if (discount.getStatus() == DiscountStatus.ACTIVE) {
+                    if (discount.getDiscountPrice() != null && discount.getDiscountPrice() > 0) {
+                        this.caculateByDiscountPrice(discount.getDiscountPrice());
+                    } else if (discount.getDiscountPercentage() != null && discount.getDiscountPercentage() > 0) {
+                        this.caculateByDiscountPercent(discount.getDiscountPercentage());
+                    } else {
+                        throw new AppException(AppErrorCode.DISCOUNT_PRICE_OR_PERCENT_IS_REQUIRED);
+                    }
+                    if (discount.getDiscountType() != null) {
+                        this.discountType = discount.getDiscountType();
+                    }
+                    if (this.discountType == DiscountType.FLASH_SALE) {
+                        return;
+                    }
                 }
             }
+        } else {
+            this.discountPrice = null;
+            this.discountPercent = null;
+            this.discountType = null;
         }
     }
 
@@ -229,7 +235,7 @@ public class Product extends Auditor {
     }
 
     private void caculateByDiscountPercent(Integer discountPercent) {
-        this.discountPrice = (long) (this.originPrice * discountPercent / 100);
+        this.discountPrice = (long) (this.originPrice * (100 - discountPercent) / 100);
         this.discountPercent = discountPercent;
     }
 }

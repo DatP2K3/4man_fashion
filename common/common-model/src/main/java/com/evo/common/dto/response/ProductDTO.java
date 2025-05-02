@@ -1,4 +1,4 @@
-package com.evo.product.application.dto.response;
+package com.evo.common.dto.response;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -6,9 +6,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.evo.common.enums.DiscountType;
-import com.evo.product.domain.ProductImage;
-import com.evo.product.domain.ProductVariant;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,7 +30,7 @@ public class ProductDTO {
     private BigDecimal averageRating;
     private Double height;
     private Boolean hidden;
-    List<ProductVariant> productVariants;
-    List<ProductImage> productImages;
+    List<ProductVariantDTO> productVariants;
+    List<ProductImageDTO> productImages;
     private UUID avatarId;
 }
