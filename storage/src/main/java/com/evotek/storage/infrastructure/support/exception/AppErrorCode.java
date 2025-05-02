@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 public enum AppErrorCode {
-    FILE_NOT_FOUND(1028, "File not found", HttpStatus.BAD_REQUEST),
+    FILE_NOT_FOUND(1028, "File not found", HttpStatus.NOT_FOUND),
     CANT_CREATE_DIR(1029, "Can't create directory", HttpStatus.BAD_REQUEST),
     INVALID_FILENAME(1030, "Invalid filename", HttpStatus.BAD_REQUEST),
     CANT_STORE_FILE(1031, "Can't store file", HttpStatus.BAD_REQUEST),

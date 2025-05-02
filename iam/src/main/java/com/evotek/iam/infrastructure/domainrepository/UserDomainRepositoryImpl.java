@@ -1,8 +1,6 @@
 package com.evotek.iam.infrastructure.domainrepository;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import jakarta.transaction.Transactional;
@@ -63,9 +61,9 @@ public class UserDomainRepositoryImpl extends AbstractDomainRepository<User, Use
     @Transactional
     public User save(User domainModel) {
         UserEntity userEntity = userEntityMapper.toEntity(domainModel);
-        UserRole userRole = domainModel.getUserRole();
-        UserRoleEntity userRoleEntity = userRoleEntityMapper.toEntity(userRole);
-        userRoleEntityRepository.save(userRoleEntity);
+        List<UserRole> userRoles = domainModel.getUserRoles();
+        List<UserRoleEntity> userRoleEntitys = userRoleEntityMapper.toEntityList(userRoles);
+        userRoleEntityRepository.saveAll(userRoleEntitys);
         UserActivityLog userActivityLog = domainModel.getUserActivityLog();
         if (userActivityLog != null) {
             UserActivityLogEntity userActivityLogEntity = userActivityLogEntityMapper.toEntity(userActivityLog);
@@ -92,11 +90,14 @@ public class UserDomainRepositoryImpl extends AbstractDomainRepository<User, Use
     @Override
     protected List<User> enrichList(List<User> users) {
         if (users.isEmpty()) return users;
-        List<UUID> userIds = users.stream().map(User::getSelfUserID).toList();
-        Map<UUID, UserRole> userRoleMap = userRoleEntityRepository.findByUserIdIn(userIds).stream()
-                .map(userRoleEntityMapper::toDomainModel)
-                .collect(Collectors.toMap(UserRole::getUserId, userRole -> userRole));
-        users.forEach(user -> user.setUserRole(userRoleMap.getOrDefault(user.getSelfUserID(), new UserRole())));
+        List<UUID> userIds = users.stream().map(User::getId).toList();
+
+        Map<UUID, List<UserRole>> userRoleMap = userRoleEntityRepository.findByUserIdInAndDeletedFalse(userIds).stream()
+                .collect(Collectors.groupingBy(
+                        UserRoleEntity::getUserId,
+                        Collectors.mapping(userRoleEntityMapper::toDomainModel, Collectors.toList())));
+        users.forEach(user ->
+                user.setUserRoles(new ArrayList<>(userRoleMap.getOrDefault(user.getId(), Collections.emptyList()))));
         return users;
     }
 

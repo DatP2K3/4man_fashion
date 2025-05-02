@@ -1,0 +1,21 @@
+package com.evo.profile.application.dto.mapper;
+
+import com.evo.profile.infrastructure.persistence.entity.ProfileEntity;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+import com.evo.common.dto.response.DTOMapper;
+import com.evo.profile.application.dto.response.ProfileDTO;
+import com.evo.profile.domain.Profile;
+
+@Mapper()
+public interface ProfileDTOMapper extends DTOMapper<ProfileDTO, Profile, ProfileEntity> {
+
+    @Mapping(target = "membershipTierName", ignore = true) // Sẽ xử lý riêng
+    @Mapping(target = "nextMembershipTierName", ignore = true) // Sẽ xử lý riêng
+    @Mapping(target = "pointsToNextLevel", ignore = true) // Sẽ xử lý riêng
+    @Mapping(target = "percent", ignore = true) // Sẽ xử lý riêng
+    @Mapping(target = "totalPoints", source = "userWallet.totalPoints")
+    @Mapping(target = "totalCoins", source = "userWallet.totalCoins")
+    ProfileDTO domainModelToDTO(Profile profile);
+}

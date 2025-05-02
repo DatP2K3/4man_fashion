@@ -57,6 +57,18 @@ public class RoleDomainRepositoryImpl extends AbstractDomainRepository<Role, Rol
     }
 
     @Override
+    public List<Role> findByIdIn(List<UUID> roleIds) {
+        List<RoleEntity> roleEntities = roleEntityRepository.findByIdIn(roleIds);
+        return enrichList(roleEntityMapper.toDomainModelList(roleEntities));
+    }
+
+    @Override
+    public List<Permission> findPermissionByRoleIdIn(List<UUID> roleIds) {
+        List<PermissionEntity> permissionEntities = permissionEntityRepository.findPermissionByRoleIdIn(roleIds);
+        return permissionEntityMapper.toDomainModelList(permissionEntities);
+    }
+
+    @Override
     @Transactional
     public Role save(Role domainModel) {
         RoleEntity roleEntity = roleEntityMapper.toEntity(domainModel);

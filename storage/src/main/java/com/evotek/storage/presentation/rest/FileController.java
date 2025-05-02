@@ -23,13 +23,26 @@ public class FileController {
     private final FileCommandService fileCommandService;
     private final FileQueryService fileQueryService;
 
-    @PreAuthorize("hasPermission(null, 'file.create')")
     @PostMapping("/file/upload")
     public ApiResponses<List<FileResponse>> storeFile(
             @RequestPart List<MultipartFile> files, @RequestParam boolean isPublic, @RequestParam String description) {
         List<FileResponse> fileResponses = fileCommandService.storeFile(files, isPublic, description);
         return ApiResponses.<List<FileResponse>>builder()
                 .data(fileResponses)
+                .success(true)
+                .code(201)
+                .message("Files stored successfully")
+                .timestamp(System.currentTimeMillis())
+                .status("OK")
+                .build();
+    }
+
+    @PostMapping("/file/upload-only-one")
+    public ApiResponses<FileResponse> storeOneFile(
+            @RequestPart MultipartFile file, @RequestParam boolean isPublic, @RequestParam String description) {
+        FileResponse fileResponse = fileCommandService.storeOneFile(file, isPublic, description);
+        return ApiResponses.<FileResponse>builder()
+                .data(fileResponse)
                 .success(true)
                 .code(201)
                 .message("Files stored successfully")
@@ -85,3 +98,5 @@ public class FileController {
                 .build();
     }
 }
+
+// TODO: Chuyển đổi get private file không trả về url nữa mà gender ảnh luôn//tham khảo Quân

@@ -14,4 +14,6 @@ public interface FileCommandService {
     FileResponse updateFile(UpdateFileRequest updateFileRequest);
 
     void deleteFile(UUID fileId);
+
+    FileResponse storeOneFile(MultipartFile file, boolean isPublic, String description);
 }

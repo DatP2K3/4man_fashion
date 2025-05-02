@@ -18,6 +18,7 @@ public class UserRole extends Auditor {
     private UUID id;
     private UUID userId;
     private UUID roleId;
+    private boolean deleted;
 
     public UserRole(UUID roleId, UUID userId) {
         this.id = IdUtils.nextId();

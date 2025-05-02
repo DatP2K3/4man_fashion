@@ -132,6 +132,45 @@ public class FileCommandServiceImpl implements FileCommandService {
         fileDomainRepository.save(file);
     }
 
+    @Override
+    public FileResponse storeOneFile(MultipartFile file, boolean isPublic, String description) {
+        try {
+            validateFile(file);
+            int fileWidth = 0;
+            int fileHeight = 0;
+            if (isImage(file)) {
+                BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
+                fileWidth = bufferedImage.getWidth();
+                fileHeight = bufferedImage.getHeight();
+            }
+            StoreFileCmd storeFilecmd = StoreFileCmd.builder()
+                    .originName(file.getOriginalFilename())
+                    .fileType(file.getContentType())
+                    .fileSize(file.getSize())
+                    .fileWidth(fileWidth)
+                    .fileHeight(fileHeight)
+                    .description(description)
+                    .isPublic(isPublic)
+                    .build();
+
+            File fileDomain = new File(storeFilecmd);
+            Path storageLocation = isPublic ? publicStorageLocation : privateStorageLocation;
+            Path targetLocation = storageLocation.resolve(fileDomain.getMd5Name());
+            file.transferTo(targetLocation.toFile());
+
+            WriteHistoryCmd writeHistoryCmd = WriteHistoryCmd.builder()
+                    .fileId(fileDomain.getId())
+                    .action("Store file")
+                    .build();
+            FileHistory fileHistory = new FileHistory(writeHistoryCmd);
+            fileDomain.setHistory(fileHistory);
+            fileDomain = fileDomainRepository.save(fileDomain);
+            return fileResponseMapper.domainModelToDTO(fileDomain);
+        } catch (IOException e) {
+            throw new AppException(AppErrorCode.CANT_STORE_FILE);
+        }
+    }
+
     public void validateFile(MultipartFile file) {
         List<String> allowedMimeTypes =
                 Arrays.asList(fileStorageProperties.getAllowedTypes().split(","));

@@ -31,15 +31,13 @@ public class KeycloakServiceImpl implements KeycloakService {
     private String clientSecret;
 
     @Override
-    public String createKeycloakUser(CreateUserRequest request) {
+    public String createKeycloakUser(CreateOrUpdateUserRequest request) {
         try {
             String token = getClientToken();
             var creationResponse = keycloakIdentityClient.createUser(
                     "Bearer " + token,
                     CreateUserKeycloakRequest.builder()
                             .username(request.getUsername())
-                            .firstName(request.getFirstName())
-                            .lastName(request.getLastName())
                             .email(request.getEmail())
                             .enabled(true)
                             .emailVerified(false)

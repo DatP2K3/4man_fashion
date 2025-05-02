@@ -27,4 +27,7 @@ public class UserRoleEntity extends AuditEntity {
 
     @Column(name = "role_id")
     private UUID roleId;
+
+    @Column(name = "deleted")
+    private boolean deleted;
 }

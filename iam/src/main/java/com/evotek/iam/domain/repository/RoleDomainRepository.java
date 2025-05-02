@@ -11,4 +11,8 @@ public interface RoleDomainRepository extends DomainRepository<Role, UUID> {
     Role findByName(String name);
 
     List<Permission> findPermissionByRoleId(UUID roleId);
+
+    List<Role> findByIdIn(List<UUID> roleIds);
+
+    List<Permission> findPermissionByRoleIdIn(List<UUID> roleIds);
 }

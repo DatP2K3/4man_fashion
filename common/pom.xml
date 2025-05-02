@@ -9,7 +9,7 @@
 		<relativePath/>
 	</parent>
 	<groupId>com.evo.common</groupId>
-	<artifactId>evo-common</artifactId>
+	<artifactId>common</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>common</name>
 	<description>Common project for Spring Boot</description>

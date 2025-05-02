@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="common-client" />
+        <module name="config" />
+        <module name="discovery-service" />
+      </profile>
+      <profile name="Annotation profile for common" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
+        </processorPath>
+        <module name="common-model" />
+        <module name="common-web" />
+      </profile>
+      <profile name="Annotation profile for storage" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.6.3/mapstruct-1.6.3.jar" />
+        </processorPath>
+        <module name="notification" />
+        <module name="product" />
+        <module name="elasticsearch" />
+        <module name="profile" />
+        <module name="banner" />
+        <module name="storage" />
+        <module name="gateway" />
+        <module name="cart" />
+        <module name="baseddd" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="common-persistence" target="21" />
+      <module name="iam" target="21" />
+      <module name="order" target="21" />
+      <module name="spring-boot-starter-parent" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="banner" options="-parameters" />
+      <module name="baseddd" options="-parameters" />
+      <module name="cart" options="-parameters" />
+      <module name="common-client" options="-parameters" />
+      <module name="common-model" options="-parameters" />
+      <module name="common-persistence" options="-parameters" />
+      <module name="common-web" options="-parameters" />
+      <module name="config" options="-parameters" />
+      <module name="discovery-service" options="-parameters" />
+      <module name="elasticsearch" options="-parameters" />
+      <module name="gateway" options="-parameters" />
+      <module name="iam" options="-parameters" />
+      <module name="notification" options="-parameters" />
+      <module name="order" options="-parameters" />
+      <module name="product" options="-parameters" />
+      <module name="profile" options="-parameters" />
+      <module name="storage" options="-parameters" />
+    </option>
+  </component>
+</project>

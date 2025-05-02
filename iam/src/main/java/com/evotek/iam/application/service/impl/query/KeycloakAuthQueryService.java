@@ -8,7 +8,7 @@ import java.util.Date;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import com.evotek.iam.application.configuration.TokenProvider;
+import com.evotek.iam.application.config.TokenProvider;
 import com.evotek.iam.application.service.AuthServiceQuery;
 import com.evotek.iam.domain.OauthClient;
 import com.evotek.iam.domain.repository.OauthClientDomainRepository;

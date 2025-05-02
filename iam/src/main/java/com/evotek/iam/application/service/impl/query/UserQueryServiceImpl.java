@@ -80,19 +80,23 @@ public class UserQueryServiceImpl implements UserQueryService {
     @Override
     public UserAuthority getUserAuthority(String username) {
         User user = userDomainRepository.getByUsername(username);
-        UserRole userRole = user.getUserRole();
-        Role role = roleDomainRepository.getById(userRole.getRoleId());
-        boolean isRoot = role.isRoot();
-        List<Permission> permissions = roleDomainRepository.findPermissionByRoleId(userRole.getRoleId());
+        List<UserRole> userRoles = user.getUserRoles();
+        List<UUID> roleIds = userRoles.stream().map(UserRole::getRoleId).toList();
+        List<Role> roles = roleDomainRepository.findByIdIn(roleIds);
+        boolean isRoot = false;
+        if (roles != null && !roles.isEmpty()) {
+            isRoot = roles.stream().anyMatch(Role::isRoot);
+        }
+        List<Permission> permissions = roleDomainRepository.findPermissionByRoleIdIn(roleIds);
         List<String> grantedPermissions = List.of();
         if (permissions != null && !permissions.isEmpty()) {
             grantedPermissions = permissions.stream()
-                    .filter(Objects::nonNull) // Lọc các phần tử null nếu có
+                    .filter(Objects::nonNull)
                     .map(permission -> permission.getResourceId() + "." + permission.getScope())
                     .toList();
         }
         return UserAuthority.builder()
-                .userId(user.getSelfUserID())
+                .userId(user.getId())
                 .isRoot(isRoot)
                 .isClient(false)
                 .grantedPermissions(grantedPermissions)

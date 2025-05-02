@@ -1,6 +1,7 @@
 package com.evo.common.entity;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
@@ -18,11 +19,11 @@ import lombok.Setter;
 public class AuditEntity {
     @CreatedBy
     @Column(name = "created_by", updatable = false)
-    private String createdBy;
+    private UUID createdBy;
 
     @LastModifiedBy
     @Column(name = "last_modified_by")
-    private String lastModifiedBy;
+    private UUID lastModifiedBy;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)

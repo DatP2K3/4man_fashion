@@ -13,7 +13,7 @@ public interface CommandMapper {
 
     VerifyOtpCmd from(VerifyOtpRequest request);
 
-    CreateUserCmd from(CreateUserRequest request);
+    CreateOrUpdateUserCmd from(CreateOrUpdateUserRequest request);
 
     ChangePasswordCmd from(ChangePasswordRequest request);
 
@@ -24,8 +24,6 @@ public interface CommandMapper {
     CreateRolePermissionCmd from(CreateRolePermissionRequest request);
 
     CreateUserRoleCmd from(CreateUserRoleRequest request);
-
-    UpdateUserCmd from(UpdateUserRequest request);
 
     WriteLogCmd from(String activity);
 }
