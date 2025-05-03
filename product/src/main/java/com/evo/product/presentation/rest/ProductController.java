@@ -6,9 +6,9 @@ import java.util.UUID;
 import org.springframework.web.bind.annotation.*;
 
 import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.ProductDTO;
 import com.evo.product.application.dto.request.CreateOrUpdateDiscountRequest;
 import com.evo.product.application.dto.request.CreateOrUpdateProductRequest;
-import com.evo.common.dto.response.ProductDTO;
 import com.evo.product.application.service.ProductCommandService;
 import com.evo.product.application.service.ProductQueryService;
 

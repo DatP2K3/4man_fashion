@@ -1,5 +1,12 @@
 package com.evo.product.application.service.impl;
 
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
 import com.evo.common.dto.event.ProductEvent;
 import com.evo.common.dto.event.ProductSync;
 import com.evo.common.enums.DiscountStatus;
@@ -9,13 +16,8 @@ import com.evo.product.domain.Product;
 import com.evo.product.domain.repository.DiscountDomainRepository;
 import com.evo.product.domain.repository.ProductDomainRepository;
 import com.evo.product.infrastructure.adapter.rabbitmq.ProductEventRabbitMQService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

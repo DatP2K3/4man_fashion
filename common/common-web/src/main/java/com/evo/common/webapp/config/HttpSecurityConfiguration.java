@@ -26,6 +26,7 @@ public class HttpSecurityConfiguration {
         "/api/products/search",
         "/api/products/**",
         "/api/banners",
+         "/api/locations/**",
         "/api/public/**",
         "/api/uploads/**",
         "/actuator/**",

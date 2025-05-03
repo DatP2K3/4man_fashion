@@ -87,17 +87,26 @@ public class Profile {
         if (cmd.getDefaultAddress()) {
             for (ShippingAddress shippingAddress : this.listShippingAddress) {
                 shippingAddress.setDefaultAddress(false);
-                if (shippingAddress.getId().equals(cmd.getId())) {
-                    shippingAddress.setRecipientName(cmd.getRecipientName());
-                    shippingAddress.setPhoneNumber(cmd.getPhoneNumber());
-                    shippingAddress.setAddressLine1(cmd.getAddressLine1());
-                    shippingAddress.setAddressLine2(cmd.getAddressLine2());
-                    shippingAddress.setWard(cmd.getWard());
-                    shippingAddress.setDistrict(cmd.getDistrict());
-                    shippingAddress.setCity(cmd.getCity());
-                    shippingAddress.setDefaultAddress(cmd.getDefaultAddress());
-                }
+                processUpdateShippingAddress(shippingAddress, cmd);
             }
+        } else {
+            for (ShippingAddress shippingAddress : this.listShippingAddress) {
+                processUpdateShippingAddress(shippingAddress, cmd);
+            }
+        }
+    }
+
+    private void processUpdateShippingAddress(ShippingAddress shippingAddress, CreateOrUpdateShippingAddressCmd cmd) {
+        if (shippingAddress.getId().equals(cmd.getId())) {
+            shippingAddress.setRecipientName(cmd.getRecipientName());
+            shippingAddress.setPhoneNumber(cmd.getPhoneNumber());
+            shippingAddress.setAddressLine1(cmd.getAddressLine1());
+            shippingAddress.setAddressLine2(cmd.getAddressLine2());
+            shippingAddress.setWard(cmd.getWard());
+            shippingAddress.setDistrict(cmd.getDistrict());
+            shippingAddress.setWardCode(cmd.getWardCode());
+            shippingAddress.setDistrictId(cmd.getDistrictId());
+            shippingAddress.setCity(cmd.getCity());
         }
     }
 }

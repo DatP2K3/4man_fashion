@@ -5,5 +5,6 @@ import com.evo.cart.application.dto.response.CartDTO;
 
 public interface CartCommandService {
     CartDTO getOrInitCart();
+
     CartDTO updateCart(UpdateCartRequest request);
 }

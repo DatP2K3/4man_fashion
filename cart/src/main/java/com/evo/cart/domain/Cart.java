@@ -1,17 +1,17 @@
 package com.evo.cart.domain;
 
-import com.evo.cart.domain.command.UpdateCartCmd;
-import com.evo.cart.domain.command.CreateCartItemCmd;
-import com.evo.common.Auditor;
-import com.evo.common.enums.DiscountType;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import com.evo.cart.domain.command.CreateCartItemCmd;
+import com.evo.cart.domain.command.UpdateCartCmd;
+import com.evo.common.Auditor;
+
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor

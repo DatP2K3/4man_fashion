@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class HttpSecurityConfiguration {
     private final String[] PUBLIC_ENDPOINTS = {
         "/elasticsearch/**",
+        "/location/**",
     };
 
     @Bean

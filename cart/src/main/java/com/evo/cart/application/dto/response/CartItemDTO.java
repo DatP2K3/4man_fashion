@@ -1,11 +1,12 @@
 package com.evo.cart.application.dto.response;
 
+import java.util.UUID;
+
 import com.evo.common.enums.DiscountType;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor

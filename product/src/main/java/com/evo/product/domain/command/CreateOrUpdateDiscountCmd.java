@@ -3,7 +3,6 @@ package com.evo.product.domain.command;
 import java.time.Instant;
 import java.util.UUID;
 
-import com.evo.common.enums.DiscountStatus;
 import com.evo.common.enums.DiscountType;
 
 import lombok.Getter;

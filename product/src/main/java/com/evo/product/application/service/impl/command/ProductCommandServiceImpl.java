@@ -1,13 +1,15 @@
 package com.evo.product.application.service.impl.command;
 
-import com.evo.common.dto.event.ProductSync;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.evo.common.dto.event.ProductEvent;
+import com.evo.common.dto.event.ProductSync;
+import com.evo.common.dto.response.ProductDTO;
 import com.evo.product.application.dto.mapper.ProductDTOMapper;
 import com.evo.product.application.dto.request.CreateOrUpdateDiscountRequest;
 import com.evo.product.application.dto.request.CreateOrUpdateProductRequest;
-import com.evo.common.dto.response.ProductDTO;
 import com.evo.product.application.mapper.CommandMapper;
 import com.evo.product.application.mapper.SyncMapper;
 import com.evo.product.application.service.ProductCommandService;
@@ -18,8 +20,6 @@ import com.evo.product.domain.repository.ProductDomainRepository;
 import com.evo.product.infrastructure.adapter.rabbitmq.ProductEventRabbitMQService;
 
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

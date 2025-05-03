@@ -2,9 +2,6 @@ package com.evo.profile.application.dto.response;
 
 import java.util.UUID;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +17,8 @@ public class ShippingAddressDTO {
     private String addressLine2; // Địa chỉ bổ sung (Tòa nhà, căn hộ)
     private String ward; // Phường/Xã
     private String district; // Quận/Huyện
+    private String wardCode; // Mã phường/xã
+    private String districtId; // Id quận/huyện
     private String city;
     private UUID userId;
     private Boolean defaultAddress; // Địa chỉ mặc định

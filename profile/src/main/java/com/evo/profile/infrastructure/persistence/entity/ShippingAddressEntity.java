@@ -33,8 +33,14 @@ public class ShippingAddressEntity {
     @Column(name = "ward")
     private String ward; // Phường/Xã
 
+    @Column(name = "ward_code")
+    private String wardCode; // Mã phường/xã
+
     @Column(name = "district")
     private String district; // Quận/Huyện
+
+    @Column(name = "district_id")
+    private String districtId; // Id quận/huyện
 
     @Column(name = "city")
     private String city;

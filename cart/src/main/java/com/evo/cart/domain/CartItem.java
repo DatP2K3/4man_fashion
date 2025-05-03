@@ -1,13 +1,13 @@
 package com.evo.cart.domain;
 
+import java.util.UUID;
+
 import com.evo.cart.domain.command.CreateCartItemCmd;
 import com.evo.common.Auditor;
 import com.evo.common.enums.DiscountType;
-import jakarta.persistence.Column;
+
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
