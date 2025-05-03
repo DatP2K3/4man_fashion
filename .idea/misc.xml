@@ -24,6 +24,7 @@
         <option value="$PROJECT_DIR$/baseddd/pom.xml" />
         <option value="$PROJECT_DIR$/cart/pom.xml" />
         <option value="$PROJECT_DIR$/location/pom.xml" />
+        <option value="$PROJECT_DIR$/shopinfo/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
