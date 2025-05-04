@@ -2,6 +2,8 @@ package com.evo.order.infrastructure.persistence.entity;
 
 import java.util.UUID;
 
+import com.evo.common.entity.AuditEntity;
+import com.evo.common.enums.OrderStatus;
 import jakarta.persistence.*;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -18,15 +20,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "order_items")
-public class OrderItemEntity {
+public class OrderItemEntity extends AuditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "user_id")
-    private UUID userId;
+@Column(name = "order_id")
+    private UUID orderId;
 
-    @Column(name = "status")
+    @Column(name = "product_id")
+    private UUID productId;
 
+    @Column(name = "product_variant_id")
+    private UUID productVariantId;
+
+    @Column(name = "quantity")
+    private int quantity;
+
+    @Column(name = "price")
+    private Long price;
 }

@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.evo.common.dto.response.DTOMapper;
-import com.evo.profile.application.dto.response.ProfileDTO;
+import com.evo.common.dto.response.ProfileDTO;
 import com.evo.profile.domain.Profile;
 import com.evo.profile.infrastructure.persistence.entity.ProfileEntity;
 

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.evo.cart.application.dto.mapper.CartDTOMapper;
 import com.evo.cart.application.dto.request.UpdateCartRequest;
-import com.evo.cart.application.dto.response.CartDTO;
+import com.evo.common.dto.response.CartDTO;
 import com.evo.cart.application.mapper.CommandMapper;
 import com.evo.cart.application.service.CartCommandService;
 import com.evo.cart.domain.Cart;

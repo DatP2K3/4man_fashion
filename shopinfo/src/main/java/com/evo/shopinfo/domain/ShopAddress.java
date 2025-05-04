@@ -2,7 +2,6 @@ package com.evo.shopinfo.domain;
 
 import com.evo.common.Auditor;
 import com.evo.common.enums.ShopAddressType;
-import com.evo.shopinfo.application.dto.response.ShopAddressDTO;
 import com.evo.shopinfo.domain.command.CreateUpdateShopAddressCmd;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

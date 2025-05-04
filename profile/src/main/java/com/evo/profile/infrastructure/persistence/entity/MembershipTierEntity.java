@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.evo.common.entity.AuditEntity;
-import com.evo.profile.infrastructure.support.enums.MembershipTierType;
+import com.evo.common.enums.MembershipTierType;
 
 import lombok.*;
 

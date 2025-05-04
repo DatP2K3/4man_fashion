@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import com.evo.profile.application.dto.request.GetTokenRequest;
 import com.evo.profile.application.dto.request.LockUserRequest;
 import com.evo.profile.application.dto.request.ResetKeycloakPasswordRequest;
-import com.evo.profile.application.dto.response.TokenDTO;
+import com.evo.common.dto.response.TokenDTO;
 import com.evo.profile.infrastructure.adapter.keycloak.config.KeycloakIdentityClientConfiguration;
 
 import feign.QueryMap;

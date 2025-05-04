@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatusCode;
 @Getter
 public enum AppErrorCode {
     ORDER_NOT_FOUND(1189, "Order not found", HttpStatus.NOT_FOUND),
+    ORDER_ITEM_NOT_FOUND(1190, "Order item not found", HttpStatus.NOT_FOUND),
     ;
 
     private final int code;

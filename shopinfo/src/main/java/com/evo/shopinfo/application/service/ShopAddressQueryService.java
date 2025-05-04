@@ -1,6 +1,6 @@
 package com.evo.shopinfo.application.service;
 
-import com.evo.shopinfo.application.dto.response.ShopAddressDTO;
+import com.evo.common.dto.response.ShopAddressDTO;
 
 import java.util.List;
 

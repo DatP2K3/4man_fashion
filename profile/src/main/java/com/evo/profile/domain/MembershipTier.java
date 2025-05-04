@@ -5,7 +5,7 @@ import java.util.UUID;
 import com.evo.common.Auditor;
 import com.evo.profile.domain.command.CreateOrUpdateMembershipTierCmd;
 import com.evo.profile.infrastructure.support.IdUtils;
-import com.evo.profile.infrastructure.support.enums.MembershipTierType;
+import com.evo.common.enums.MembershipTierType;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;

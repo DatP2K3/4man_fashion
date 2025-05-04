@@ -30,16 +30,17 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.6.3/mapstruct-1.6.3.jar" />
         </processorPath>
-        <module name="shopinfo" />
-        <module name="notification" />
         <module name="product" />
-        <module name="elasticsearch" />
         <module name="profile" />
         <module name="banner" />
-        <module name="location" />
         <module name="storage" />
-        <module name="gateway" />
         <module name="cart" />
+        <module name="shopinfo" />
+        <module name="notification" />
+        <module name="elasticsearch" />
+        <module name="payment" />
+        <module name="location" />
+        <module name="gateway" />
         <module name="order" />
         <module name="baseddd" />
       </profile>
@@ -67,6 +68,7 @@
       <module name="location" options="-parameters" />
       <module name="notification" options="-parameters" />
       <module name="order" options="-parameters" />
+      <module name="payment" options="-parameters" />
       <module name="product" options="-parameters" />
       <module name="profile" options="-parameters" />
       <module name="shopinfo" options="-parameters" />

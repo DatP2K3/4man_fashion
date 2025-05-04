@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.evo.common.dto.response.ApiResponses;
 import com.evo.profile.application.dto.request.CreateOrUpdateMembershipTierRequest;
-import com.evo.profile.application.dto.response.MembershipTierDTO;
+import com.evo.common.dto.response.MembershipTierDTO;
 import com.evo.profile.application.service.MembershipTierService;
 
 import lombok.RequiredArgsConstructor;

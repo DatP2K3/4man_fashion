@@ -108,6 +108,10 @@ public class CartDomainRepositoryImpl extends AbstractDomainRepository<Cart, Car
                 cartItem.setDiscountPrice(productDTO.getDiscountPrice());
                 cartItem.setDiscountType(productDTO.getDiscountType());
                 cartItem.setOriginPrice(productDTO.getOriginPrice());
+                cartItem.setHeight(productDTO.getHeight());
+                cartItem.setWidth(productDTO.getWidth());
+                cartItem.setLength(productDTO.getLength());
+                cartItem.setWeight(productDTO.getWeight());
 
                 List<ProductVariantDTO> productVariantDTOs = productDTO.getProductVariants();
                 for (ProductVariantDTO productVariantDTO : productVariantDTOs) {

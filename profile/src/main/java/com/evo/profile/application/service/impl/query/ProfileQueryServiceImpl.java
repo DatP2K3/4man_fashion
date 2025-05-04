@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.evo.profile.application.dto.mapper.ProfileDTOMapper;
 import com.evo.profile.application.dto.request.SearchProfileRequest;
-import com.evo.profile.application.dto.response.ProfileDTO;
+import com.evo.common.dto.response.ProfileDTO;
 import com.evo.profile.application.mapper.QueryMapper;
 import com.evo.profile.application.service.ProfileQueryService;
 import com.evo.profile.domain.Profile;

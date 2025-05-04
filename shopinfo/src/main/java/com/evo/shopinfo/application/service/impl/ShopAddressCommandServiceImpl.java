@@ -2,7 +2,7 @@ package com.evo.shopinfo.application.service.impl;
 
 import com.evo.shopinfo.application.dto.ShopAddressDTOMapper;
 import com.evo.shopinfo.application.dto.request.CreateOrUpdateShopAddressRequest;
-import com.evo.shopinfo.application.dto.response.ShopAddressDTO;
+import com.evo.common.dto.response.ShopAddressDTO;
 import com.evo.shopinfo.application.mapper.CommandMapper;
 import com.evo.shopinfo.application.service.ShopAddressCommandService;
 import com.evo.shopinfo.domain.ShopAddress;

@@ -1,7 +1,7 @@
 package com.evo.shopinfo.application.service.impl;
 
 import com.evo.shopinfo.application.dto.ShopAddressDTOMapper;
-import com.evo.shopinfo.application.dto.response.ShopAddressDTO;
+import com.evo.common.dto.response.ShopAddressDTO;
 import com.evo.shopinfo.application.service.ShopAddressQueryService;
 import com.evo.shopinfo.infrastructure.persistence.entity.ShopAddressEntity;
 import com.evo.shopinfo.infrastructure.persistence.repository.ShopAddressEntityRepository;

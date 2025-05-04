@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FeignProductClientConfiguration {
     @Bean
-    public FeignProductClientConfiguration requestInterceptor() {
-        return new FeignProductClientConfiguration();
+    public FeignProductClientInterceptor requestInterceptor() {
+        return new FeignProductClientInterceptor();
     }
 }

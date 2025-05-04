@@ -2,12 +2,10 @@ package com.evo.common.enums;
 
 public enum OrderStatus {
     PENDING,
-    PROCESSING,
-    COMPLETED,
+    ACCEPTED,
+    SHIPPING,
     CANCELED,
-    ON_HOLD,
-    SHIPPED,
-    DELIVERED,
+    COMPLETED,
     RETURNED,
 }
-//@TODO: need fix
+// @TODO: need fix

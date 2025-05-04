@@ -2,7 +2,7 @@ package com.evo.shopinfo.rest;
 
 import com.evo.common.dto.response.ApiResponses;
 import com.evo.shopinfo.application.dto.request.CreateOrUpdateShopAddressRequest;
-import com.evo.shopinfo.application.dto.response.ShopAddressDTO;
+import com.evo.common.dto.response.ShopAddressDTO;
 import com.evo.shopinfo.application.service.ShopAddressCommandService;
 import com.evo.shopinfo.application.service.ShopAddressQueryService;
 import lombok.RequiredArgsConstructor;

@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.evo.profile.application.dto.request.CreateOrUpdateAddressRequest;
 import com.evo.profile.application.dto.request.UpdateProfileInfoRequest;
-import com.evo.profile.application.dto.response.ProfileDTO;
+import com.evo.common.dto.response.ProfileDTO;
 
 public interface ProfileCommandService {
     ProfileDTO getOrInitProfile();
