@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatusCode;
 public enum AppErrorCode {
     ORDER_NOT_FOUND(1189, "Order not found", HttpStatus.NOT_FOUND),
     ORDER_ITEM_NOT_FOUND(1190, "Order item not found", HttpStatus.NOT_FOUND),
+    CANT_DELETE_ORDER(1191, "Can't delete order", HttpStatus.BAD_REQUEST),
     ;
 
     private final int code;

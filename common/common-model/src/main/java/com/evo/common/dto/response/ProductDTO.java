@@ -24,12 +24,12 @@ public class ProductDTO {
     private UUID categoryId;
     private Map<String, String> description;
     private String introduce; // Introduce is a short description of the product(html)
-    private Double weight;
-    private Double length;
-    private Double width;
+    private int weight;
+    private int length;
+    private int width;
     private Long totalSold;
     private BigDecimal averageRating;
-    private Double height;
+    private int height;
     private Boolean hidden;
     List<ProductVariantDTO> productVariants;
     List<ProductImageDTO> productImages;

@@ -1,4 +1,4 @@
-package com.evo.profile.infrastructure.support;
+package com.evo.common.support;
 
 import java.util.UUID;
 

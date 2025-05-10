@@ -35,9 +35,15 @@ public class OrderItemEntity extends AuditEntity {
     @Column(name = "product_variant_id")
     private UUID productVariantId;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "quantity")
     private int quantity;
 
     @Column(name = "price")
     private Long price;
+
+    @Column(name = "deleted")
+    private Boolean deleted;
 }

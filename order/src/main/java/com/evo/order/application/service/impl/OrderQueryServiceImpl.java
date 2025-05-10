@@ -2,19 +2,23 @@ package com.evo.order.application.service.impl;
 
 import com.evo.common.dto.response.*;
 import com.evo.common.enums.ShopAddressType;
+import com.evo.order.application.dto.mapper.OrderDTOMapper;
 import com.evo.order.application.dto.request.GetGHNFeeRequest;
-import com.evo.order.application.dto.response.GHNFeeDTO;
-import com.evo.order.application.dto.response.OrderDTO;
-import com.evo.order.application.dto.response.OrderFeeDTO;
+import com.evo.order.application.dto.request.PrintOrCancelGHNOrderRequest;
+import com.evo.order.application.dto.request.SearchOrderRequest;
+import com.evo.order.application.dto.response.*;
+import com.evo.order.application.mapper.QueryMapper;
 import com.evo.order.application.service.OrderQueryService;
+import com.evo.order.domain.Order;
+import com.evo.order.domain.query.SearchOrderQuery;
+import com.evo.order.domain.repository.OrderDomainRepository;
 import com.evo.order.infrastructure.adapter.cart.client.CartClient;
 import com.evo.order.infrastructure.adapter.ghn.client.GHNClient;
 import com.evo.order.infrastructure.adapter.profile.client.ProfileClient;
 import com.evo.order.infrastructure.adapter.shopinfo.client.ShopInfoClient;
+import com.evo.order.infrastructure.persistence.entity.OrderEntity;
+import com.evo.order.infrastructure.persistence.repository.OrderEntityRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,10 +31,22 @@ public class OrderQueryServiceImpl implements OrderQueryService {
     private final ShopInfoClient shopInfoClient;
     private final ProfileClient profileClient;
     private final GHNClient ghnClient;
+    private final QueryMapper queryMapper;
+    private final OrderDTOMapper orderDTOMapper;
+    private final OrderDomainRepository orderDomainRepository;
+    private final OrderEntityRepository orderEntityRepository;
 
     @Override
-    public List<OrderDTO> findByUserId(UUID userId) {
-        return List.of();
+    public List<OrderDTO> search(SearchOrderRequest request) {
+        SearchOrderQuery searchOrderQuery = queryMapper.from(request);
+        List<OrderEntity> orderEntities = orderEntityRepository.search(searchOrderQuery);
+        return orderDTOMapper.entitiesToDTOs(orderEntities);
+    }
+
+    @Override
+    public Long count(SearchOrderRequest request) {
+        SearchOrderQuery searchOrderQuery = queryMapper.from(request);
+        return orderEntityRepository.count(searchOrderQuery);
     }
 
     @Override
@@ -86,6 +102,30 @@ public class OrderQueryServiceImpl implements OrderQueryService {
                 .totalQuantity(totalQuantity)
                 .totalPrice(totalPrice)
                 .shippingFee(ghnFeeDTO.getTotal())
+                .totalLength(maxLength)
+                .totalWeight(totalWeight)
+                .totalHeight(totalHeight)
+                .totalWidth(maxWidth)
                 .build();
     }
+
+    @Override
+    public OrderDTO findByOrderCode(String orderCode) {
+        Order order = orderDomainRepository.findByOrderCode(orderCode);
+        return  orderDTOMapper.domainModelToDTO(order);
+    }
+
+    @Override
+    public String printGHNOrder(PrintOrCancelGHNOrderRequest printOrCancelGHNOrderRequest) {
+        String token = getGHYNPrintToken(printOrCancelGHNOrderRequest);
+        return   ghnClient.print(token);
+    }
+
+    @Override
+    public String getGHYNPrintToken(PrintOrCancelGHNOrderRequest printOrCancelGHNOrderRequest) {
+       GHNPrintTokenDTO ghnPrintTokenDTO = ghnClient.getPrintToken(printOrCancelGHNOrderRequest).getData();
+       return ghnPrintTokenDTO.getToken();
+    }
+
+
 }

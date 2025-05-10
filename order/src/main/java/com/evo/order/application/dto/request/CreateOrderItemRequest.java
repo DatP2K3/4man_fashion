@@ -14,21 +14,14 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateOrderItemRequest {
-    private UUID userId;
-    private OrderStatus orderStatus;
-    private PaymentMethod paymentMethod;
-    private PaymentStatus paymentStatus;
-    private String recipientName;
-    private String phoneNumber;
-    private String addressLine1;
-    private String addressLine2;
-    private String ward;
-    private String wardCode;
-    private String district;
-    private String districtId;
-    private String city;
-    private int shipmentFee;
-    private Long totalPrice;
-    private String rejectReason;
-    private String note;
+        private UUID orderId;
+        private UUID productId;
+        private UUID productVariantId;
+        private String name;
+        private int quantity;
+        private Long price;
+        private int weight;
+        private  int height;
+        private int width;
+        private int length;
 }

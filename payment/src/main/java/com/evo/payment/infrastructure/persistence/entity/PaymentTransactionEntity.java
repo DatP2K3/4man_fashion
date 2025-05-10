@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -20,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "payment_transactions")
-public class PaymentTransaction extends AuditEntity {
+public class PaymentTransactionEntity extends AuditEntity {
     @Id
     @Column(name = "id")
     private UUID id;
@@ -30,6 +29,9 @@ public class PaymentTransaction extends AuditEntity {
 
     @Column(name = "transaction_code")
     private String transactionCode;
+
+    @Column(name = "order_code")
+    private String orderCode;
 
     @Column(name = "status")
     private TransactionStatus status;

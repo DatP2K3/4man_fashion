@@ -16,4 +16,9 @@ public class OrderItemDTO {
     private UUID productVariantId;
     private int quantity;
     private Long price;
+    private int weight;
+    private  int height;
+    private int width;
+    private int length;
+    private Boolean deleted;
 }

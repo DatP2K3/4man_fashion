@@ -20,12 +20,12 @@ public class ProvinceEntity {
     @Column(name = "id")
     private int id;
 
-@Column(name = "name")
+    @Column(name = "name")
     private String name;
 
-@Column(name = "code")
+    @Column(name = "code")
     private String code;
 
-@Column(name = "is_enabled")
+    @Column(name = "is_enabled")
     private Boolean enabled;
 }

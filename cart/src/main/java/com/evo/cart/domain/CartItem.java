@@ -30,10 +30,10 @@ public class CartItem extends Auditor {
     private UUID avatarId;
     private String size;
     private String color;
-    private Double weight;
-    private  Double height;
-    private Double width;
-    private Double length;
+    private int weight;
+    private  int height;
+    private int width;
+    private int length;
 
     public CartItem(CreateCartItemCmd createCartItemCmd) {
         this.productVariantId = createCartItemCmd.getProductVariantId();

@@ -1,7 +1,7 @@
 package com.evo.common.enums;
 
 public enum PaymentStatus {
-    PENDING,
+    UNPAID,
     PAID,
     FAILED,
     REFUNDED

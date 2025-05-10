@@ -62,4 +62,8 @@ public class Cart extends Auditor {
             }
         }
     }
+
+    public void emptyCart() {
+        this.getCartItems().forEach(item -> item.setDeleted(true));
+    }
 }

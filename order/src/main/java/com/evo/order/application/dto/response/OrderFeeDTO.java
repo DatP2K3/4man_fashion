@@ -10,7 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class OrderFeeDTO {
-    int totalQuantity;
-    Long totalPrice;
-    int shippingFee;
+    private int totalQuantity;
+    private Long totalPrice;
+    private int shippingFee;
+    private int totalWeight;
+    private  int totalHeight;
+    private int totalWidth;
+    private int totalLength;
 }

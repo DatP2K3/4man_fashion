@@ -1,6 +1,7 @@
 package com.evo.cart.rest;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -53,6 +54,18 @@ public class CartController {
                 .success(true)
                 .code(200)
                 .message("Cart updated successfully")
+                .timestamp(System.currentTimeMillis())
+                .status("OK")
+                .build();
+    }
+    @PutMapping("/carts/empty/{cartId}")
+    ApiResponses<Void> emptyCart(@PathVariable UUID cartId) {
+        cartCommandService.emptyCart(cartId);
+        return ApiResponses.<Void>builder()
+                .data(null)
+                .success(true)
+                .code(200)
+                .message("Cart emptied successfully")
                 .timestamp(System.currentTimeMillis())
                 .status("OK")
                 .build();

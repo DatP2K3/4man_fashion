@@ -3,6 +3,7 @@ package com.evo.profile.infrastructure.persistence.repository.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -24,7 +25,7 @@ public class ProfileEntityRepositoryImpl implements ProfileEntityRepositoryCusto
     @Override
     public List<ProfileEntity> search(SearchProfileQuery searchProfileQuery) {
         Map<String, Object> values = new HashMap<>();
-        String sql = "select e from ProfileEntity e " + createWhereQuery(searchProfileQuery.getKeyword(), values)
+        String sql = "select e from ProfileEntity e " + createWhereQuery(searchProfileQuery.getKeyword(), searchProfileQuery.getUserId(), values)
                 + createOrderQuery(searchProfileQuery.getSortBy());
         TypedQuery<ProfileEntity> query = entityManager.createQuery(sql, ProfileEntity.class);
         values.forEach(query::setParameter);
@@ -33,11 +34,20 @@ public class ProfileEntityRepositoryImpl implements ProfileEntityRepositoryCusto
         return query.getResultList();
     }
 
-    private String createWhereQuery(String keyword, Map<String, Object> values) {
+    private String createWhereQuery(String keyword, UUID userId, Map<String, Object> values) {
         StringBuilder sql = new StringBuilder();
         if (!keyword.isBlank()) {
             sql.append(" where ( lower(e.username) like :keyword" + " or lower(e.email) like :keyword )");
             values.put("keyword", encodeKeyword(keyword));
+        }
+        if (userId != null) {
+            if (sql.length() > 0) {
+                sql.append(" and ");
+            } else {
+                sql.append(" where ");
+            }
+            sql.append(" o.userId = :userId");
+            values.put("userId", userId);
         }
         return sql.toString();
     }
@@ -62,7 +72,7 @@ public class ProfileEntityRepositoryImpl implements ProfileEntityRepositoryCusto
     public Long count(SearchProfileQuery searchProfileQuery) {
         Map<String, Object> values = new HashMap<>();
         String sql =
-                "select count(e) from ProfileEntity e " + createWhereQuery(searchProfileQuery.getKeyword(), values);
+                "select count(e) from ProfileEntity e " + createWhereQuery(searchProfileQuery.getKeyword(), searchProfileQuery.getUserId(), values);
         Query query = entityManager.createQuery(sql, Long.class);
         values.forEach(query::setParameter);
         return (Long) query.getSingleResult();

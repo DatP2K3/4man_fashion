@@ -51,4 +51,11 @@ public class CartCommandServiceImpl implements CartCommandService {
         cart = cartDomainRepository.save(cart);
         return cartDTOMapper.domainModelToDTO(cart);
     }
+
+    @Override
+    public void emptyCart(UUID cartId) {
+        Cart cart = cartDomainRepository.getById(cartId);
+        cart.emptyCart();
+        cartDomainRepository.save(cart);
+    }
 }

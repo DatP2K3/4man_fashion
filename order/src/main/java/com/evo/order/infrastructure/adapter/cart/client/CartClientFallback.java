@@ -33,7 +33,15 @@ public class CartClientFallback
             if (cause instanceof ForwardInnerAlertException) {
                 throw (RuntimeException) cause;
             }
-            throw new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR);
+            throw new ResponseException(ServiceUnavailableError.CART_SERVICE_UNAVAILABLE_ERROR);
+        }
+
+        @Override
+        public ApiResponses<Void> emptyCart(UUID cartId) {
+            if (cause instanceof ForwardInnerAlertException) {
+                throw (RuntimeException) cause;
+            }
+            throw new ResponseException(ServiceUnavailableError.CART_SERVICE_UNAVAILABLE_ERROR);
         }
     }
 }

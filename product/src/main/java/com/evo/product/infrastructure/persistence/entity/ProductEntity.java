@@ -49,16 +49,16 @@ public class ProductEntity extends AuditEntity {
     private Long originPrice;
 
     @Column(name = "weight")
-    private Double weight;
+    private int weight;
 
     @Column(name = "length")
-    private Double length;
+    private int length;
 
     @Column(name = "width")
-    private Double width;
+    private int width;
 
     @Column(name = "height")
-    private Double height;
+    private int height;
 
     @Column(name = "introduce", columnDefinition = "TEXT")
     private String introduce;
