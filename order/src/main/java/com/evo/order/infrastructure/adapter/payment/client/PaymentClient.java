@@ -1,11 +1,12 @@
 package com.evo.order.infrastructure.adapter.payment.client;
 
-import com.evo.common.dto.request.GetPaymentUrlRequest;
-import com.evo.common.dto.response.ApiResponses;
-import com.evo.order.infrastructure.adapter.payment.config.FeignPaymentClientConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import com.evo.common.dto.request.GetPaymentUrlRequest;
+import com.evo.common.dto.response.ApiResponses;
+import com.evo.order.infrastructure.adapter.payment.config.FeignPaymentClientConfiguration;
 
 @FeignClient(
         name = "payment-service",

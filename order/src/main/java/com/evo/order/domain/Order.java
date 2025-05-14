@@ -1,5 +1,9 @@
 package com.evo.order.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import com.evo.common.Auditor;
 import com.evo.common.enums.OrderStatus;
 import com.evo.common.enums.PaymentMethod;
@@ -7,12 +11,9 @@ import com.evo.common.enums.PaymentStatus;
 import com.evo.common.support.IdUtils;
 import com.evo.order.domain.command.CreateOrderCmd;
 import com.evo.order.infrastructure.support.exception.OrderCodeUtils;
+
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
@@ -61,7 +62,7 @@ public class Order extends Auditor {
     private String note;
     private UUID referencesId;
     private int totalWeight;
-    private  int totalHeight;
+    private int totalHeight;
     private int totalWidth;
     private int totalLength;
     private String paymentUrl;
@@ -92,7 +93,7 @@ public class Order extends Auditor {
         this.fromDistrictId = createOrderCmd.getFromDistrictId();
         this.fromCity = createOrderCmd.getFromCity();
 
-// To address
+        // To address
         this.toName = createOrderCmd.getToName();
         this.toPhoneNumber = createOrderCmd.getToPhoneNumber();
         this.toAddressLine1 = createOrderCmd.getToAddressLine1();
@@ -103,7 +104,7 @@ public class Order extends Auditor {
         this.toDistrictId = createOrderCmd.getToDistrictId();
         this.toCity = createOrderCmd.getToCity();
 
-// Return address
+        // Return address
         this.returnName = createOrderCmd.getReturnName();
         this.returnPhoneNumber = createOrderCmd.getReturnPhoneNumber();
         this.returnAddressLine1 = createOrderCmd.getReturnAddressLine1();

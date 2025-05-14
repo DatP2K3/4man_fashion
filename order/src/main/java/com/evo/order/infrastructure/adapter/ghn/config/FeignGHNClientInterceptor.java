@@ -1,9 +1,10 @@
 package com.evo.order.infrastructure.adapter.ghn.config;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 
 @Slf4j
 public class FeignGHNClientInterceptor implements RequestInterceptor {

@@ -2,11 +2,11 @@ package com.evo.order.infrastructure.persistence.entity;
 
 import java.util.UUID;
 
-import com.evo.common.entity.AuditEntity;
-import com.evo.common.enums.OrderStatus;
 import jakarta.persistence.*;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.evo.common.entity.AuditEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +26,7 @@ public class OrderItemEntity extends AuditEntity {
     @Column(name = "id")
     private UUID id;
 
-@Column(name = "order_id")
+    @Column(name = "order_id")
     private UUID orderId;
 
     @Column(name = "product_id")

@@ -40,6 +40,7 @@ public class HttpSecurityConfiguration {
         "/swagger-resources/**",
         "/swagger-doc/**",
         "/api/test-retry",
+        "api/vn-pay-callback"
     };
 
     @Bean

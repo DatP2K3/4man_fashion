@@ -1,16 +1,19 @@
 package com.evo.payment.infrastructure.persistence.entity;
 
+import java.time.Instant;
+import java.util.UUID;
+
+import jakarta.persistence.*;
+
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import com.evo.common.entity.AuditEntity;
 import com.evo.common.enums.TransactionStatus;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.Instant;
-import java.util.UUID;
 
 @Entity
 @Data
@@ -22,6 +25,7 @@ import java.util.UUID;
 public class PaymentTransactionEntity extends AuditEntity {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "amount")

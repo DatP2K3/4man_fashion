@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.evo.common.dto.response.ProfileDTO;
 import com.evo.profile.application.dto.mapper.ProfileDTOMapper;
 import com.evo.profile.application.dto.mapper.ShippingAddressDTOMapper;
-import com.evo.common.dto.response.ProfileDTO;
 import com.evo.profile.domain.MembershipTier;
 import com.evo.profile.domain.Profile;
 import com.evo.profile.domain.repository.MembershipTierDomainRepository;

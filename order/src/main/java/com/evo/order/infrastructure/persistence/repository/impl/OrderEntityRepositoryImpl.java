@@ -1,19 +1,21 @@
 package com.evo.order.infrastructure.persistence.repository.impl;
 
-import com.evo.common.enums.OrderStatus;
-import com.evo.order.domain.query.SearchOrderQuery;
-import com.evo.order.infrastructure.persistence.entity.OrderEntity;
-import com.evo.order.infrastructure.persistence.repository.custom.OrderEntityRepositoryCustom;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
-import jakarta.persistence.TypedQuery;
-import org.springframework.util.StringUtils;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
+
+import org.springframework.util.StringUtils;
+
+import com.evo.common.enums.OrderStatus;
+import com.evo.order.domain.query.SearchOrderQuery;
+import com.evo.order.infrastructure.persistence.entity.OrderEntity;
+import com.evo.order.infrastructure.persistence.repository.custom.OrderEntityRepositoryCustom;
 
 public class OrderEntityRepositoryImpl implements OrderEntityRepositoryCustom {
     @PersistenceContext
@@ -22,7 +24,12 @@ public class OrderEntityRepositoryImpl implements OrderEntityRepositoryCustom {
     @Override
     public List<OrderEntity> search(SearchOrderQuery searchOrderQuery) {
         Map<String, Object> values = new HashMap<>();
-        String sql = "select o from OrderEntity o " + createWhereQuery(searchOrderQuery.getKeyword(), searchOrderQuery.getUserId(), searchOrderQuery.getOrderStatus(), values)
+        String sql = "select o from OrderEntity o "
+                + createWhereQuery(
+                        searchOrderQuery.getKeyword(),
+                        searchOrderQuery.getUserId(),
+                        searchOrderQuery.getOrderStatus(),
+                        values)
                 + createOrderQuery(searchOrderQuery.getSortBy());
         TypedQuery<OrderEntity> query = entityManager.createQuery(sql, OrderEntity.class);
         values.forEach(query::setParameter);
@@ -77,8 +84,12 @@ public class OrderEntityRepositoryImpl implements OrderEntityRepositoryCustom {
     @Override
     public Long count(SearchOrderQuery searchOrderQuery) {
         Map<String, Object> values = new HashMap<>();
-        String sql =
-                "select count(o) from OrderEntity o " + createWhereQuery(searchOrderQuery.getKeyword(), searchOrderQuery.getUserId(), searchOrderQuery.getOrderStatus(), values);
+        String sql = "select count(o) from OrderEntity o "
+                + createWhereQuery(
+                        searchOrderQuery.getKeyword(),
+                        searchOrderQuery.getUserId(),
+                        searchOrderQuery.getOrderStatus(),
+                        values);
         Query query = entityManager.createQuery(sql, Long.class);
         values.forEach(query::setParameter);
         return (Long) query.getSingleResult();

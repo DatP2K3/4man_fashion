@@ -1,5 +1,9 @@
 package com.evo.location.application.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.evo.location.application.dto.mapper.DistrictMapper;
 import com.evo.location.application.dto.mapper.ProvinceMapper;
 import com.evo.location.application.dto.mapper.WardMapper;
@@ -12,10 +16,8 @@ import com.evo.location.infrastructure.persistence.entity.WardEntity;
 import com.evo.location.infrastructure.persistence.repository.DistrictEntityRepository;
 import com.evo.location.infrastructure.persistence.repository.ProvinceEntityRepository;
 import com.evo.location.infrastructure.persistence.repository.WardEntityRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -24,8 +26,9 @@ public class LocationQueryServiceImpl implements LocationQueryService {
     private final DistrictMapper districtMapper;
     private final WardMapper wardMapper;
     private final ProvinceEntityRepository provinceEntityRepository;
-     private final DistrictEntityRepository districtEntityRepository;
-     private final WardEntityRepository wardEntityRepository;
+    private final DistrictEntityRepository districtEntityRepository;
+    private final WardEntityRepository wardEntityRepository;
+
     @Override
     public List<ProvinceDTO> getAllProvinces() {
         List<ProvinceEntity> provinceEntities = provinceEntityRepository.findAll();
@@ -34,7 +37,7 @@ public class LocationQueryServiceImpl implements LocationQueryService {
 
     @Override
     public List<DistrictDTO> getDistrictsByProvinceId(int provinceId) {
-       List<DistrictEntity> districtEntities = districtEntityRepository.getDistrictsByProvinceId(provinceId);
+        List<DistrictEntity> districtEntities = districtEntityRepository.getDistrictsByProvinceId(provinceId);
         return districtMapper.entityListToDTOList(districtEntities);
     }
 

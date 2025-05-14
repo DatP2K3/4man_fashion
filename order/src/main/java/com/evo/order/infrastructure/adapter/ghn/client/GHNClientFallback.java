@@ -1,5 +1,8 @@
 package com.evo.order.infrastructure.adapter.ghn.client;
 
+import org.springframework.cloud.openfeign.FallbackFactory;
+import org.springframework.stereotype.Component;
+
 import com.evo.common.dto.response.ApiResponses;
 import com.evo.common.enums.ServiceUnavailableError;
 import com.evo.common.exception.ForwardInnerAlertException;
@@ -12,14 +15,11 @@ import com.evo.order.application.dto.response.GHNFeeDTO;
 import com.evo.order.application.dto.response.GHNOrderDTO;
 import com.evo.order.application.dto.response.GHNOrderDetailDTO;
 import com.evo.order.application.dto.response.GHNPrintTokenDTO;
+
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.openfeign.FallbackFactory;
-import org.springframework.stereotype.Component;
 
 @Component
-public class GHNClientFallback
-        implements FallbackFactory<
-        GHNClient> {
+public class GHNClientFallback implements FallbackFactory<GHNClient> {
     @Override
     public GHNClient create(Throwable cause) {
         return new FallbackWithFactory(cause);

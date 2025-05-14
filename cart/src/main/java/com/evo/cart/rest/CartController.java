@@ -6,10 +6,10 @@ import java.util.UUID;
 import org.springframework.web.bind.annotation.*;
 
 import com.evo.cart.application.dto.request.UpdateCartRequest;
-import com.evo.common.dto.response.CartDTO;
 import com.evo.cart.application.service.CartCommandService;
 import com.evo.cart.application.service.CartQueryService;
 import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.CartDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -58,6 +58,7 @@ public class CartController {
                 .status("OK")
                 .build();
     }
+
     @PutMapping("/carts/empty/{cartId}")
     ApiResponses<Void> emptyCart(@PathVariable UUID cartId) {
         cartCommandService.emptyCart(cartId);

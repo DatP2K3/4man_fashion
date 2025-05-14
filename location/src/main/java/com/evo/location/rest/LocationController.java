@@ -1,17 +1,19 @@
 package com.evo.location.rest;
 
-import com.evo.common.dto.response.ApiResponses;
-import com.evo.location.application.dto.response.DistrictDTO;
-import com.evo.location.application.dto.response.ProvinceDTO;
-import com.evo.location.application.dto.response.WardDTO;
-import com.evo.location.application.service.LocationQueryService;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.evo.common.dto.response.ApiResponses;
+import com.evo.location.application.dto.response.DistrictDTO;
+import com.evo.location.application.dto.response.ProvinceDTO;
+import com.evo.location.application.dto.response.WardDTO;
+import com.evo.location.application.service.LocationQueryService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api")

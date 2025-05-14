@@ -1,11 +1,12 @@
 package com.evo.location.infrastructure.persistence.repository;
 
-import com.evo.location.infrastructure.persistence.entity.DistrictEntity;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import com.evo.location.infrastructure.persistence.entity.DistrictEntity;
 
 public interface DistrictEntityRepository extends JpaRepository<DistrictEntity, Integer> {
     @Query("SELECT d FROM DistrictEntity d WHERE d.provinceId = :provinceId")

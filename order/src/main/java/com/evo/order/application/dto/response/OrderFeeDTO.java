@@ -14,7 +14,7 @@ public class OrderFeeDTO {
     private Long totalPrice;
     private int shippingFee;
     private int totalWeight;
-    private  int totalHeight;
+    private int totalHeight;
     private int totalWidth;
     private int totalLength;
 }

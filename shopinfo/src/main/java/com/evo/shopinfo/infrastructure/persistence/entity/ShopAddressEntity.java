@@ -1,16 +1,18 @@
 package com.evo.shopinfo.infrastructure.persistence.entity;
 
-import com.evo.common.Auditor;
+import java.util.UUID;
+
+import jakarta.persistence.*;
+
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import com.evo.common.entity.AuditEntity;
 import com.evo.common.enums.ShopAddressType;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.util.UUID;
 
 @Entity
 @Data

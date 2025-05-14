@@ -1,20 +1,20 @@
 package com.evo.order.infrastructure.adapter.shopinfo.client;
 
+import java.util.List;
+
+import org.springframework.cloud.openfeign.FallbackFactory;
+import org.springframework.stereotype.Component;
+
 import com.evo.common.dto.response.ApiResponses;
 import com.evo.common.dto.response.ShopAddressDTO;
 import com.evo.common.enums.ServiceUnavailableError;
 import com.evo.common.exception.ForwardInnerAlertException;
 import com.evo.common.exception.ResponseException;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.openfeign.FallbackFactory;
-import org.springframework.stereotype.Component;
 
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
-public class ShopInfoClientFallback
-        implements FallbackFactory<
-        ShopInfoClient> {
+public class ShopInfoClientFallback implements FallbackFactory<ShopInfoClient> {
     @Override
     public ShopInfoClient create(Throwable cause) {
         return new FallbackWithFactory(cause);

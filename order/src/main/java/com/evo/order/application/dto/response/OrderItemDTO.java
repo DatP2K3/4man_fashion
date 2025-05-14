@@ -1,10 +1,10 @@
 package com.evo.order.application.dto.response;
 
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -17,7 +17,7 @@ public class OrderItemDTO {
     private int quantity;
     private Long price;
     private int weight;
-    private  int height;
+    private int height;
     private int width;
     private int length;
     private Boolean deleted;

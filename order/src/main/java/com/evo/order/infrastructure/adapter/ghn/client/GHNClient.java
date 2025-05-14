@@ -1,5 +1,12 @@
 package com.evo.order.infrastructure.adapter.ghn.client;
 
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.evo.common.dto.response.ApiResponses;
 import com.evo.order.application.dto.request.CreateGHNOrderRequest;
 import com.evo.order.application.dto.request.GetGHNFeeRequest;
@@ -10,12 +17,6 @@ import com.evo.order.application.dto.response.GHNOrderDTO;
 import com.evo.order.application.dto.response.GHNOrderDetailDTO;
 import com.evo.order.application.dto.response.GHNPrintTokenDTO;
 import com.evo.order.infrastructure.adapter.ghn.config.FeignGHNClientConfiguration;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(
         name = "ghn-service",
@@ -24,13 +25,13 @@ import org.springframework.web.bind.annotation.RequestParam;
         configuration = FeignGHNClientConfiguration.class,
         fallbackFactory = GHNClientFallback.class)
 public interface GHNClient {
-    @PostMapping(value = "/shiip/public-api/v2/shipping-order/fee",  consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/shiip/public-api/v2/shipping-order/fee", consumes = MediaType.APPLICATION_JSON_VALUE)
     ApiResponses<GHNFeeDTO> calculateShippingFee(@RequestBody GetGHNFeeRequest request);
 
     @PostMapping(value = "/shiip/public-api/v2/shipping-order/create", consumes = MediaType.APPLICATION_JSON_VALUE)
     ApiResponses<GHNOrderDTO> createShippingOrder(@RequestBody CreateGHNOrderRequest request);
 
-    @PostMapping(value = "/shiip/public-api/v2/a5/gen-token",  consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/shiip/public-api/v2/a5/gen-token", consumes = MediaType.APPLICATION_JSON_VALUE)
     ApiResponses<GHNPrintTokenDTO> getPrintToken(@RequestBody PrintOrCancelGHNOrderRequest request);
 
     @GetMapping(value = "/a5/public-api/printA5", consumes = MediaType.APPLICATION_JSON_VALUE)

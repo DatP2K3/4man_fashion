@@ -1,15 +1,16 @@
 package com.evo.order.application.dto.response;
 
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+
 import com.evo.common.enums.OrderStatus;
 import com.evo.common.enums.PaymentMethod;
 import com.evo.common.enums.PaymentStatus;
-import com.evo.order.domain.OrderItem;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -55,12 +56,14 @@ public class OrderDTO {
     private String note;
     private UUID referencesId;
     private int totalWeight;
-    private  int totalHeight;
+    private int totalHeight;
     private int totalWidth;
     private int totalLength;
     private Boolean printed;
     private String paymentUrl;
     private String GHNOrderCode;
-
+    protected String createdBy;
+    protected UUID lastModifiedBy;
+    protected Instant createdAt;
     private List<OrderItemDTO> orderItems;
 }

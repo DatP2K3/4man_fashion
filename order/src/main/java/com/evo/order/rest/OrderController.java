@@ -1,5 +1,11 @@
 package com.evo.order.rest;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.web.bind.annotation.*;
+
 import com.evo.common.dto.response.ApiResponses;
 import com.evo.common.dto.response.PageApiResponse;
 import com.evo.order.application.dto.request.*;
@@ -7,12 +13,8 @@ import com.evo.order.application.dto.response.OrderDTO;
 import com.evo.order.application.dto.response.OrderFeeDTO;
 import com.evo.order.application.service.OrderCommandService;
 import com.evo.order.application.service.OrderQueryService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api")
@@ -41,6 +43,19 @@ public class OrderController {
                 .success(true)
                 .code(200)
                 .message("Delete order successfully")
+                .timestamp(System.currentTimeMillis())
+                .status("OK")
+                .build();
+    }
+
+    @GetMapping("/orders")
+    public ApiResponses<List<OrderDTO>> getOrdersOfUser() {
+        List<OrderDTO> orderDTOs = orderQueryService.getOrdersOfUser();
+        return ApiResponses.<List<OrderDTO>>builder()
+                .data(orderDTOs)
+                .success(true)
+                .code(200)
+                .message("Get orders successfully")
                 .timestamp(System.currentTimeMillis())
                 .status("OK")
                 .build();
@@ -113,6 +128,6 @@ public class OrderController {
 
     @PostMapping("/orders/ghn-order/print")
     public String printGHNOrder(@RequestBody PrintOrCancelGHNOrderRequest request) {
-        return  orderQueryService.printGHNOrder(request);
+        return orderQueryService.printGHNOrder(request);
     }
 }

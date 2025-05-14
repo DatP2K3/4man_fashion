@@ -25,7 +25,8 @@ public class ProfileEntityRepositoryImpl implements ProfileEntityRepositoryCusto
     @Override
     public List<ProfileEntity> search(SearchProfileQuery searchProfileQuery) {
         Map<String, Object> values = new HashMap<>();
-        String sql = "select e from ProfileEntity e " + createWhereQuery(searchProfileQuery.getKeyword(), searchProfileQuery.getUserId(), values)
+        String sql = "select e from ProfileEntity e "
+                + createWhereQuery(searchProfileQuery.getKeyword(), searchProfileQuery.getUserId(), values)
                 + createOrderQuery(searchProfileQuery.getSortBy());
         TypedQuery<ProfileEntity> query = entityManager.createQuery(sql, ProfileEntity.class);
         values.forEach(query::setParameter);
@@ -71,8 +72,8 @@ public class ProfileEntityRepositoryImpl implements ProfileEntityRepositoryCusto
     @Override
     public Long count(SearchProfileQuery searchProfileQuery) {
         Map<String, Object> values = new HashMap<>();
-        String sql =
-                "select count(e) from ProfileEntity e " + createWhereQuery(searchProfileQuery.getKeyword(), searchProfileQuery.getUserId(), values);
+        String sql = "select count(e) from ProfileEntity e "
+                + createWhereQuery(searchProfileQuery.getKeyword(), searchProfileQuery.getUserId(), values);
         Query query = entityManager.createQuery(sql, Long.class);
         values.forEach(query::setParameter);
         return (Long) query.getSingleResult();

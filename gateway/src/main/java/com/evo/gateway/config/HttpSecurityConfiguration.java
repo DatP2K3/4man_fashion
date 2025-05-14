@@ -20,8 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @EnableWebFluxSecurity
 public class HttpSecurityConfiguration {
     private final String[] PUBLIC_ENDPOINTS = {
-        "/elasticsearch/**",
-        "/location/**",
+        "/elasticsearch/**", "/location/**",
     };
 
     @Bean

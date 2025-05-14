@@ -1,12 +1,12 @@
 package com.evo.order.domain;
 
+import java.util.UUID;
+
 import com.evo.common.Auditor;
 import com.evo.order.domain.command.CreateOrderItemCmd;
-import jakarta.persistence.Column;
+
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
@@ -22,7 +22,7 @@ public class OrderItem extends Auditor {
     private int quantity;
     private Long price;
     private int weight;
-    private  int height;
+    private int height;
     private int width;
     private int length;
     private Boolean deleted;

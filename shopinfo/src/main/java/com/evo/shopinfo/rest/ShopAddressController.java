@@ -1,14 +1,16 @@
 package com.evo.shopinfo.rest;
 
-import com.evo.common.dto.response.ApiResponses;
-import com.evo.shopinfo.application.dto.request.CreateOrUpdateShopAddressRequest;
-import com.evo.common.dto.response.ShopAddressDTO;
-import com.evo.shopinfo.application.service.ShopAddressCommandService;
-import com.evo.shopinfo.application.service.ShopAddressQueryService;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.ShopAddressDTO;
+import com.evo.shopinfo.application.dto.request.CreateOrUpdateShopAddressRequest;
+import com.evo.shopinfo.application.service.ShopAddressCommandService;
+import com.evo.shopinfo.application.service.ShopAddressQueryService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api")

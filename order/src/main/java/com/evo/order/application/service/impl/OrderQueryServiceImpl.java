@@ -1,5 +1,11 @@
 package com.evo.order.application.service.impl;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
 import com.evo.common.dto.response.*;
 import com.evo.common.enums.ShopAddressType;
 import com.evo.order.application.dto.mapper.OrderDTOMapper;
@@ -18,11 +24,8 @@ import com.evo.order.infrastructure.adapter.profile.client.ProfileClient;
 import com.evo.order.infrastructure.adapter.shopinfo.client.ShopInfoClient;
 import com.evo.order.infrastructure.persistence.entity.OrderEntity;
 import com.evo.order.infrastructure.persistence.repository.OrderEntityRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -96,7 +99,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
                 .InsuranceValue(totalPrice)
                 .build();
 
-        GHNFeeDTO ghnFeeDTO = ghnClient.calculateShippingFee(getGHNFeeRequest).getData() ;
+        GHNFeeDTO ghnFeeDTO = ghnClient.calculateShippingFee(getGHNFeeRequest).getData();
 
         return OrderFeeDTO.builder()
                 .totalQuantity(totalQuantity)
@@ -112,20 +115,27 @@ public class OrderQueryServiceImpl implements OrderQueryService {
     @Override
     public OrderDTO findByOrderCode(String orderCode) {
         Order order = orderDomainRepository.findByOrderCode(orderCode);
-        return  orderDTOMapper.domainModelToDTO(order);
+        return orderDTOMapper.domainModelToDTO(order);
     }
 
     @Override
     public String printGHNOrder(PrintOrCancelGHNOrderRequest printOrCancelGHNOrderRequest) {
         String token = getGHYNPrintToken(printOrCancelGHNOrderRequest);
-        return   ghnClient.print(token);
+        return ghnClient.print(token);
     }
 
     @Override
     public String getGHYNPrintToken(PrintOrCancelGHNOrderRequest printOrCancelGHNOrderRequest) {
-       GHNPrintTokenDTO ghnPrintTokenDTO = ghnClient.getPrintToken(printOrCancelGHNOrderRequest).getData();
-       return ghnPrintTokenDTO.getToken();
+        GHNPrintTokenDTO ghnPrintTokenDTO =
+                ghnClient.getPrintToken(printOrCancelGHNOrderRequest).getData();
+        return ghnPrintTokenDTO.getToken();
     }
 
-
+    @Override
+    public List<OrderDTO> getOrdersOfUser() {
+        var context = SecurityContextHolder.getContext();
+        UUID userId = UUID.fromString(context.getAuthentication().getName());
+        List<OrderEntity> orderEntities = orderEntityRepository.findByUserId(userId);
+        return orderDTOMapper.entitiesToDTOs(orderEntities);
+    }
 }

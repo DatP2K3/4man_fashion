@@ -1,13 +1,17 @@
 package com.evo.order.application.service.impl;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.evo.common.dto.request.GetPaymentUrlRequest;
 import com.evo.common.dto.response.CartDTO;
 import com.evo.common.dto.response.ProfileDTO;
 import com.evo.common.dto.response.ShippingAddressDTO;
 import com.evo.common.dto.response.ShopAddressDTO;
-import com.evo.common.enums.OrderStatus;
-import com.evo.common.enums.PaymentMethod;
-import com.evo.common.enums.ShopAddressType;
+import com.evo.common.enums.*;
 import com.evo.order.application.dto.mapper.OrderDTOMapper;
 import com.evo.order.application.dto.request.*;
 import com.evo.order.application.dto.response.GHNOrderDTO;
@@ -19,18 +23,15 @@ import com.evo.order.application.service.OrderQueryService;
 import com.evo.order.domain.Order;
 import com.evo.order.domain.OrderItem;
 import com.evo.order.domain.command.CreateOrderCmd;
+import com.evo.order.domain.command.UpdateOrderStatusCmd;
 import com.evo.order.domain.repository.OrderDomainRepository;
 import com.evo.order.infrastructure.adapter.cart.client.CartClient;
 import com.evo.order.infrastructure.adapter.ghn.client.GHNClient;
 import com.evo.order.infrastructure.adapter.payment.client.PaymentClient;
 import com.evo.order.infrastructure.adapter.profile.client.ProfileClient;
 import com.evo.order.infrastructure.adapter.shopinfo.client.ShopInfoClient;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -56,11 +57,11 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                 .findFirst()
                 .orElse(null);
 
-        ShopAddressDTO fromAddress  = null;
+        ShopAddressDTO fromAddress = null;
         ShopAddressDTO returnAddress = null;
         List<ShopAddressDTO> shopAddressDTOS = shopInfoClient.getShopAddress().getData();
 
-        for(ShopAddressDTO shopAddressDTO : shopAddressDTOS) {
+        for (ShopAddressDTO shopAddressDTO : shopAddressDTOS) {
             if (shopAddressDTO.getType().equals(ShopAddressType.SEND_ADDRESS)) {
                 fromAddress = shopAddressDTO;
             } else if (shopAddressDTO.getType().equals(ShopAddressType.RETURN_ADDRESS)) {
@@ -79,7 +80,8 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                 .build();
 
         if (order.getPaymentMethod().equals(PaymentMethod.ONLINE)) {
-            String paymentUrl = paymentClient.getPaymentUrl(getPaymentUrlRequest).getData();
+            String paymentUrl =
+                    paymentClient.getPaymentUrl(getPaymentUrlRequest).getData();
             order.setPaymentUrl(paymentUrl);
         }
 
@@ -91,7 +93,8 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     @Override
     @Transactional
     public void delete(CancelOrderRequest cancelOrderRequest) {
-        if (cancelOrderRequest.getOrderIds() == null || cancelOrderRequest.getOrderIds().isEmpty()) {
+        if (cancelOrderRequest.getOrderIds() == null
+                || cancelOrderRequest.getOrderIds().isEmpty()) {
             return;
         }
         List<UUID> orderIds = cancelOrderRequest.getOrderIds();
@@ -100,16 +103,16 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                 .filter(order -> order.getGHNOrderCode() != null)
                 .map(Order::getGHNOrderCode)
                 .toList();
-       for (Order order : orders) {
-           if (order.getOrderStatus().equals(OrderStatus.PENDING_SHIPMENT)
-                   || order.getOrderStatus().equals(OrderStatus.WAITING_FOR_PICKUP)) {
-               order.setOrderStatus(OrderStatus.CANCELLED);
-               List<OrderItem> orderItems = order.getOrderItems();
-               for (OrderItem orderItem : orderItems) {
-                   orderItem.setDeleted(true);
-               }
-               orderDomainRepository.save(order);
-           }
+        for (Order order : orders) {
+            if (order.getOrderStatus().equals(OrderStatus.PENDING_SHIPMENT)
+                    || order.getOrderStatus().equals(OrderStatus.WAITING_FOR_PICKUP)) {
+                order.setOrderStatus(OrderStatus.CANCELLED);
+                List<OrderItem> orderItems = order.getOrderItems();
+                for (OrderItem orderItem : orderItems) {
+                    orderItem.setDeleted(true);
+                }
+                orderDomainRepository.save(order);
+            }
         }
         if (!ghnOrderCodes.isEmpty()) {
             PrintOrCancelGHNOrderRequest request = new PrintOrCancelGHNOrderRequest(ghnOrderCodes);
@@ -123,42 +126,61 @@ public class OrderCommandServiceImpl implements OrderCommandService {
             return List.of();
         }
         List<Order> orders = orderDomainRepository.getByIds(request.getOrderIds());
-       for (Order order : orders) {
-           CreateGHNOrderRequest createGHNOrderRequest = CreateGHNOrderRequest.builder()
-                .fromName(order.getFromName())
-                .fromPhone(order.getFromPhoneNumber())
-                .fromAddress(order.getFromAddressLine1() + order.getFromAddressLine2())
-                .fromDistrictName(order.getFromDistrict())
-                .fromWardName(order.getFromWard())
-                .fromProvinceName(order.getFromCity())
-                .toName(order.getToName())
-                .toPhone(order.getToPhoneNumber())
-                .toAddress(order.getToAddressLine1() + order.getToAddressLine2())
-                .toDistrictName(order.getToDistrict())
-                .toWardName(order.getToWard())
-                .toProvinceName(order.getToCity())
-                .returnPhone(order.getReturnPhoneNumber())
-                .returnAddress(order.getReturnAddressLine1() + order.getReturnAddressLine2())
-                .returnDistrictName(order.getReturnDistrict())
-                .returnWardName(order.getReturnWard())
-                .returnProvinceName(order.getReturnCity())
-                .clientOrderCode(order.getOrderCode())
-                .codAmount(order.getTotalPrice() + order.getShipmentFee())
-                .content("4Man Fashion Luxury")
-                .weight(order.getTotalWeight())
-                .length(order.getTotalLength())
-                .width(order.getTotalWidth())
-                .height(order.getTotalHeight())
-                .serviceTypeId(2)
-                .paymentTypeId(2)
-                .note(order.getNote())
-               .requiredNote("CHOXEMHANGKHONGTHU")
-                .build();
-              GHNOrderDTO ghnOrderDTO = ghnClient.createShippingOrder(createGHNOrderRequest).getData();
-              order.setGHNOrderCode(ghnOrderDTO.getOrderCode());
-              order.setOrderStatus(OrderStatus.WAITING_FOR_PICKUP);
+        for (Order order : orders) {
+            CreateGHNOrderRequest createGHNOrderRequest = CreateGHNOrderRequest.builder()
+                    .fromName(order.getFromName())
+                    .fromPhone(order.getFromPhoneNumber())
+                    .fromAddress(order.getFromAddressLine1() + order.getFromAddressLine2())
+                    .fromDistrictName(order.getFromDistrict())
+                    .fromWardName(order.getFromWard())
+                    .fromProvinceName(order.getFromCity())
+                    .toName(order.getToName())
+                    .toPhone(order.getToPhoneNumber())
+                    .toAddress(order.getToAddressLine1() + order.getToAddressLine2())
+                    .toDistrictName(order.getToDistrict())
+                    .toWardName(order.getToWard())
+                    .toProvinceName(order.getToCity())
+                    .returnPhone(order.getReturnPhoneNumber())
+                    .returnAddress(order.getReturnAddressLine1() + order.getReturnAddressLine2())
+                    .returnDistrictName(order.getReturnDistrict())
+                    .returnWardName(order.getReturnWard())
+                    .returnProvinceName(order.getReturnCity())
+                    .clientOrderCode(order.getOrderCode())
+                    .codAmount(order.getTotalPrice() + order.getShipmentFee())
+                    .content("4Man Fashion Luxury")
+                    .weight(order.getTotalWeight())
+                    .length(order.getTotalLength())
+                    .width(order.getTotalWidth())
+                    .height(order.getTotalHeight())
+                    .serviceTypeId(2)
+                    .paymentTypeId(2)
+                    .note(order.getNote())
+                    .requiredNote("CHOXEMHANGKHONGTHU")
+                    .build();
+
+            if (order.getPaymentMethod() == PaymentMethod.ONLINE) {
+                createGHNOrderRequest.setPaymentTypeId(1);
+                createGHNOrderRequest.setCodAmount(0L);
+            }
+
+            GHNOrderDTO ghnOrderDTO =
+                    ghnClient.createShippingOrder(createGHNOrderRequest).getData();
+            order.setGHNOrderCode(ghnOrderDTO.getOrderCode());
+            order.setOrderStatus(OrderStatus.WAITING_FOR_PICKUP);
         }
         orders = orderDomainRepository.saveAll(orders);
         return orderDTOMapper.domainModelsToDTOs(orders);
+    }
+
+    @Override
+    public void updateStatus(UpdateOrderStatusCmd updateOrderStatusCmd) {
+        Order order = orderDomainRepository.getByOrderCode(updateOrderStatusCmd.getOrderCode());
+        if (updateOrderStatusCmd.getStatus() == TransactionStatus.SUCCESS) {
+            order.setPaymentStatus(PaymentStatus.PAID);
+            order.setOrderStatus(OrderStatus.PENDING_SHIPMENT);
+        } else {
+            order.setPaymentStatus(PaymentStatus.FAILED);
+        }
+        orderDomainRepository.save(order);
     }
 }

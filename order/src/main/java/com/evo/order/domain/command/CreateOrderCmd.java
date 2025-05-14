@@ -1,16 +1,17 @@
 package com.evo.order.domain.command;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import com.evo.common.dto.response.*;
 import com.evo.common.enums.OrderStatus;
 import com.evo.common.enums.PaymentMethod;
 import com.evo.common.enums.PaymentStatus;
 import com.evo.order.application.dto.response.OrderFeeDTO;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -54,12 +55,18 @@ public class CreateOrderCmd {
     private String note;
     private UUID referencesId;
     private int totalWeight;
-    private  int totalHeight;
+    private int totalHeight;
     private int totalWidth;
     private int totalLength;
     private List<CreateOrderItemCmd> orderItems;
 
-    public void enrichInfo(ProfileDTO profileDTO, OrderFeeDTO orderFeeDTO, ShopAddressDTO fromAddress, ShippingAddressDTO toAddress, ShopAddressDTO returnAddress, CartDTO cartDTO) {
+    public void enrichInfo(
+            ProfileDTO profileDTO,
+            OrderFeeDTO orderFeeDTO,
+            ShopAddressDTO fromAddress,
+            ShippingAddressDTO toAddress,
+            ShopAddressDTO returnAddress,
+            CartDTO cartDTO) {
         this.userId = profileDTO.getId();
 
         this.fromName = fromAddress.getShopName();
@@ -100,11 +107,11 @@ public class CreateOrderCmd {
         this.totalLength = orderFeeDTO.getTotalLength();
 
         List<CartItemDTO> cartItemDTOS = cartDTO.getCartItems();
-        if(this.orderItems == null) {
-            this.orderItems =  new ArrayList<>();
+        if (this.orderItems == null) {
+            this.orderItems = new ArrayList<>();
         }
         this.totalProductVariant = cartItemDTOS.size();
-        for(CartItemDTO cartItemDTO : cartItemDTOS) {
+        for (CartItemDTO cartItemDTO : cartItemDTOS) {
             if (cartItemDTO.getDeleted() == true) continue;
             CreateOrderItemCmd orderItem = new CreateOrderItemCmd();
             orderItem.setProductId(cartItemDTO.getProductId());
@@ -112,8 +119,7 @@ public class CreateOrderCmd {
             orderItem.setPrice(
                     cartItemDTO.getDiscountPrice() != null && cartItemDTO.getDiscountPrice() != 0
                             ? cartItemDTO.getDiscountPrice()
-                            : cartItemDTO.getOriginPrice()
-            );
+                            : cartItemDTO.getOriginPrice());
             this.orderItems.add(orderItem);
         }
     }

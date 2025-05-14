@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import com.evo.profile.domain.command.CreateOrUpdateShippingAddressCmd;
 
-import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 

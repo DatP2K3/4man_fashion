@@ -1,19 +1,18 @@
 package com.evo.order.infrastructure.adapter.payment.client;
 
-import com.evo.common.dto.request.GetPaymentUrlRequest;
-import com.evo.common.dto.response.ApiResponses;
-import com.evo.common.dto.response.CartDTO;
-import com.evo.common.enums.ServiceUnavailableError;
-import com.evo.common.exception.ForwardInnerAlertException;
-import com.evo.common.exception.ResponseException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
+import com.evo.common.dto.request.GetPaymentUrlRequest;
+import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.enums.ServiceUnavailableError;
+import com.evo.common.exception.ForwardInnerAlertException;
+import com.evo.common.exception.ResponseException;
+
+import lombok.extern.slf4j.Slf4j;
+
 @Component
-public class PaymentClientFallback
-        implements FallbackFactory<
-        PaymentClient> {
+public class PaymentClientFallback implements FallbackFactory<PaymentClient> {
     @Override
     public PaymentClient create(Throwable cause) {
         return new FallbackWithFactory(cause);
@@ -27,7 +26,7 @@ public class PaymentClientFallback
             this.cause = cause;
         }
 
-         @Override
+        @Override
         public ApiResponses<String> getPaymentUrl(GetPaymentUrlRequest getPaymentUrlRequest) {
             if (cause instanceof ForwardInnerAlertException) {
                 throw (RuntimeException) cause;

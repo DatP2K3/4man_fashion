@@ -1,13 +1,13 @@
 package com.evo.order.infrastructure.adapter.shopinfo.client;
 
-import com.evo.common.dto.response.ApiResponses;
-import com.evo.common.dto.response.CartDTO;
-import com.evo.common.dto.response.ShopAddressDTO;
-import com.evo.order.infrastructure.adapter.shopinfo.config.ShopInfoClientConfiguration;
+import java.util.List;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
+import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.ShopAddressDTO;
+import com.evo.order.infrastructure.adapter.shopinfo.config.ShopInfoClientConfiguration;
 
 @FeignClient(
         name = "shopInfo-service",

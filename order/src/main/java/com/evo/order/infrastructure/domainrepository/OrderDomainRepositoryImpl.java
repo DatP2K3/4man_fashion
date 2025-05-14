@@ -1,5 +1,12 @@
 package com.evo.order.infrastructure.domainrepository;
 
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Repository;
+
 import com.evo.common.enums.OrderStatus;
 import com.evo.common.repository.AbstractDomainRepository;
 import com.evo.order.domain.Order;
@@ -13,12 +20,6 @@ import com.evo.order.infrastructure.persistence.repository.OrderEntityRepository
 import com.evo.order.infrastructure.persistence.repository.OrderItemEntityRepository;
 import com.evo.order.infrastructure.support.exception.AppErrorCode;
 import com.evo.order.infrastructure.support.exception.AppException;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Repository
 public class OrderDomainRepositoryImpl extends AbstractDomainRepository<Order, OrderEntity, UUID>
@@ -53,7 +54,8 @@ public class OrderDomainRepositoryImpl extends AbstractDomainRepository<Order, O
 
     @Override
     public Order getById(UUID uuid) {
-        OrderEntity orderEntity = orderEntityRepository.findById(uuid).orElseThrow(() -> new AppException(AppErrorCode.ORDER_NOT_FOUND));
+        OrderEntity orderEntity =
+                orderEntityRepository.findById(uuid).orElseThrow(() -> new AppException(AppErrorCode.ORDER_NOT_FOUND));
         return this.enrich(orderEntityMapper.toDomainModel(orderEntity));
     }
 
@@ -65,11 +67,10 @@ public class OrderDomainRepositoryImpl extends AbstractDomainRepository<Order, O
 
         List<UUID> orderIds = orders.stream().map(Order::getId).toList();
 
-        Map<UUID, List<OrderItem>> orderItemMap =
-                orderItemEntityRepository.findByOrderIdIn(orderIds).stream()
-                        .collect(Collectors.groupingBy(
-                                OrderItemEntity::getOrderId,
-                                Collectors.mapping(orderItemEntityMapper::toDomainModel, Collectors.toList())));
+        Map<UUID, List<OrderItem>> orderItemMap = orderItemEntityRepository.findByOrderIdIn(orderIds).stream()
+                .collect(Collectors.groupingBy(
+                        OrderItemEntity::getOrderId,
+                        Collectors.mapping(orderItemEntityMapper::toDomainModel, Collectors.toList())));
 
         for (Order order : orders) {
             List<OrderItem> orderItems = orderItemMap.get(order.getId());
@@ -83,7 +84,9 @@ public class OrderDomainRepositoryImpl extends AbstractDomainRepository<Order, O
 
     @Override
     public Order findByOrderCode(String orderCode) {
-        OrderEntity orderEntity = orderEntityRepository.findByOrderCode(orderCode).orElseThrow(() -> new AppException(AppErrorCode.ORDER_NOT_FOUND));
+        OrderEntity orderEntity = orderEntityRepository
+                .findByOrderCode(orderCode)
+                .orElseThrow(() -> new AppException(AppErrorCode.ORDER_NOT_FOUND));
         return this.enrich(orderEntityMapper.toDomainModel(orderEntity));
     }
 
@@ -91,6 +94,15 @@ public class OrderDomainRepositoryImpl extends AbstractDomainRepository<Order, O
     public List<Order> getByIds(List<UUID> orderIds) {
         List<OrderEntity> orderEntities = orderEntityRepository.findAllById(orderIds);
         return this.enrichList(orderEntityMapper.toDomainModelList(orderEntities));
+    }
+
+    @Override
+    public Order getByOrderCode(String orderCode) {
+        OrderEntity orderEntity = orderEntityRepository
+                .findByOrderCode(orderCode)
+                .orElseThrow(() -> new AppException(AppErrorCode.ORDER_NOT_FOUND));
+        Order order = this.enrich(orderEntityMapper.toDomainModel(orderEntity));
+        return order;
     }
 
     @Override

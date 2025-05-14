@@ -31,7 +31,7 @@ public class CartItem extends Auditor {
     private String size;
     private String color;
     private int weight;
-    private  int height;
+    private int height;
     private int width;
     private int length;
 

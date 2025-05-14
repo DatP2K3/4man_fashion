@@ -21,7 +21,7 @@
         <module name="common-model" />
         <module name="common-web" />
       </profile>
-      <profile name="Annotation profile for storage" enabled="true">
+      <profile name="Annotation profile for order" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -30,22 +30,22 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.6.3/mapstruct-1.6.3.jar" />
         </processorPath>
-        <module name="product" />
-        <module name="profile" />
-        <module name="banner" />
-        <module name="storage" />
-        <module name="cart" />
         <module name="shopinfo" />
         <module name="notification" />
+        <module name="product" />
         <module name="elasticsearch" />
+        <module name="profile" />
+        <module name="banner" />
         <module name="payment" />
         <module name="location" />
+        <module name="storage" />
         <module name="gateway" />
+        <module name="cart" />
         <module name="order" />
-        <module name="baseddd" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="baseddd" target="21" />
       <module name="common-persistence" target="21" />
       <module name="iam" target="21" />
       <module name="spring-boot-starter-parent" target="1.5" />

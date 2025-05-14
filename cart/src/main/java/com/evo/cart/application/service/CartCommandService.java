@@ -1,9 +1,9 @@
 package com.evo.cart.application.service;
 
+import java.util.UUID;
+
 import com.evo.cart.application.dto.request.UpdateCartRequest;
 import com.evo.common.dto.response.CartDTO;
-
-import java.util.UUID;
 
 public interface CartCommandService {
     CartDTO getOrInitCart();
