@@ -21,6 +21,8 @@ public class ShippingAddress {
     private String addressLine2; // Địa chỉ bổ sung (Tòa nhà, căn hộ)
     private String ward; // Phường/Xã
     private String district; // Quận/Huyện
+    private String wardCode; // Mã phường/xã
+    private String districtId; // Id quận/huyện
     private String city;
     private UUID profileId;
     private Boolean defaultAddress;
@@ -32,6 +34,8 @@ public class ShippingAddress {
         this.addressLine2 = cmd.getAddressLine2();
         this.ward = cmd.getWard();
         this.district = cmd.getDistrict();
+        this.districtId = cmd.getDistrictId();
+        this.wardCode = cmd.getWardCode();
         this.city = cmd.getCity();
         this.profileId = cmd.getProfileId();
         if (cmd.getDefaultAddress() != null) {

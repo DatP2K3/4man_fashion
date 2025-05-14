@@ -38,10 +38,10 @@ public class Product extends Auditor {
     private UUID categoryId;
     private Map<String, String> description;
     private String introduce; // Introduce is a short description of the product(html)
-    private Double weight;
-    private Double length;
-    private Double width;
-    private Double height;
+    private int weight;
+    private int length;
+    private int width;
+    private int height;
     private Boolean hidden;
     private Long totalSold;
     private BigDecimal averageRating;
@@ -85,16 +85,16 @@ public class Product extends Auditor {
         if (createOrUpdateProductCmd.getIntroduce() != null) {
             this.introduce = createOrUpdateProductCmd.getIntroduce();
         }
-        if (createOrUpdateProductCmd.getWeight() != null) {
+        if (createOrUpdateProductCmd.getWeight() != 0) {
             this.weight = createOrUpdateProductCmd.getWeight();
         }
-        if (createOrUpdateProductCmd.getLength() != null) {
+        if (createOrUpdateProductCmd.getLength() != 0) {
             this.length = createOrUpdateProductCmd.getLength();
         }
-        if (createOrUpdateProductCmd.getWidth() != null) {
+        if (createOrUpdateProductCmd.getWidth() != 0) {
             this.width = createOrUpdateProductCmd.getWidth();
         }
-        if (createOrUpdateProductCmd.getHeight() != null) {
+        if (createOrUpdateProductCmd.getHeight() != 0) {
             this.height = createOrUpdateProductCmd.getHeight();
         }
         if (createOrUpdateProductCmd.getHidden() != null) {
@@ -192,11 +192,11 @@ public class Product extends Auditor {
                 Instant startDate = createOrUpdateDiscountCmd.getStartDate();
                 Instant endDate = createOrUpdateDiscountCmd.getEndDate();
 
-                if(endDate.isBefore(Instant.now())) {
+                if (endDate.isBefore(Instant.now())) {
                     discount.setStatus(DiscountStatus.EXPIRED);
-                } else if(startDate.isBefore(Instant.now()) && Instant.now().isBefore(endDate)) {
+                } else if (startDate.isBefore(Instant.now()) && Instant.now().isBefore(endDate)) {
                     discount.setStatus(DiscountStatus.ACTIVE);
-                } else if(startDate.isAfter(Instant.now())) {
+                } else if (startDate.isAfter(Instant.now())) {
                     discount.setStatus(DiscountStatus.SCHEDULED);
                 }
             }

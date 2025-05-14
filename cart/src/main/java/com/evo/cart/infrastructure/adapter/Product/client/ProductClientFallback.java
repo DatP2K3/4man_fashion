@@ -1,26 +1,22 @@
 package com.evo.cart.infrastructure.adapter.Product.client;
 
-import com.evo.common.dto.request.SearchFileRequest;
-import com.evo.common.dto.request.UpdateFileRequest;
+import java.util.UUID;
+
+import org.springframework.cloud.openfeign.FallbackFactory;
+import org.springframework.stereotype.Component;
+
 import com.evo.common.dto.response.ApiResponses;
-import com.evo.common.dto.response.FileResponse;
-import com.evo.common.dto.response.PageApiResponse;
 import com.evo.common.dto.response.ProductDTO;
 import com.evo.common.enums.ServiceUnavailableError;
 import com.evo.common.exception.ForwardInnerAlertException;
 import com.evo.common.exception.ResponseException;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.openfeign.FallbackFactory;
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 public class ProductClientFallback
         implements FallbackFactory<
-        ProductClient> { // FallbackFactory: Dùng để xử lý khi gặp lỗi khi gọi api từ Iam Client
+                ProductClient> { // FallbackFactory: Dùng để xử lý khi gặp lỗi khi gọi api từ Iam Client
     @Override
     public ProductClient create(Throwable cause) {
         return new FallbackWithFactory(cause);

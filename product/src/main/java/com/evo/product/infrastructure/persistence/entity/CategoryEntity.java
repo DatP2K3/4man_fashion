@@ -28,7 +28,7 @@ public class CategoryEntity extends AuditEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "productType")
+    @Column(name = "product_type")
     private String productType;
 
     @Column(name = "description", columnDefinition = "TEXT")

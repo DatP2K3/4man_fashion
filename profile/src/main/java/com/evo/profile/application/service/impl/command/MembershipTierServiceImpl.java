@@ -4,9 +4,9 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.evo.common.dto.response.MembershipTierDTO;
 import com.evo.profile.application.dto.mapper.MembershipTierDTOMapper;
 import com.evo.profile.application.dto.request.CreateOrUpdateMembershipTierRequest;
-import com.evo.profile.application.dto.response.MembershipTierDTO;
 import com.evo.profile.application.mapper.CommandMapper;
 import com.evo.profile.application.service.MembershipTierService;
 import com.evo.profile.domain.MembershipTier;

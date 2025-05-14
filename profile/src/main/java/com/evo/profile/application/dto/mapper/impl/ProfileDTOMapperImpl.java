@@ -3,15 +3,15 @@ package com.evo.profile.application.dto.mapper.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.evo.profile.infrastructure.persistence.entity.ProfileEntity;
 import org.springframework.stereotype.Component;
 
+import com.evo.common.dto.response.ProfileDTO;
 import com.evo.profile.application.dto.mapper.ProfileDTOMapper;
 import com.evo.profile.application.dto.mapper.ShippingAddressDTOMapper;
-import com.evo.profile.application.dto.response.ProfileDTO;
 import com.evo.profile.domain.MembershipTier;
 import com.evo.profile.domain.Profile;
 import com.evo.profile.domain.repository.MembershipTierDomainRepository;
+import com.evo.profile.infrastructure.persistence.entity.ProfileEntity;
 
 import lombok.RequiredArgsConstructor;
 

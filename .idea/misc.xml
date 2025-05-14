@@ -23,6 +23,9 @@
         <option value="$PROJECT_DIR$/discovery-service/pom.xml" />
         <option value="$PROJECT_DIR$/baseddd/pom.xml" />
         <option value="$PROJECT_DIR$/cart/pom.xml" />
+        <option value="$PROJECT_DIR$/location/pom.xml" />
+        <option value="$PROJECT_DIR$/shopinfo/pom.xml" />
+        <option value="$PROJECT_DIR$/payment/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
@@ -43,19 +46,22 @@
   <component name="com.github.lipiridi.spotless.applier.ui.settings.ModuleSettingsState">
     <option name="selectedModules">
       <list>
-        <option value="notification" />
         <option value="product" />
+        <option value="profile" />
+        <option value="banner" />
+        <option value="storage" />
+        <option value="discovery-service" />
+        <option value="cart" />
+        <option value="notification" />
         <option value="common" />
         <option value="elasticsearch" />
         <option value="common-model" />
-        <option value="profile" />
-        <option value="banner" />
         <option value="common-web" />
-        <option value="storage" />
         <option value="common-client" />
         <option value="config" />
         <option value="gateway" />
         <option value="order" />
+        <option value="baseddd" />
       </list>
     </option>
   </component>

@@ -2,7 +2,6 @@ package com.evo.product.application.dto.mapper;
 
 import java.util.UUID;
 
-import com.evo.product.infrastructure.persistence.entity.ProductEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -10,6 +9,7 @@ import com.evo.common.dto.response.DTOMapper;
 import com.evo.common.dto.response.ProductDTO;
 import com.evo.product.domain.Product;
 import com.evo.product.domain.ProductImage;
+import com.evo.product.infrastructure.persistence.entity.ProductEntity;
 
 @Mapper(
         componentModel = "spring",

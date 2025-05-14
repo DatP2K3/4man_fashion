@@ -7,6 +7,12 @@ public enum ServiceUnavailableError implements ResponseError {
     IAM_SERVICE_UNAVAILABLE_ERROR(50300002, "IAM Service unavailable"),
     STORAGE_SERVICE_UNAVAILABLE_ERROR(50300003, "Storage Service unavailable"),
     NOTIFICATION_SERVICE_UNAVAILABLE_ERROR(50300004, "Notification Service unavailable"),
+    PAYMENT_SERVICE_UNAVAILABLE_ERROR(50300005, "Payment Service unavailable"),
+    PRODUCT_SERVICE_UNAVAILABLE_ERROR(50300006, "Product Service unavailable"),
+    ORDER_SERVICE_UNAVAILABLE_ERROR(50300007, "Order Service unavailable"),
+    CART_SERVICE_UNAVAILABLE_ERROR(50300008, "Cart Service unavailable"),
+    LOCATION_SERVICE_UNAVAILABLE_ERROR(50300009, "Location Service unavailable"),
+    GHN_SERVICE_UNAVAILABLE_ERROR(50300010, "GHN Service unavailable"),
     ;
 
     private final Integer code;

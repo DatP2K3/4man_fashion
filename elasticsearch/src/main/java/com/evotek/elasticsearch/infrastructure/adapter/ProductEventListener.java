@@ -20,13 +20,15 @@ public class ProductEventListener {
 
     @RabbitListener(queues = "${rabbitmq.queue.product.create}")
     public void handleProductCreated(ProductEvent event) {
-        SyncProductCmd syncProductCmd = commandMapper.from(event.getProductSyncs().getFirst());
+        SyncProductCmd syncProductCmd =
+                commandMapper.from(event.getProductSyncs().getFirst());
         productCommandService.create(syncProductCmd);
     }
 
     @RabbitListener(queues = "${rabbitmq.queue.product.update}")
     public void handleProductUpdated(ProductEvent event) {
-        SyncProductCmd syncProductCmd = commandMapper.from(event.getProductSyncs().getFirst());
+        SyncProductCmd syncProductCmd =
+                commandMapper.from(event.getProductSyncs().getFirst());
         productCommandService.update(syncProductCmd);
     }
 

@@ -114,7 +114,9 @@ public class RabbitMQConsumerConfig {
 
     @Bean
     public Binding productUpdateAllBinding() {
-        return BindingBuilder.bind(productUpdateAllQueue()).to(productExchange()).with(productUpdateAllRoutingKey);
+        return BindingBuilder.bind(productUpdateAllQueue())
+                .to(productExchange())
+                .with(productUpdateAllRoutingKey);
     }
 
     @Bean

@@ -5,10 +5,10 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.evo.common.dto.response.TokenDTO;
 import com.evo.profile.application.dto.request.GetTokenRequest;
 import com.evo.profile.application.dto.request.LockUserRequest;
 import com.evo.profile.application.dto.request.ResetKeycloakPasswordRequest;
-import com.evo.profile.application.dto.response.TokenDTO;
 import com.evo.profile.infrastructure.adapter.keycloak.KeycloakIdentityClient;
 import com.evo.profile.infrastructure.adapter.keycloak.KeycloakService;
 import com.evo.profile.infrastructure.support.exception.ErrorNormalizer;

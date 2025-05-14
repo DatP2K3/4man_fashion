@@ -3,9 +3,9 @@ package com.evo.product.infrastructure.domainrepository;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.evo.common.enums.DiscountStatus;
 import org.springframework.stereotype.Repository;
 
+import com.evo.common.enums.DiscountStatus;
 import com.evo.common.repository.AbstractDomainRepository;
 import com.evo.product.domain.*;
 import com.evo.product.domain.repository.ProductDomainRepository;
@@ -92,10 +92,11 @@ public class ProductDomainRepositoryImpl extends AbstractDomainRepository<Produc
                                 Collectors.mapping(productImageEntityMapper::toDomainModel, Collectors.toList())));
 
         List<DiscountStatus> discountStatuses = Arrays.asList(DiscountStatus.CANCELED, DiscountStatus.EXPIRED);
-        Map<UUID, List<Discount>> discountMap = discountEntityRepository.findByProductIdsAndStatusNotIn(productIds, discountStatuses).stream()
-                .collect(Collectors.groupingBy(
-                        DiscountEntity::getProductId,
-                        Collectors.mapping(discountEntityMapper::toDomainModel, Collectors.toList())));
+        Map<UUID, List<Discount>> discountMap =
+                discountEntityRepository.findByProductIdsAndStatusNotIn(productIds, discountStatuses).stream()
+                        .collect(Collectors.groupingBy(
+                                DiscountEntity::getProductId,
+                                Collectors.mapping(discountEntityMapper::toDomainModel, Collectors.toList())));
 
         products.forEach(product -> {
             product.setProductVariants(
@@ -114,16 +115,14 @@ public class ProductDomainRepositoryImpl extends AbstractDomainRepository<Produc
         List<ProductEntity> productEntities = productEntityRepository.findAll();
         List<Product> products = this.enrichList(productEntityMapper.toDomainModelList(productEntities));
         return products.stream()
-                .filter(product -> product.getDiscounts() == null || product.getDiscounts().isEmpty())
+                .filter(product ->
+                        product.getDiscounts() == null || product.getDiscounts().isEmpty())
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Product> getAll() {
         List<ProductEntity> productEntities = productEntityRepository.getAll();
-       return this.enrichList(productEntityMapper.toDomainModelList(productEntities));
-
+        return this.enrichList(productEntityMapper.toDomainModelList(productEntities));
     }
-
-
 }

@@ -1,13 +1,13 @@
 package com.evo.cart.domain;
 
+import java.util.UUID;
+
 import com.evo.cart.domain.command.CreateCartItemCmd;
 import com.evo.common.Auditor;
 import com.evo.common.enums.DiscountType;
-import jakarta.persistence.Column;
+
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
@@ -30,6 +30,10 @@ public class CartItem extends Auditor {
     private UUID avatarId;
     private String size;
     private String color;
+    private int weight;
+    private int height;
+    private int width;
+    private int length;
 
     public CartItem(CreateCartItemCmd createCartItemCmd) {
         this.productVariantId = createCartItemCmd.getProductVariantId();

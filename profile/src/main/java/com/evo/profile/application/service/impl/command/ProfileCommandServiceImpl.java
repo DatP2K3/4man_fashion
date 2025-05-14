@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.evo.common.dto.response.FileResponse;
+import com.evo.common.dto.response.ProfileDTO;
 import com.evo.profile.application.dto.mapper.ProfileDTOMapper;
 import com.evo.profile.application.dto.request.CreateOrUpdateAddressRequest;
 import com.evo.profile.application.dto.request.UpdateProfileInfoRequest;
-import com.evo.profile.application.dto.response.ProfileDTO;
 import com.evo.profile.application.mapper.CommandMapper;
 import com.evo.profile.application.service.MembershipTierService;
 import com.evo.profile.application.service.ProfileCommandService;

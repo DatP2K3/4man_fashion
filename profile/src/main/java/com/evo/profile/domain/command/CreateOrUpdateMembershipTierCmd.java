@@ -2,7 +2,7 @@ package com.evo.profile.domain.command;
 
 import java.util.UUID;
 
-import com.evo.profile.infrastructure.support.enums.MembershipTierType;
+import com.evo.common.enums.MembershipTierType;
 
 import lombok.Getter;
 import lombok.Setter;

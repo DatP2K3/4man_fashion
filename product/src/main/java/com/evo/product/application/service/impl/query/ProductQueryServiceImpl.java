@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.evo.product.application.dto.mapper.ProductDTOMapper;
 import com.evo.common.dto.response.ProductDTO;
+import com.evo.product.application.dto.mapper.ProductDTOMapper;
 import com.evo.product.application.service.ProductQueryService;
 import com.evo.product.domain.Product;
 import com.evo.product.domain.repository.ProductDomainRepository;
@@ -28,6 +28,6 @@ public class ProductQueryServiceImpl implements ProductQueryService {
     @Override
     public List<ProductDTO> getAllProductsWithNoDiscount() {
         List<Product> products = productDomainRepository.getAllProductsWithNoDiscount();
-       return productDTOMapper.domainModelsToDTOs(products);
+        return productDTOMapper.domainModelsToDTOs(products);
     }
 }

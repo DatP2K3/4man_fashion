@@ -26,6 +26,7 @@ public class HttpSecurityConfiguration {
         "/api/products/search",
         "/api/products/**",
         "/api/banners",
+        "/api/locations/**",
         "/api/public/**",
         "/api/uploads/**",
         "/actuator/**",
@@ -39,6 +40,7 @@ public class HttpSecurityConfiguration {
         "/swagger-resources/**",
         "/swagger-doc/**",
         "/api/test-retry",
+        "api/vn-pay-callback"
     };
 
     @Bean

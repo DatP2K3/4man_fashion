@@ -42,6 +42,4 @@ public class DiscountController {
                 .status("OK")
                 .build();
     }
-
-
 }
