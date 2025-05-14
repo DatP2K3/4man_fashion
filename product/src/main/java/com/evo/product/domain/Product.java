@@ -194,10 +194,10 @@ public class Product extends Auditor {
 
                 if (endDate.isBefore(Instant.now())) {
                     discount.setStatus(DiscountStatus.EXPIRED);
-                } else if (startDate.isBefore(Instant.now()) && Instant.now().isBefore(endDate)) {
-                    discount.setStatus(DiscountStatus.ACTIVE);
                 } else if (startDate.isAfter(Instant.now())) {
                     discount.setStatus(DiscountStatus.SCHEDULED);
+                } else {
+                    discount.setStatus(DiscountStatus.ACTIVE);
                 }
             }
         }
