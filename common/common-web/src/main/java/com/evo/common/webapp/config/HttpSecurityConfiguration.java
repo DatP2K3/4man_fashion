@@ -1,5 +1,6 @@
 package com.evo.common.webapp.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
@@ -40,8 +41,13 @@ public class HttpSecurityConfiguration {
         "/swagger-resources/**",
         "/swagger-doc/**",
         "/api/test-retry",
-        "api/vn-pay-callback"
+        "api/vn-pay-callback",
+        "api/category/category-by-productType",
+        "api/category/**"
     };
+
+    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+    private String jwkSetUri;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -60,7 +66,7 @@ public class HttpSecurityConfiguration {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        return JwtDecoders.fromIssuerLocation("http://localhost:8180/realms/IamService");
+        return JwtDecoders.fromIssuerLocation(jwkSetUri);
     }
 
     @Bean

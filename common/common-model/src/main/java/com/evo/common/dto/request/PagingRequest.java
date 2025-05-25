@@ -7,11 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 public class PagingRequest {
     @Min(value = 1, message = "Page index must be greater than 0")
     @Max(value = 1000, message = "Page index be less than 1000")

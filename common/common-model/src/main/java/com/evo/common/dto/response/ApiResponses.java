@@ -35,4 +35,19 @@ public class ApiResponses<T> implements Serializable {
         response.setTimestamp(System.currentTimeMillis());
         return response;
     }
+
+    public static <T> ApiResponses<T> success(T data) {
+        return success(data, "xin chào");
+    }
+
+    public static <T> ApiResponses<T> success(T data, String message) {
+        ApiResponses<T> response = new ApiResponses<>();
+        response.setData(data);
+        response.setMessage(message);
+        response.setSuccess(true);
+        response.setCode(200);
+        response.setTimestamp(System.currentTimeMillis());
+        response.setStatus("OK");
+        return response;
+    }
 }

@@ -1,18 +1,18 @@
-package com.evo.order.application.dto.request;
+package com.evo.common.dto.request;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.UUID;
 
-import com.evo.common.dto.request.PagingRequest;
 import com.evo.common.enums.OrderStatus;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 public class SearchOrderRequest extends PagingRequest {
     private String keyword;
     private UUID userId;
