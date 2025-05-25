@@ -39,7 +39,7 @@ public class ProfileDTOMapperImpl implements ProfileDTOMapper {
         // Xử lý userWallet
         if (profile.getUserWallet() != null) {
             dto.setTotalPoints(profile.getUserWallet().getTotalPoints());
-            dto.setTotalCoins(profile.getUserWallet().getTotalCoins());
+            dto.setCashbackBalance(profile.getUserWallet().getCashbackBalance());
         }
 
         // Xử lý địa chỉ giao hàng

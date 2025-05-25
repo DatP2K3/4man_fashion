@@ -1,5 +1,7 @@
 package com.evo.profile.application.service.impl.command;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -12,6 +14,8 @@ import com.evo.profile.application.service.MembershipTierService;
 import com.evo.profile.domain.MembershipTier;
 import com.evo.profile.domain.command.CreateOrUpdateMembershipTierCmd;
 import com.evo.profile.domain.repository.MembershipTierDomainRepository;
+import com.evo.profile.infrastructure.persistence.entity.MembershipTierEntity;
+import com.evo.profile.infrastructure.persistence.repository.MembershipTierEntityRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MembershipTierServiceImpl implements MembershipTierService {
     private final MembershipTierDomainRepository membershipTierDomainRepository;
+    private final MembershipTierEntityRepository membershipTierEntityRepository;
     private final CommandMapper commandMapper;
     private final MembershipTierDTOMapper membershipTierDTOMapper;
 
@@ -65,5 +70,18 @@ public class MembershipTierServiceImpl implements MembershipTierService {
         MembershipTier membershipTier = membershipTierDomainRepository.getById(id);
         membershipTier.setDeleted(deleted);
         membershipTierDomainRepository.save(membershipTier);
+    }
+
+    @Override
+    public UUID handleMembershipTierChange(Long amount) {
+        List<MembershipTierEntity> membershipTiers = membershipTierEntityRepository.findAll();
+        membershipTiers.sort(
+                Comparator.comparing(MembershipTierEntity::getMinPoints).reversed());
+        for (MembershipTierEntity tier : membershipTiers) {
+            if (amount >= tier.getMinPoints()) {
+                return tier.getId();
+            }
+        }
+        return null;
     }
 }

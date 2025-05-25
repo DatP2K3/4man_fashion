@@ -1,4 +1,4 @@
-package com.evo.order.infrastructure.adapter.rabbitmq;
+package com.evotek.notification.infrastructure.adapter.rabbitmq;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
@@ -14,27 +14,27 @@ import org.springframework.retry.support.RetryTemplate;
 
 @Configuration
 public class RabbitMQConsumerConfig {
-    @Value("${rabbitmq.exchange.order}")
-    private String orderExchange;
+    @Value("${rabbitmq.exchange.noti}")
+    private String notiExchange;
 
-    @Value("${rabbitmq.queue.order.update}")
-    private String orderUpdateQueue;
+    @Value("${rabbitmq.queue.noti.push}")
+    private String notiPushQueue;
 
-    @Value("${rabbitmq.queue.order.dlq}")
-    private String orderDeadQueue;
+    @Value("${rabbitmq.queue.noti.dlq}")
+    private String notiDeadQueue;
 
-    @Value("${rabbitmq.routing.order.update}")
-    private String orderUpdateRoutingKey;
+    @Value("${rabbitmq.routing.noti.push}")
+    private String notiPushRoutingKey;
 
-    @Value("${rabbitmq.exchange.order-dlx}")
+    @Value("${rabbitmq.exchange.noti-dlx}")
     private String deadLetterExchange;
 
-    @Value("${rabbitmq.routing.order.dlk}")
+    @Value("${rabbitmq.routing.noti.dlk}")
     private String deadLetterRoutingKey;
 
     @Bean
-    public DirectExchange orderExchange() {
-        return new DirectExchange(orderExchange);
+    public DirectExchange notiExchange() {
+        return new DirectExchange(notiExchange);
     }
 
     @Bean
@@ -44,7 +44,7 @@ public class RabbitMQConsumerConfig {
 
     @Bean
     public Queue deadLetterQueue() {
-        return QueueBuilder.durable(orderDeadQueue).build();
+        return QueueBuilder.durable(notiDeadQueue).build();
     }
 
     @Bean
@@ -53,16 +53,16 @@ public class RabbitMQConsumerConfig {
     }
 
     @Bean
-    public Queue orderUpdateQueue() {
-        return QueueBuilder.durable(orderUpdateQueue)
+    public Queue notiPushQueue() {
+        return QueueBuilder.durable(notiPushQueue)
                 .withArgument("x-dead-letter-exchange", deadLetterExchange)
                 .withArgument("x-dead-letter-routing-key", deadLetterRoutingKey)
                 .build();
     }
 
     @Bean
-    public Binding orderUpdateBinding() {
-        return BindingBuilder.bind(orderUpdateQueue()).to(orderExchange()).with(orderUpdateRoutingKey);
+    public Binding notiPushBinding() {
+        return BindingBuilder.bind(notiPushQueue()).to(notiExchange()).with(notiPushRoutingKey);
     }
 
     @Bean

@@ -1,17 +1,18 @@
-package com.evo.location.rest;
+package com.evo.location.controller;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.evo.common.dto.response.ApiResponses;
-import com.evo.location.application.dto.response.DistrictDTO;
-import com.evo.location.application.dto.response.ProvinceDTO;
-import com.evo.location.application.dto.response.WardDTO;
-import com.evo.location.application.service.LocationQueryService;
+import com.evo.location.dto.response.DistrictDTO;
+import com.evo.location.dto.response.ProvinceDTO;
+import com.evo.location.dto.response.WardDTO;
+import com.evo.location.service.LocationQueryService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class LocationController {
     private final LocationQueryService locationQueryService;
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/locations/provinces")
     public ApiResponses<List<ProvinceDTO>> getProvinces() {
         List<ProvinceDTO> provinces = locationQueryService.getAllProvinces();
@@ -34,6 +36,7 @@ public class LocationController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/locations/districts-by-province/{provinceId}")
     public ApiResponses<List<DistrictDTO>> getDistricts(@PathVariable int provinceId) {
         List<DistrictDTO> districts = locationQueryService.getDistrictsByProvinceId(provinceId);
@@ -47,6 +50,7 @@ public class LocationController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/locations/wards-by-district/{districtId}")
     public ApiResponses<List<WardDTO>> getWardsByDistrictId(@PathVariable int districtId) {
         List<WardDTO> wards = locationQueryService.getWardsByDistrictId(districtId);

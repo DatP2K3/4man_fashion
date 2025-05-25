@@ -1,5 +1,6 @@
 package com.evo.order.infrastructure.persistence.repository.impl;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,9 @@ public class OrderEntityRepositoryImpl implements OrderEntityRepositoryCustom {
                         searchOrderQuery.getKeyword(),
                         searchOrderQuery.getUserId(),
                         searchOrderQuery.getOrderStatus(),
+                        searchOrderQuery.getStartDate(),
+                        searchOrderQuery.getEndDate(),
+                        searchOrderQuery.getPrinted(),
                         values)
                 + createOrderQuery(searchOrderQuery.getSortBy());
         TypedQuery<OrderEntity> query = entityManager.createQuery(sql, OrderEntity.class);
@@ -38,7 +42,14 @@ public class OrderEntityRepositoryImpl implements OrderEntityRepositoryCustom {
         return query.getResultList();
     }
 
-    private String createWhereQuery(String keyword, UUID userId, OrderStatus orderStatus, Map<String, Object> values) {
+    private String createWhereQuery(
+            String keyword,
+            UUID userId,
+            OrderStatus orderStatus,
+            Instant startDate,
+            Instant endDate,
+            Boolean printed,
+            Map<String, Object> values) {
         StringBuilder sql = new StringBuilder();
         if (!keyword.isBlank()) {
             sql.append(" where ( lower(o.orderCode) like :keyword" + " or lower(o.recipientName) like :keyword )");
@@ -61,6 +72,33 @@ public class OrderEntityRepositoryImpl implements OrderEntityRepositoryCustom {
             }
             sql.append(" o.orderStatus = :orderStatus");
             values.put("orderStatus", orderStatus);
+        }
+        if (startDate != null) {
+            if (sql.length() == 0) {
+                sql.append(" where ");
+            } else {
+                sql.append(" and ");
+            }
+            sql.append(" o.createdAt >= :startDate");
+            values.put("startDate", startDate);
+        }
+        if (endDate != null) {
+            if (sql.length() == 0) {
+                sql.append(" where ");
+            } else {
+                sql.append(" and ");
+            }
+            sql.append(" o.createdAt <= :endDate");
+            values.put("endDate", endDate);
+        }
+        if (printed != null) {
+            if (sql.length() == 0) {
+                sql.append(" where ");
+            } else {
+                sql.append(" and ");
+            }
+            sql.append(" o.printed = :printed");
+            values.put("printed", printed);
         }
         return sql.toString();
     }
@@ -89,6 +127,9 @@ public class OrderEntityRepositoryImpl implements OrderEntityRepositoryCustom {
                         searchOrderQuery.getKeyword(),
                         searchOrderQuery.getUserId(),
                         searchOrderQuery.getOrderStatus(),
+                        searchOrderQuery.getStartDate(),
+                        searchOrderQuery.getEndDate(),
+                        searchOrderQuery.getPrinted(),
                         values);
         Query query = entityManager.createQuery(sql, Long.class);
         values.forEach(query::setParameter);

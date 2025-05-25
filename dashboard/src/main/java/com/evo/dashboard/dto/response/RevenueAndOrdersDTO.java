@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RevenueAndOrderTrendDTO {
+public class RevenueAndOrdersDTO {
     private String dateLabel;
     private Long totalRevenue;
     private Long totalOrders;

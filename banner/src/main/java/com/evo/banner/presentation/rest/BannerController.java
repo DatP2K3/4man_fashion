@@ -3,6 +3,7 @@ package com.evo.banner.presentation.rest;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.evo.banner.application.dto.request.CreateBannerRequest;
@@ -20,6 +21,7 @@ public class BannerController {
     private final BannerCommandService bannerCommandService;
     private final BannerQueryService bannerQueryService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/banners")
     public ApiResponses<BannerDTO> createBanner(@RequestBody CreateBannerRequest request) {
         BannerDTO bannerDTO = bannerCommandService.createBanner(request);
@@ -46,6 +48,7 @@ public class BannerController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/banners/{id}")
     public ApiResponses<Void> deleteBanner(@PathVariable UUID id) {
         bannerCommandService.deleteBanner(id);

@@ -3,6 +3,7 @@ package com.evo.profile.presentation.rest;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,7 @@ public class ProfileController {
     private final ProfileCommandService profileCommandService;
     private final ProfileQueryService profileQueryService;
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/profiles")
     ApiResponses<ProfileDTO> initProfile() {
         ProfileDTO profileDTO = profileCommandService.getOrInitProfile();
@@ -37,6 +39,7 @@ public class ProfileController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/profiles/shipping-address")
     ApiResponses<ProfileDTO> createShippingAddress(@RequestBody CreateOrUpdateAddressRequest request) {
         ProfileDTO profileDTO = profileCommandService.createShippingAddress(request);
@@ -50,6 +53,7 @@ public class ProfileController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/profiles/shipping-address")
     ApiResponses<ProfileDTO> updateShippingAddress(@RequestBody CreateOrUpdateAddressRequest request) {
         ProfileDTO profileDTO = profileCommandService.updateShippingAddress(request);
@@ -63,6 +67,7 @@ public class ProfileController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/profiles")
     ApiResponses<ProfileDTO> updateProfile(@RequestBody UpdateProfileInfoRequest request) {
         ProfileDTO profileDTO = profileCommandService.updateProfile(request);
@@ -76,6 +81,7 @@ public class ProfileController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/profiles/avatar")
     public ApiResponses<ProfileDTO> changeAvatar(@RequestPart MultipartFile file) {
         ProfileDTO profileDTO = profileCommandService.changeAvatar(file);
@@ -89,6 +95,7 @@ public class ProfileController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all-profiles")
     public PageApiResponse<List<ProfileDTO>> search(@RequestBody SearchProfileRequest searchProfileRequest) {
         Long totalProfiles = profileQueryService.totalProfiles(searchProfileRequest);

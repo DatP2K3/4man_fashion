@@ -3,6 +3,7 @@ package com.evo.product.presentation.rest;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.evo.common.dto.response.ApiResponses;
@@ -21,6 +22,7 @@ public class ProductController {
     private final ProductCommandService productCommandService;
     private final ProductQueryService productQueryService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/products")
     public ApiResponses<ProductDTO> createProduct(
             @RequestBody CreateOrUpdateProductRequest createOrUpdateProductRequest) {
@@ -35,6 +37,7 @@ public class ProductController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/products")
     public ApiResponses<ProductDTO> updateProduct(
             @RequestBody CreateOrUpdateProductRequest createOrUpdateProductRequest) {
@@ -62,6 +65,7 @@ public class ProductController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/products/discounts")
     public ApiResponses<ProductDTO> createDiscount(
             @RequestBody CreateOrUpdateDiscountRequest createOrUpdateDiscountRequest) {
@@ -76,6 +80,7 @@ public class ProductController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/products/discounts")
     public ApiResponses<ProductDTO> updateDiscount(
             @RequestBody CreateOrUpdateDiscountRequest createOrUpdateDiscountRequest) {
@@ -90,6 +95,7 @@ public class ProductController {
                 .build();
     }
 
+    @PreAuthorize("hasRole(USER)")
     @GetMapping("/products-with-no-discount")
     public ApiResponses<List<ProductDTO>> getAllProductsWithNoDiscount() {
         List<ProductDTO> productDTOs = productQueryService.getAllProductsWithNoDiscount();

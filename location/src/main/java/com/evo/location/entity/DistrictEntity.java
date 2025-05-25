@@ -1,4 +1,4 @@
-package com.evo.location.infrastructure.persistence.entity;
+package com.evo.location.entity;
 
 import jakarta.persistence.*;
 

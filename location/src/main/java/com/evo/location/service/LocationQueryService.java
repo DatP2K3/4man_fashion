@@ -1,10 +1,10 @@
-package com.evo.location.application.service;
+package com.evo.location.service;
 
 import java.util.List;
 
-import com.evo.location.application.dto.response.DistrictDTO;
-import com.evo.location.application.dto.response.ProvinceDTO;
-import com.evo.location.application.dto.response.WardDTO;
+import com.evo.location.dto.response.DistrictDTO;
+import com.evo.location.dto.response.ProvinceDTO;
+import com.evo.location.dto.response.WardDTO;
 
 public interface LocationQueryService {
     List<ProvinceDTO> getAllProvinces();

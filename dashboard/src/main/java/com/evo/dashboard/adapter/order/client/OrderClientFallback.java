@@ -1,16 +1,20 @@
-package com.evo.dashboard.infrastructure.adapter.order.client;
+package com.evo.dashboard.adapter.order.client;
 
-import com.evo.common.dto.response.ApiResponses;
-import com.evo.common.dto.response.CartDTO;
-import com.evo.common.enums.ServiceUnavailableError;
-import com.evo.common.exception.ForwardInnerAlertException;
-import com.evo.common.exception.ResponseException;
-import com.evo.order.infrastructure.adapter.cart.client.CartClient;
-import lombok.extern.slf4j.Slf4j;
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
+import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.OrderDTO;
+import com.evo.common.enums.OrderStatus;
+import com.evo.common.enums.ServiceUnavailableError;
+import com.evo.common.exception.ForwardInnerAlertException;
+import com.evo.common.exception.ResponseException;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 public class OrderClientFallback implements FallbackFactory<OrderClient> {
@@ -27,5 +31,21 @@ public class OrderClientFallback implements FallbackFactory<OrderClient> {
             this.cause = cause;
         }
 
+        @Override
+        public ApiResponses<List<OrderDTO>> searchOrders(
+                String keyword,
+                UUID userId,
+                OrderStatus orderStatus,
+                Instant startDate,
+                Instant endDate,
+                Boolean printed,
+                int pageIndex,
+                int pageSize,
+                String sortBy) {
+            if (cause instanceof ForwardInnerAlertException) {
+                throw (RuntimeException) cause;
+            }
+            throw new ResponseException(ServiceUnavailableError.ORDER_SERVICE_UNAVAILABLE_ERROR);
+        }
     }
 }

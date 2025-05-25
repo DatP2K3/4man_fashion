@@ -23,6 +23,7 @@ public class FileController {
     private final FileCommandService fileCommandService;
     private final FileQueryService fileQueryService;
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/file/upload")
     public ApiResponses<List<FileResponse>> storeFile(
             @RequestPart List<MultipartFile> files, @RequestParam boolean isPublic, @RequestParam String description) {
@@ -37,6 +38,7 @@ public class FileController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/file/upload-only-one")
     public ApiResponses<FileResponse> storeOneFile(
             @RequestPart MultipartFile file, @RequestParam boolean isPublic, @RequestParam String description) {
@@ -71,7 +73,7 @@ public class FileController {
         return fileQueryService.search(searchFileRequest);
     }
 
-    @PreAuthorize("hasPermission(null, 'file.update')")
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("file/update")
     public ApiResponses<FileResponse> updateFile(@RequestBody UpdateFileRequest updateFileRequest) {
         FileResponse fileResponse = fileCommandService.updateFile(updateFileRequest);
@@ -85,7 +87,7 @@ public class FileController {
                 .build();
     }
 
-    @PreAuthorize("hasPermission(null, 'file.delete')")
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("file/delete/{fileId}")
     public ApiResponses<Void> deleteFile(@PathVariable UUID fileId) {
         fileCommandService.deleteFile(fileId);

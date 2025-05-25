@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import com.evo.common.dto.event.PushNotificationEvent;
@@ -36,7 +35,6 @@ public class NotificationConsumerService {
     private final DeviceRegistrationDomainRepository deviceRegistrationDomainRepository;
     private final UserTopicDomainRepository userTopicDomainRepository;
 
-    @KafkaListener(topics = "send-notification-group")
     public void handleSendNotification(SendNotificationEvent event) {
         try {
             if (Channel.EMAIL.name().equals(event.getChannel())) {
@@ -51,7 +49,6 @@ public class NotificationConsumerService {
         }
     }
 
-    @KafkaListener(topics = "push-notification-group")
     public void handlePushNotification(PushNotificationEvent event) {
         try {
             if (event.getTopic() != null) {
@@ -79,7 +76,7 @@ public class NotificationConsumerService {
         }
     }
 
-    private void processEmailNotification(SendNotificationEvent event) {
+    public void processEmailNotification(SendNotificationEvent event) {
         // Map templateCode từ event sang template name của Thymeleaf
         String templateName = templateCodeMapper.mapToTemplateName(event.getTemplateCode());
 
@@ -90,7 +87,7 @@ public class NotificationConsumerService {
         emailService.sendTemplateEmail(event.getRecipient(), subject, templateName, event.getParam());
     }
 
-    private void pushNotificationToUser(PushNotificationEvent event, UUID notificationId) {
+    public void pushNotificationToUser(PushNotificationEvent event, UUID notificationId) {
         List<DeviceRegistration> deviceRegistrations =
                 deviceRegistrationQueryService.getDeviceByUserIdAndEnable(event.getUserId());
         deviceRegistrations.forEach(deviceRegistration -> {

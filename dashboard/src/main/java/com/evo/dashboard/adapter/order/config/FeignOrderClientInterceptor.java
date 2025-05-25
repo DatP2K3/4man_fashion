@@ -1,11 +1,12 @@
-package com.evo.dashboard.infrastructure.adapter.order.config;
+package com.evo.dashboard.adapter.order.config;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 
 @Slf4j
 public class FeignOrderClientInterceptor implements RequestInterceptor {

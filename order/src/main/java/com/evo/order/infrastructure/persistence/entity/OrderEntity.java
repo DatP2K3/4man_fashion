@@ -136,6 +136,9 @@ public class OrderEntity extends AuditEntity {
     @Column(name = "total_price")
     private Long totalPrice;
 
+    @Column(name = "cashback_used")
+    private Long cashbackUsed;
+
     @Column(name = "reject_reason", columnDefinition = "TEXT")
     private String rejectReason;
 

@@ -9,7 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="common-client" />
         <module name="config" />
-        <module name="discovery-service" />
+        <module name="discovery" />
       </profile>
       <profile name="Annotation profile for common" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -21,7 +21,7 @@
         <module name="common-model" />
         <module name="common-web" />
       </profile>
-      <profile name="Annotation profile for order" enabled="true">
+      <profile name="Annotation profile for profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -30,17 +30,18 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.6.3/mapstruct-1.6.3.jar" />
         </processorPath>
-        <module name="shopinfo" />
-        <module name="notification" />
         <module name="product" />
-        <module name="elasticsearch" />
         <module name="profile" />
         <module name="banner" />
+        <module name="storage" />
+        <module name="cart" />
+        <module name="shopinfo" />
+        <module name="notification" />
+        <module name="elasticsearch" />
         <module name="payment" />
         <module name="location" />
-        <module name="storage" />
         <module name="gateway" />
-        <module name="cart" />
+        <module name="dashboard" />
         <module name="order" />
       </profile>
     </annotationProcessing>
@@ -61,7 +62,8 @@
       <module name="common-persistence" options="-parameters" />
       <module name="common-web" options="-parameters" />
       <module name="config" options="-parameters" />
-      <module name="discovery-service" options="-parameters" />
+      <module name="dashboard" options="-parameters" />
+      <module name="discovery" options="-parameters" />
       <module name="elasticsearch" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="iam" options="-parameters" />

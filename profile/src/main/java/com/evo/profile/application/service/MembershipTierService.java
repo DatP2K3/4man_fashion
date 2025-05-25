@@ -13,4 +13,6 @@ public interface MembershipTierService {
     UUID getDefaultMembershipTierId();
 
     void delete(UUID id, boolean deleted);
+
+    UUID handleMembershipTierChange(Long amount);
 }

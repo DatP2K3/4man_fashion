@@ -4,12 +4,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import com.evo.common.dto.request.SearchOrderRequest;
 import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.OrderDTO;
 import com.evo.common.dto.response.PageApiResponse;
 import com.evo.order.application.dto.request.*;
-import com.evo.order.application.dto.response.OrderDTO;
 import com.evo.order.application.dto.response.OrderFeeDTO;
 import com.evo.order.application.service.OrderCommandService;
 import com.evo.order.application.service.OrderQueryService;
@@ -23,6 +25,7 @@ public class OrderController {
     private final OrderQueryService orderQueryService;
     private final OrderCommandService orderCommandService;
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("caculate-fee/{toAddressId}")
     public ApiResponses<OrderFeeDTO> caculateFeeByAddressId(@PathVariable UUID toAddressId) {
         OrderFeeDTO orderFeeDTO = orderQueryService.caculateFeeByAddressId(toAddressId);
@@ -36,6 +39,7 @@ public class OrderController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/orders")
     ApiResponses<Void> deleteOrder(@RequestBody CancelOrderRequest cancelOrderRequest) {
         orderCommandService.delete(cancelOrderRequest);
@@ -48,6 +52,7 @@ public class OrderController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/orders")
     public ApiResponses<List<OrderDTO>> getOrdersOfUser() {
         List<OrderDTO> orderDTOs = orderQueryService.getOrdersOfUser();
@@ -61,6 +66,7 @@ public class OrderController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("orders/search")
     public PageApiResponse<List<OrderDTO>> searchOrders(SearchOrderRequest request) {
         Long totalOrders = orderQueryService.count(request);
@@ -87,6 +93,7 @@ public class OrderController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/orders")
     public ApiResponses<OrderDTO> createOrder(@RequestBody CreateOrderRequest request) {
         OrderDTO orderDTO = orderCommandService.create(request);
@@ -100,6 +107,7 @@ public class OrderController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/orders/{orderCode}")
     public ApiResponses<OrderDTO> getOrderByOrderCode(@PathVariable String orderCode) {
         OrderDTO orderDTO = orderQueryService.findByOrderCode(orderCode);
@@ -113,6 +121,7 @@ public class OrderController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/orders/ghn")
     public ApiResponses<List<OrderDTO>> createGHNOrder(@RequestBody CreatShippingOrderRequest request) {
         List<OrderDTO> ghnOrders = orderCommandService.createGHNOrder(request);
@@ -126,6 +135,7 @@ public class OrderController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/orders/ghn-order/print")
     public String printGHNOrder(@RequestBody PrintOrCancelGHNOrderRequest request) {
         return orderQueryService.printGHNOrder(request);

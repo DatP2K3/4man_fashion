@@ -16,6 +16,6 @@ public interface ProfileDTOMapper extends DTOMapper<ProfileDTO, Profile, Profile
     @Mapping(target = "pointsToNextLevel", ignore = true) // Sẽ xử lý riêng
     @Mapping(target = "percent", ignore = true) // Sẽ xử lý riêng
     @Mapping(target = "totalPoints", source = "userWallet.totalPoints")
-    @Mapping(target = "totalCoins", source = "userWallet.totalCoins")
+    @Mapping(target = "cashbackBalance", source = "userWallet.cashbackBalance")
     ProfileDTO domainModelToDTO(Profile profile);
 }

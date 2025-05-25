@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OrderFeeDTO {
     private int totalQuantity;
+    private Long cashbackUsed;
     private Long totalPrice;
     private int shippingFee;
     private int totalWeight;

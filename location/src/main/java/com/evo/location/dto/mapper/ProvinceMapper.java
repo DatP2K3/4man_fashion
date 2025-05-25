@@ -1,9 +1,9 @@
-package com.evo.location.application.dto.mapper;
+package com.evo.location.dto.mapper;
 
 import org.mapstruct.Mapper;
 
-import com.evo.location.application.dto.response.ProvinceDTO;
-import com.evo.location.infrastructure.persistence.entity.ProvinceEntity;
+import com.evo.location.dto.response.ProvinceDTO;
+import com.evo.location.entity.ProvinceEntity;
 
 @Mapper(componentModel = "spring")
 public interface ProvinceMapper extends DTOMapper<ProvinceDTO, ProvinceEntity> {}

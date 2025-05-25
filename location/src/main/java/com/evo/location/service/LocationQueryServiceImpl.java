@@ -1,21 +1,21 @@
-package com.evo.location.application.service;
+package com.evo.location.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.evo.location.application.dto.mapper.DistrictMapper;
-import com.evo.location.application.dto.mapper.ProvinceMapper;
-import com.evo.location.application.dto.mapper.WardMapper;
-import com.evo.location.application.dto.response.DistrictDTO;
-import com.evo.location.application.dto.response.ProvinceDTO;
-import com.evo.location.application.dto.response.WardDTO;
-import com.evo.location.infrastructure.persistence.entity.DistrictEntity;
-import com.evo.location.infrastructure.persistence.entity.ProvinceEntity;
-import com.evo.location.infrastructure.persistence.entity.WardEntity;
-import com.evo.location.infrastructure.persistence.repository.DistrictEntityRepository;
-import com.evo.location.infrastructure.persistence.repository.ProvinceEntityRepository;
-import com.evo.location.infrastructure.persistence.repository.WardEntityRepository;
+import com.evo.location.dto.mapper.DistrictMapper;
+import com.evo.location.dto.mapper.ProvinceMapper;
+import com.evo.location.dto.mapper.WardMapper;
+import com.evo.location.dto.response.DistrictDTO;
+import com.evo.location.dto.response.ProvinceDTO;
+import com.evo.location.dto.response.WardDTO;
+import com.evo.location.entity.DistrictEntity;
+import com.evo.location.entity.ProvinceEntity;
+import com.evo.location.entity.WardEntity;
+import com.evo.location.repository.DistrictEntityRepository;
+import com.evo.location.repository.ProvinceEntityRepository;
+import com.evo.location.repository.WardEntityRepository;
 
 import lombok.RequiredArgsConstructor;
 

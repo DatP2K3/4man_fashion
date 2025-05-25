@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.evo.common.entity.AuditEntity;
 import com.evo.common.enums.CashbackTransactionType;
 
 import lombok.*;
@@ -18,9 +19,10 @@ import lombok.*;
 @EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(callSuper = false)
 @Table(name = "cashback_transactions")
-public class CashbackTransactionEntity {
+public class CashbackTransactionEntity extends AuditEntity {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "user_id")

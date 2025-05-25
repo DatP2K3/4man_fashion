@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.evo.common.enums.CashbackTransactionType;
 import com.evo.profile.domain.command.CreateOrUpdateShippingAddressCmd;
 import com.evo.profile.domain.command.UpdateProfileInfoCmd;
 
@@ -107,6 +108,14 @@ public class Profile {
             shippingAddress.setWardCode(cmd.getWardCode());
             shippingAddress.setDistrictId(cmd.getDistrictId());
             shippingAddress.setCity(cmd.getCity());
+        }
+    }
+
+    public void updateUserWallet(Long amount, CashbackTransactionType type) {
+        if (type == CashbackTransactionType.EARNED) {
+            this.userWallet.plusCashbackBalance(amount);
+        } else {
+            this.userWallet.minusCashbackBalance(amount);
         }
     }
 }

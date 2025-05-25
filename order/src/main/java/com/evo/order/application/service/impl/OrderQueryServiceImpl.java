@@ -6,12 +6,12 @@ import java.util.UUID;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.evo.common.dto.request.SearchOrderRequest;
 import com.evo.common.dto.response.*;
 import com.evo.common.enums.ShopAddressType;
 import com.evo.order.application.dto.mapper.OrderDTOMapper;
 import com.evo.order.application.dto.request.GetGHNFeeRequest;
 import com.evo.order.application.dto.request.PrintOrCancelGHNOrderRequest;
-import com.evo.order.application.dto.request.SearchOrderRequest;
 import com.evo.order.application.dto.response.*;
 import com.evo.order.application.mapper.QueryMapper;
 import com.evo.order.application.service.OrderQueryService;
@@ -56,6 +56,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
     public OrderFeeDTO caculateFeeByAddressId(UUID toAddressId) {
         CartDTO cartDTO = cartClient.getCart().getData();
         List<CartItemDTO> cartItems = cartDTO.getCartItems();
+        Long cashbackUsed = 0L;
         Long totalPrice = 0L;
         int totalQuantity = cartItems.size();
         int totalWeight = 0;
@@ -82,6 +83,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
                 .orElse(null);
 
         ProfileDTO profileDTO = profileClient.getProfile().getData();
+        Long cashbackBalance = profileDTO.getCashbackBalance();
         ShippingAddressDTO toAddress = profileDTO.getListShippingAddress().stream()
                 .filter(item -> item.getId().equals(toAddressId))
                 .findFirst()
@@ -101,8 +103,14 @@ public class OrderQueryServiceImpl implements OrderQueryService {
 
         GHNFeeDTO ghnFeeDTO = ghnClient.calculateShippingFee(getGHNFeeRequest).getData();
 
+        if (cashbackBalance < ghnFeeDTO.getTotal() + totalPrice) {
+            cashbackUsed = cashbackBalance;
+        } else {
+            cashbackUsed = cashbackBalance - (ghnFeeDTO.getTotal() + totalPrice);
+        }
         return OrderFeeDTO.builder()
                 .totalQuantity(totalQuantity)
+                .cashbackUsed(cashbackUsed)
                 .totalPrice(totalPrice)
                 .shippingFee(ghnFeeDTO.getTotal())
                 .totalLength(maxLength)

@@ -1,7 +1,5 @@
 package com.evo.product.application.service.impl.command;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.evo.product.application.dto.mapper.CategoryDTOMapper;
@@ -35,11 +33,5 @@ public class CategoryCommandServiceImpl implements CategoryCommandService {
         Category category = categoryDomainRepository.getById(createOrUpdateCategoryRequest.getId());
         category.update(createOrUpdateCategoryCmd);
         return categoryDTOMapper.domainModelToDTO(categoryDomainRepository.save(category));
-    }
-
-    @Override
-    public List<CategoryDTO> getCategories() {
-        List<Category> categories = categoryDomainRepository.getAll();
-        return categoryDTOMapper.domainModelsToDTOs(categories);
     }
 }

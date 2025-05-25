@@ -8,7 +8,7 @@ WORKDIR /app
 COPY ./target/*.jar app.jar
 
 # Mở cổng 8080
-EXPOSE 8080
+EXPOSE 6565
 
 # Chạy ứng dụng
 ENTRYPOINT ["java", "-jar", "app.jar"]
