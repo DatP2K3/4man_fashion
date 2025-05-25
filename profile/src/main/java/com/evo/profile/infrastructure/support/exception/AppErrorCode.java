@@ -12,7 +12,10 @@ public enum AppErrorCode {
     USER_EXISTED(1009, "Username existed, please choose another one", HttpStatus.BAD_REQUEST),
     USERNAME_IS_MISSING(1010, "Please enter username", HttpStatus.BAD_REQUEST),
     PROFILE_NOT_FOUND(1050, "Profile not found", HttpStatus.NOT_FOUND),
-    MEMBERSHIP_TIER_NOT_FOUND(1051, "Membership tier not found", HttpStatus.NOT_FOUND);
+    MEMBERSHIP_TIER_NOT_FOUND(1051, "Membership tier not found", HttpStatus.NOT_FOUND),
+    CASHBACK_TRANSACTION_NOT_FOUND(1052, "Cashback transaction not found", HttpStatus.NOT_FOUND),
+    INVALID_CASHBACK_AMOUNT(1053, "Invalid cashback amount", HttpStatus.BAD_REQUEST),
+    ;
 
     private final int code;
     private final HttpStatusCode statusCode;

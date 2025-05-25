@@ -1,10 +1,10 @@
 package com.evo.profile.application.mapper;
 
+import com.evo.common.dto.event.ProcessCashbackEvent;
+import com.evo.common.dto.event.UseCashbackEvent;
 import org.mapstruct.Mapper;
 
-import com.evo.profile.application.dto.request.CreateOrUpdateAddressRequest;
-import com.evo.profile.application.dto.request.CreateOrUpdateMembershipTierRequest;
-import com.evo.profile.application.dto.request.UpdateProfileInfoRequest;
+import com.evo.profile.application.dto.request.*;
 import com.evo.profile.domain.command.*;
 
 @Mapper(componentModel = "spring")
@@ -14,4 +14,8 @@ public interface CommandMapper {
     CreateOrUpdateShippingAddressCmd fromCreateOrUpdateProfileRequest(CreateOrUpdateAddressRequest request);
 
     UpdateProfileInfoCmd from(UpdateProfileInfoRequest request);
+
+    ProcessCashbackCmd from(ProcessCashbackEvent event);
+
+    UseCashbackCmd from(UseCashbackEvent event);
 }

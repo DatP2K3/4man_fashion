@@ -1,24 +1,34 @@
-package com.evo.dashboard.infrastructure.adapter.order.client;
+package com.evo.dashboard.adapter.order.client;
 
-import com.evo.common.dto.request.SearchOrderRequest;
-import com.evo.common.dto.response.ApiResponses;
-import com.evo.common.dto.response.CartDTO;
-import com.evo.common.dto.response.OrderDTO;
-import com.evo.dashboard.infrastructure.adapter.order.config.FeignOrderClientConfiguration;
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.UUID;
+import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.OrderDTO;
+import com.evo.common.enums.OrderStatus;
+import com.evo.dashboard.adapter.order.config.FeignOrderClientConfiguration;
 
 @FeignClient(
         name = "order-service",
         url = "${app.order-service.url:}",
-        contextId = "cart-with-token",
+        contextId = "order-with-token",
         configuration = FeignOrderClientConfiguration.class,
         fallbackFactory = OrderClientFallback.class)
 public interface OrderClient {
     @GetMapping("api/orders/search")
-    ApiResponses<OrderDTO> searchOrders(SearchOrderRequest searchOrderRequest);
+    ApiResponses<List<OrderDTO>> searchOrders(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) UUID userId,
+            @RequestParam(required = false) OrderStatus orderStatus,
+            @RequestParam(required = false) Instant startDate,
+            @RequestParam(required = false) Instant endDate,
+            @RequestParam(required = false) Boolean printed,
+            @RequestParam(defaultValue = "1") int pageIndex,
+            @RequestParam(defaultValue = "30") int pageSize,
+            @RequestParam(required = false) String sortBy);
 }

@@ -1,4 +1,4 @@
-package com.evo.product.infrastructure.adapter.rabbitmq;
+package com.evo.order.infrastructure.adapter.rabbitmq;
 
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -14,12 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @Slf4j
 public class RabbitMQPublisherConfig {
-    @Value("${rabbitmq.exchange.product}")
-    private String productExchange;
+    @Value("${rabbitmq.exchange.noti}")
+    private String notiExchange;
 
     @Bean
-    public DirectExchange productExchange() {
-        return new DirectExchange(productExchange);
+    public DirectExchange orderExchange() {
+        return new DirectExchange(notiExchange);
     }
 
     @Bean

@@ -3,6 +3,7 @@ package com.evo.cart.rest;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.evo.cart.application.dto.request.UpdateCartRequest;
@@ -20,6 +21,7 @@ public class CartController {
     private final CartQueryService cartQueryService;
     private final CartCommandService cartCommandService;
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/carts/get-or-init")
     ApiResponses<CartDTO> getCartOrInit() {
         CartDTO cartDTO = cartCommandService.getOrInitCart();
@@ -33,6 +35,7 @@ public class CartController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/carts")
     ApiResponses<List<CartDTO>> getAllCarts() {
         List<CartDTO> cartDTOs = cartQueryService.getAllCarts();
@@ -46,6 +49,7 @@ public class CartController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/carts")
     ApiResponses<CartDTO> updateCart(@RequestBody UpdateCartRequest updateCartRequest) {
         CartDTO updatedCart = cartCommandService.updateCart(updateCartRequest);
@@ -59,6 +63,7 @@ public class CartController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/carts/empty/{cartId}")
     ApiResponses<Void> emptyCart(@PathVariable UUID cartId) {
         cartCommandService.emptyCart(cartId);

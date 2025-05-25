@@ -51,6 +51,7 @@ public class CreateOrderCmd {
     private int totalProductVariant;
     private int shipmentFee;
     private Long totalPrice;
+    private Long cashbackUsed;
     private String rejectReason;
     private String note;
     private UUID referencesId;
@@ -101,6 +102,7 @@ public class CreateOrderCmd {
 
         this.shipmentFee = orderFeeDTO.getShippingFee();
         this.totalPrice = orderFeeDTO.getTotalPrice();
+        this.cashbackUsed = orderFeeDTO.getCashbackUsed();
         this.totalWeight = orderFeeDTO.getTotalWeight();
         this.totalHeight = orderFeeDTO.getTotalHeight();
         this.totalWidth = orderFeeDTO.getTotalWidth();

@@ -1,4 +1,13 @@
 package com.evo.dashboard.dto.response;
 
-public class DailyOrderDTO {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class DailyOrderStatisDTO {
+    private long totalRevenue;
+    private long totalOrders;
 }

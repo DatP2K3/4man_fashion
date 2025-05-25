@@ -1,4 +1,4 @@
-package com.evo.dashboard.infrastructure.adapter.order.config;
+package com.evo.dashboard.adapter.order.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

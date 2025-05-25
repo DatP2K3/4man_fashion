@@ -7,7 +7,7 @@ WORKDIR /app
 # Copy file JAR đã build vào container
 COPY ./target/*.jar app.jar
 
-EXPOSE 9999
+EXPOSE 8765
 
 # Chạy ứng dụng
 ENTRYPOINT ["java", "-jar", "app.jar"]

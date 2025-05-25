@@ -1,4 +1,4 @@
-package com.evo.location.application.dto.response;
+package com.evo.location.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

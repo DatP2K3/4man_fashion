@@ -1,4 +1,4 @@
-package com.evo.location.application.dto.mapper;
+package com.evo.location.dto.mapper;
 
 import java.util.List;
 

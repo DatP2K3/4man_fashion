@@ -4,6 +4,7 @@
     <option name="moduleMapping">
       <map>
         <entry key="common" value="evo-common" />
+        <entry key="discovery" value="discovery-service" />
         <entry key="iam" value="iam (1)" />
       </map>
     </option>

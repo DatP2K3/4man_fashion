@@ -36,6 +36,7 @@ public class OrderDTO {
     private String toAddressLine1;
     private String toAddressLine2;
     private String toWard;
+    private Long cashbackUsed;
     private String toWardCode;
     private String toDistrict;
     private String toDistrictId;

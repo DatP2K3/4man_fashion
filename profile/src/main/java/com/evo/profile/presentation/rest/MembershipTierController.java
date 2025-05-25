@@ -1,5 +1,6 @@
 package com.evo.profile.presentation.rest;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.evo.common.dto.response.ApiResponses;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class MembershipTierController {
     private final MembershipTierService membershipTierService;
 
+    @PreAuthorize("hasRole('AMIN')")
     @PostMapping("/membership-tiers")
     ApiResponses<MembershipTierDTO> createMembershipTier(
             @RequestBody CreateOrUpdateMembershipTierRequest createMembershipTierRequest) {
@@ -29,6 +31,7 @@ public class MembershipTierController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/membership-tiers")
     ApiResponses<MembershipTierDTO> updateMembershipTier(
             @RequestBody CreateOrUpdateMembershipTierRequest updateMembershipTierRequest) {

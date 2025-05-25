@@ -3,9 +3,9 @@ package com.evo.order.application.service;
 import java.util.List;
 import java.util.UUID;
 
+import com.evo.common.dto.request.SearchOrderRequest;
+import com.evo.common.dto.response.OrderDTO;
 import com.evo.order.application.dto.request.PrintOrCancelGHNOrderRequest;
-import com.evo.order.application.dto.request.SearchOrderRequest;
-import com.evo.order.application.dto.response.OrderDTO;
 import com.evo.order.application.dto.response.OrderFeeDTO;
 
 public interface OrderQueryService {

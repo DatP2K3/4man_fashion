@@ -1,12 +1,10 @@
-package com.evo.order.infrastructure.adapter.rabbitmq;
+package com.evotek.notification.infrastructure.adapter.rabbitmq;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
-import com.evo.common.dto.event.OrderEvent;
-import com.evo.order.application.mapper.CommandMapper;
-import com.evo.order.application.service.OrderCommandService;
-import com.evo.order.domain.command.UpdateOrderStatusCmd;
+import com.evo.common.dto.event.PushNotificationEvent;
+import com.evotek.notification.application.service.NotificationConsumerService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,13 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class OrderEventListener {
-    private final CommandMapper commandMapper;
-    private final OrderCommandService orderCommandService;
+public class NotiEventListener {
+    private final NotificationConsumerService notificationConsumerService;
 
-    @RabbitListener(queues = "${rabbitmq.queue.order.update}")
-    public void handleOrderUpdated(OrderEvent event) {
-        UpdateOrderStatusCmd updateOrderStatusCmd = commandMapper.from(event);
-        orderCommandService.updateStatus(updateOrderStatusCmd);
+    @RabbitListener(queues = "${rabbitmq.queue.noti.push}")
+    public void handleNotiPush(PushNotificationEvent event) {
+        notificationConsumerService.handlePushNotification(event);
     }
 }

@@ -26,6 +26,6 @@ public class ProfileDTO {
     private List<ShippingAddressDTO> listShippingAddress;
     private int pointsToNextLevel;
     private Long totalPoints;
-    private Long totalCoins;
+    private Long cashbackBalance;
     private int percent;
 }
