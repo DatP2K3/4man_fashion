@@ -1,4 +1,4 @@
-package com.evo.order.application.dto.response;
+package com.evo.common.dto.response;
 
 import java.time.Instant;
 import java.util.List;
