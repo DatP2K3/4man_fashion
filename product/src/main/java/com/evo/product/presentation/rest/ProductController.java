@@ -95,7 +95,7 @@ public class ProductController {
                 .build();
     }
 
-    @PreAuthorize("hasRole(USER)")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/products-with-no-discount")
     public ApiResponses<List<ProductDTO>> getAllProductsWithNoDiscount() {
         List<ProductDTO> productDTOs = productQueryService.getAllProductsWithNoDiscount();
