@@ -86,4 +86,31 @@ public class ProductQueryServiceImpl implements ProductQueryService {
                 .hasPrevious(request.getPageIndex() > 1)
                 .build();
     }
+
+    @Override
+    public List<String> autocompleteProductNames(String keyword, int limit) {
+        if (!StringUtils.hasText(keyword)) {
+            return List.of(); // Trả về rỗng nếu không có từ khóa
+        }
+
+        Query query = Query.of(q -> q
+                .match(m -> m
+                        .field("name") // hoặc "name" nếu không dùng multi-field
+                        .query(keyword)
+                )
+        );
+
+        NativeQuery nativeQuery = NativeQuery.builder()
+                .withQuery(query)
+                .withPageable(PageRequest.of(0, limit))
+                .build();
+
+        SearchHits<ProductDocumentEntity> hits =
+                elasticsearchOperations.search(nativeQuery, ProductDocumentEntity.class);
+
+        return hits.getSearchHits().stream()
+                .map(hit -> hit.getContent().getName())
+                .distinct()
+                .toList();
+    }
 }
