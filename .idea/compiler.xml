@@ -21,7 +21,7 @@
         <module name="common-model" />
         <module name="common-web" />
       </profile>
-      <profile name="Annotation profile for profile" enabled="true">
+      <profile name="Annotation profile for storage" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
