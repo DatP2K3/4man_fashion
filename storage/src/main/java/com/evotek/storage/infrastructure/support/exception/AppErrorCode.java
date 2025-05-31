@@ -14,6 +14,7 @@ public enum AppErrorCode {
     CANT_HASH_FILE_NAME(1032, "Can't hash file name", HttpStatus.BAD_REQUEST),
     FILE_EXTENSION_NOT_ALLOWED(1033, "File extension not allowed", HttpStatus.BAD_REQUEST),
     FILE_TYPE_NOT_ALLOWED(1034, "File type not allowed", HttpStatus.BAD_REQUEST),
+    CANT_DELETE_FILE(1035, "Can't delete file", HttpStatus.BAD_REQUEST),
     ;
 
     private final int code;

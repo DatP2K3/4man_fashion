@@ -238,4 +238,11 @@ public class Product extends Auditor {
         this.discountPrice = (long) (this.originPrice * (100 - discountPercent) / 100);
         this.discountPercent = discountPercent;
     }
+
+    public void toggleVisibility() {
+        if (this.hidden == null) {
+            this.hidden = false;
+        }
+        this.hidden = !this.hidden;
+    }
 }

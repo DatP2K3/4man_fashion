@@ -108,4 +108,18 @@ public class ProductController {
                 .status("OK")
                 .build();
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/products/{id}/visibility")
+    public ApiResponses<ProductDTO> toggleProductVisibility(@PathVariable UUID id) {
+        ProductDTO productDTO = productCommandService.toggleProductVisibility(id);
+        return ApiResponses.<ProductDTO>builder()
+                .data(productDTO)
+                .success(true)
+                .code(200)
+                .message("Product visibility toggled successfully")
+                .timestamp(System.currentTimeMillis())
+                .status("OK")
+                .build();
+    }
 }

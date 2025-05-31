@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 import com.evo.common.Auditor;
+import com.evo.common.enums.FileUsageStatus;
 import com.evotek.storage.domain.command.StoreFileCmd;
 import com.evotek.storage.domain.command.UpdateFileCmd;
 import com.evotek.storage.infrastructure.support.IdUtils;
@@ -34,6 +35,7 @@ public class File extends Auditor {
     private Boolean isPublic;
     private Boolean deleted = false;
     private FileHistory history;
+    private FileUsageStatus usageStatus;
 
     public File(StoreFileCmd cmd) {
         validateFileName(cmd.getOriginName());
@@ -46,6 +48,7 @@ public class File extends Auditor {
         this.fileSize = cmd.getFileSize();
         this.description = cmd.getDescription();
         this.isPublic = cmd.getIsPublic();
+        this.usageStatus = FileUsageStatus.TEMPORARY;
         if (Boolean.TRUE.equals(isPublic)) {
             this.url = "http://localhost:8080/api/public/file/" + this.id;
         } else {
