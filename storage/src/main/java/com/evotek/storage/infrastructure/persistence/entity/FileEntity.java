@@ -2,6 +2,7 @@ package com.evotek.storage.infrastructure.persistence.entity;
 
 import java.util.UUID;
 
+import com.evo.common.enums.FileUsageStatus;
 import jakarta.persistence.*;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -48,6 +49,10 @@ public class FileEntity extends AuditEntity {
 
     @Column(name = "url")
     private String url;
+
+    @Column(name = "usage_status")
+    @Enumerated(EnumType.STRING)
+    private FileUsageStatus usageStatus;
 
     @Column(name = "is_public", nullable = false)
     private Boolean isPublic;

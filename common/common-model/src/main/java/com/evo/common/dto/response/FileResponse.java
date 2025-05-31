@@ -3,6 +3,7 @@ package com.evo.common.dto.response;
 import java.util.Date;
 import java.util.UUID;
 
+import com.evo.common.enums.FileUsageStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class FileResponse {
     private String url;
     private String description;
     private Boolean isPublic;
+    private FileUsageStatus usageStatus;
     private Date createdAt;
     private Date updatedAt;
     private String createdBy;
