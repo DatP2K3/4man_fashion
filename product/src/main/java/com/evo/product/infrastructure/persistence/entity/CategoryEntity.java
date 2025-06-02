@@ -33,4 +33,7 @@ public class CategoryEntity extends AuditEntity {
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
+
+    @Column(name = "deleted")
+    private Boolean deleted = false;
 }

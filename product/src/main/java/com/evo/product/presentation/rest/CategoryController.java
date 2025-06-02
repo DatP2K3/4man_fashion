@@ -87,4 +87,17 @@ public class CategoryController {
                 .status("OK")
                 .build();
     }
+
+    @PutMapping("/category/{id}/visibility")
+    @PreAuthorize("hasRole('ADMIN')")
+    ApiResponses<Void> visibilityCategory(@PathVariable UUID id) {
+        categoryCommandService.visibilityCategory(id);
+        return ApiResponses.<Void>builder()
+                .success(true)
+                .code(204)
+                .message("Category deleted successfully")
+                .timestamp(System.currentTimeMillis())
+                .status("OK")
+                .build();
+    }
 }

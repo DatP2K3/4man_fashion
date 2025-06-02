@@ -13,6 +13,8 @@ import com.evo.product.domain.repository.CategoryDomainRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryCommandServiceImpl implements CategoryCommandService {
@@ -33,5 +35,12 @@ public class CategoryCommandServiceImpl implements CategoryCommandService {
         Category category = categoryDomainRepository.getById(createOrUpdateCategoryRequest.getId());
         category.update(createOrUpdateCategoryCmd);
         return categoryDTOMapper.domainModelToDTO(categoryDomainRepository.save(category));
+    }
+
+    @Override
+    public void visibilityCategory(UUID id) {
+        Category category = categoryDomainRepository.getById(id);
+        category.toggleVisibility();
+        categoryDomainRepository.save(category);
     }
 }
