@@ -61,7 +61,7 @@ public class CategoryDomainRepositoryImpl extends AbstractDomainRepository<Categ
 
         List<UUID> categoryIds = categories.stream().map(Category::getId).toList();
         Map<UUID, List<TagDescription>> tagDescriptionMap =
-                tagDescriptionEntityRepository.findByCategoryIdInAndDeletedFalse(categoryIds).stream()
+                tagDescriptionEntityRepository.findByCategoryIdIn(categoryIds).stream()
                         .collect(Collectors.groupingBy(
                                 TagDescriptionEntity::getCategoryId,
                                 Collectors.mapping(tagDescriptionEntityMapper::toDomainModel, Collectors.toList())));
