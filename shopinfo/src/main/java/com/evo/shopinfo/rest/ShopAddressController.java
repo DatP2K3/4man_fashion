@@ -34,7 +34,7 @@ public class ShopAddressController {
                 .build();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/shop-address")
     public ApiResponses<List<ShopAddressDTO>> getAllShopAddresses() {
         List<ShopAddressDTO> shopAddressDTOs = shopAddressQueryService.getAllShopAddresses();

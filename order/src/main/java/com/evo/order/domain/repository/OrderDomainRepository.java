@@ -15,4 +15,6 @@ public interface OrderDomainRepository extends DomainRepository<Order, UUID> {
     Order getByOrderCode(String orderCode);
 
     List<Order> getAllOrderWithStatusIn(List<OrderStatus> orderStatuses);
+
+    List<Order> getByGHNOrderCodeIn(List<String> orderCodes);
 }

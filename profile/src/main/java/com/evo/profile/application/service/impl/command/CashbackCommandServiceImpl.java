@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.evo.common.enums.CashbackTransactionType;
 import com.evo.profile.application.dto.mapper.CashbackTransactionDTOMapper;
 import com.evo.profile.application.service.CashbackCommandService;
-import com.evo.profile.application.service.MembershipTierService;
+import com.evo.profile.application.service.MembershipTierCommandService;
 import com.evo.profile.domain.CashbackTransaction;
 import com.evo.profile.domain.MembershipTier;
 import com.evo.profile.domain.Profile;
@@ -28,7 +28,7 @@ public class CashbackCommandServiceImpl implements CashbackCommandService {
     private final ProfileDomainRepository profileDomainRepository;
     private final MembershipTierDomainRepository membershipTierDomainRepository;
     private final CashbackTransactionDTOMapper cashbackTransactionDTOMapper;
-    private final MembershipTierService membershipTierService;
+    private final MembershipTierCommandService membershipTierCommandService;
 
     @Override
     @Transactional
@@ -49,7 +49,7 @@ public class CashbackCommandServiceImpl implements CashbackCommandService {
 
         profile.updateUserWallet(cashbackAmount, CashbackTransactionType.EARNED);
 
-        UUID membershipTierId = membershipTierService.handleMembershipTierChange(
+        UUID membershipTierId = membershipTierCommandService.handleMembershipTierChange(
                 profile.getUserWallet().getCashbackBalance());
         if (membershipTierId != null) {
             profile.setMembershipTierId(membershipTierId);

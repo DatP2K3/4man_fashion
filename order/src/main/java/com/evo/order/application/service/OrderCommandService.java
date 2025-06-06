@@ -16,4 +16,6 @@ public interface OrderCommandService {
     List<OrderDTO> createGHNOrder(CreatShippingOrderRequest request);
 
     void updateStatus(UpdateOrderStatusCmd updateOrderStatusCmd);
+
+    void printGHNOrder(List<String> orderCodes);
 }

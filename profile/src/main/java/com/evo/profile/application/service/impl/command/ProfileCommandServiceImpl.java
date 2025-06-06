@@ -3,6 +3,7 @@ package com.evo.profile.application.service.impl.command;
 import java.util.List;
 import java.util.UUID;
 
+import com.evo.profile.domain.UserWallet;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -16,7 +17,7 @@ import com.evo.profile.application.dto.mapper.ProfileDTOMapper;
 import com.evo.profile.application.dto.request.CreateOrUpdateAddressRequest;
 import com.evo.profile.application.dto.request.UpdateProfileInfoRequest;
 import com.evo.profile.application.mapper.CommandMapper;
-import com.evo.profile.application.service.MembershipTierService;
+import com.evo.profile.application.service.MembershipTierCommandService;
 import com.evo.profile.application.service.ProfileCommandService;
 import com.evo.profile.domain.Profile;
 import com.evo.profile.domain.command.CreateOrUpdateShippingAddressCmd;
@@ -31,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProfileCommandServiceImpl implements ProfileCommandService {
     private final ProfileDomainRepository profileDomainRepository;
-    private final MembershipTierService membershipTierService;
+    private final MembershipTierCommandService membershipTierCommandService;
     private final CommandMapper commandMapper;
     private final ProfileDTOMapper profileDTOMapper;
     private final FileService fileService;
@@ -61,7 +62,7 @@ public class ProfileCommandServiceImpl implements ProfileCommandService {
             return profileDTOMapper.domainModelToDTO(profile);
         }
 
-        UUID membershipTierId = membershipTierService.getDefaultMembershipTierId();
+        UUID membershipTierId = membershipTierCommandService.getDefaultMembershipTierId();
         UpdateProfileInfoCmd cmd = new UpdateProfileInfoCmd();
         cmd.setMembershipTierId(membershipTierId);
         cmd.setEmail(email);

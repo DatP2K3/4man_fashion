@@ -117,4 +117,10 @@ public class ProfileDomainRepositoryImpl extends AbstractDomainRepository<Profil
     public Long count(SearchProfileQuery searchUserQuery) {
         return profileEntityRepository.count(searchUserQuery);
     }
+
+    @Override
+    public List<Profile> getAll() {
+        List<ProfileEntity> profileEntities = profileEntityRepository.findAll();
+        return this.enrichList(profileEntityMapper.toDomainModelList(profileEntities));
+    }
 }

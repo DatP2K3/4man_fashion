@@ -25,6 +25,7 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     public DashboardDTO getDashboardData(DashboardTime dashboardTime) {
+        //@TODO: CHƯA TÍNH TỔNG USER MỚI TRONG NGÀY, TUẦN, THÁNG
         if (dashboardTime == DashboardTime.DAY) {
             return getTodayDashboardData();
         } else if (dashboardTime == DashboardTime.WEEK) {

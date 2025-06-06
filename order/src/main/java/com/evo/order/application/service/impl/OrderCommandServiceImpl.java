@@ -223,4 +223,13 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         }
         orderDomainRepository.save(order);
     }
+
+    @Override
+    public void printGHNOrder(List<String> GHNorderCodes) {
+        List<Order> orders = orderDomainRepository.getByGHNOrderCodeIn(GHNorderCodes);
+        for (Order order : orders) {
+            order.setPrinted(true);
+        }
+        orderDomainRepository.saveAll(orders);
+    }
 }
