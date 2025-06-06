@@ -4,13 +4,15 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
+import com.evo.profile.infrastructure.support.exception.AppErrorCode;
+import com.evo.profile.infrastructure.support.exception.AppException;
 import org.springframework.stereotype.Service;
 
 import com.evo.common.dto.response.MembershipTierDTO;
 import com.evo.profile.application.dto.mapper.MembershipTierDTOMapper;
 import com.evo.profile.application.dto.request.CreateOrUpdateMembershipTierRequest;
 import com.evo.profile.application.mapper.CommandMapper;
-import com.evo.profile.application.service.MembershipTierService;
+import com.evo.profile.application.service.MembershipTierCommandService;
 import com.evo.profile.domain.MembershipTier;
 import com.evo.profile.domain.command.CreateOrUpdateMembershipTierCmd;
 import com.evo.profile.domain.repository.MembershipTierDomainRepository;
@@ -21,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class MembershipTierServiceImpl implements MembershipTierService {
+public class MembershipTierCommandServiceImpl implements MembershipTierCommandService {
     private final MembershipTierDomainRepository membershipTierDomainRepository;
     private final MembershipTierEntityRepository membershipTierEntityRepository;
     private final CommandMapper commandMapper;
@@ -68,6 +70,9 @@ public class MembershipTierServiceImpl implements MembershipTierService {
     @Override
     public void delete(UUID id, boolean deleted) {
         MembershipTier membershipTier = membershipTierDomainRepository.getById(id);
+        if (membershipTier.isDefaultTier()) {
+            throw new AppException(AppErrorCode.CANT_DELETE_DEFAULT_MEMBERSHIP_TIER);
+        }
         membershipTier.setDeleted(deleted);
         membershipTierDomainRepository.save(membershipTier);
     }
@@ -83,5 +88,15 @@ public class MembershipTierServiceImpl implements MembershipTierService {
             }
         }
         return null;
+    }
+
+    @Override
+    public void toggleVisibility(String id) {
+        MembershipTier membershipTier = membershipTierDomainRepository.getById(UUID.fromString(id));
+        if (membershipTier.isDefaultTier()) {
+            throw new AppException(AppErrorCode.CANT_TOGGLE_VISIBILITY_DEFAULT_MEMBERSHIP_TIER);
+        }
+        membershipTier.toggleVisibility();
+        membershipTierDomainRepository.save(membershipTier);
     }
 }

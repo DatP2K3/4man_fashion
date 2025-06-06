@@ -5,7 +5,7 @@ import java.util.UUID;
 import com.evo.common.dto.response.MembershipTierDTO;
 import com.evo.profile.application.dto.request.CreateOrUpdateMembershipTierRequest;
 
-public interface MembershipTierService {
+public interface MembershipTierCommandService {
     MembershipTierDTO create(CreateOrUpdateMembershipTierRequest createMemberShipTierRequest);
 
     MembershipTierDTO update(CreateOrUpdateMembershipTierRequest updateMemberShipTierRequest);
@@ -15,4 +15,6 @@ public interface MembershipTierService {
     void delete(UUID id, boolean deleted);
 
     UUID handleMembershipTierChange(Long amount);
+
+    void toggleVisibility(String id);
 }

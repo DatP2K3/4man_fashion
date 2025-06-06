@@ -33,7 +33,7 @@ public class CronJobService {
     @Scheduled(cron = "0 */3 * * * *")
     public void syncOrderStatus() {
         List<OrderStatus> orderStatuses =
-                Arrays.asList(OrderStatus.PENDING_SHIPMENT, OrderStatus.WAITING_FOR_PICKUP, OrderStatus.DELIVERED);
+                Arrays.asList(OrderStatus.PENDING_SHIPMENT, OrderStatus.WAITING_FOR_PICKUP, OrderStatus.IN_TRANSIT);
         List<Order> orders = orderDomainRepository.getAllOrderWithStatusIn(orderStatuses);
         orders.stream().filter(order -> order.getGHNOrderCode() != null).forEach(order -> {
             GetGHNOrderDetailRequest getGHNFeeRequest = new GetGHNOrderDetailRequest(order.getGHNOrderCode());

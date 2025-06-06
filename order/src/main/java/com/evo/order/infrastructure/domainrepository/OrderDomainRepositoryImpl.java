@@ -110,4 +110,10 @@ public class OrderDomainRepositoryImpl extends AbstractDomainRepository<Order, O
         List<OrderEntity> orderEntities = orderEntityRepository.getAllOrderWithStatusIn(orderStatuses);
         return this.enrichList(orderEntityMapper.toDomainModelList(orderEntities));
     }
+
+    @Override
+    public List<Order> getByGHNOrderCodeIn(List<String> orderCodes) {
+        List<OrderEntity> orderEntities = orderEntityRepository.getByGHNOrderCodeIn(orderCodes);
+        return this.enrichList(orderEntityMapper.toDomainModelList(orderEntities));
+    }
 }

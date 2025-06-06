@@ -138,6 +138,7 @@ public class OrderController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/orders/ghn-order/print")
     public String printGHNOrder(@RequestBody PrintOrCancelGHNOrderRequest request) {
+        orderCommandService.printGHNOrder(request.getOrderCodes());
         return orderQueryService.printGHNOrder(request);
     }
 }

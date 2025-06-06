@@ -18,4 +18,6 @@ public interface ProfileDomainRepository extends DomainRepository<Profile, UUID>
     List<Profile> search(SearchProfileQuery searchUserQuery);
 
     Long count(SearchProfileQuery searchUserQuery);
+
+    List<Profile> getAll();
 }
