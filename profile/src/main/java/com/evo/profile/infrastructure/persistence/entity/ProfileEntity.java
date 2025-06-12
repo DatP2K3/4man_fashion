@@ -3,18 +3,21 @@ package com.evo.profile.infrastructure.persistence.entity;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import com.evo.common.entity.AuditEntity;
 import jakarta.persistence.*;
 
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(callSuper = false)
 @Table(name = "profiles")
-public class ProfileEntity {
+public class ProfileEntity extends AuditEntity {
     @Id
     @Column(name = "id")
     private UUID id; // dùng chung id với bảng user,

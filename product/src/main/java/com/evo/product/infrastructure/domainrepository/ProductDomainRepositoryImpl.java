@@ -76,10 +76,12 @@ public class ProductDomainRepositoryImpl extends AbstractDomainRepository<Produc
         List<DiscountEntity> allDiscountEntities = new ArrayList<>();
 
         for (Product product : domains) {
-            if (product.getProductVariants() != null && !product.getProductVariants().isEmpty()) {
+            if (product.getProductVariants() != null
+                    && !product.getProductVariants().isEmpty()) {
                 allProductVariantEntities.addAll(productVariantEntityMapper.toEntityList(product.getProductVariants()));
             }
-            if (product.getProductImages() != null && !product.getProductImages().isEmpty()) {
+            if (product.getProductImages() != null
+                    && !product.getProductImages().isEmpty()) {
                 allProductImageEntities.addAll(productImageEntityMapper.toEntityList(product.getProductImages()));
             }
             if (product.getDiscounts() != null && !product.getDiscounts().isEmpty()) {

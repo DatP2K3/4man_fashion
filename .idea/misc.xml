@@ -59,11 +59,11 @@
         <option value="common" />
         <option value="common-model" />
         <option value="discovery" />
-        <option value="payment" />
-        <option value="location" />
         <option value="common-web" />
-        <option value="common-client" />
+        <option value="location" />
+        <option value="payment" />
         <option value="config" />
+        <option value="common-client" />
         <option value="gateway" />
         <option value="dashboard" />
         <option value="order" />

@@ -3,14 +3,14 @@ package com.evo.product.application.mapper;
 import java.util.List;
 import java.util.UUID;
 
-import com.evo.common.dto.event.ProductVariantSync;
-import com.evo.product.domain.command.UpdateProductVariantQuantityCmd;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.evo.common.dto.event.ProductSync;
+import com.evo.common.dto.event.ProductVariantSync;
 import com.evo.product.domain.Product;
 import com.evo.product.domain.ProductImage;
+import com.evo.product.domain.command.UpdateProductVariantQuantityCmd;
 
 @Mapper(componentModel = "spring")
 public interface SyncMapper {

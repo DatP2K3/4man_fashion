@@ -51,7 +51,7 @@ public class OrderEntityRepositoryImpl implements OrderEntityRepositoryCustom {
             Boolean printed,
             Map<String, Object> values) {
         StringBuilder sql = new StringBuilder();
-        if (!keyword.isBlank()) {
+        if (StringUtils.hasText(keyword)) {
             sql.append(" where ( lower(o.orderCode) like :keyword" + " or lower(o.recipientName) like :keyword )");
             values.put("keyword", encodeKeyword(keyword));
         }

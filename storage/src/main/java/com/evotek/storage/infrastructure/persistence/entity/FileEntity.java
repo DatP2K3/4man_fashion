@@ -2,12 +2,12 @@ package com.evotek.storage.infrastructure.persistence.entity;
 
 import java.util.UUID;
 
-import com.evo.common.enums.FileUsageStatus;
 import jakarta.persistence.*;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.evo.common.entity.AuditEntity;
+import com.evo.common.enums.FileUsageStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

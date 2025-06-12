@@ -1,10 +1,10 @@
 package com.evo.product.application.service;
 
+import java.util.UUID;
+
 import com.evo.common.dto.response.ProductDTO;
 import com.evo.product.application.dto.request.CreateOrUpdateDiscountRequest;
 import com.evo.product.application.dto.request.CreateOrUpdateProductRequest;
-
-import java.util.UUID;
 
 public interface ProductCommandService {
     ProductDTO createProduct(CreateOrUpdateProductRequest createOrUpdateProductRequest);
@@ -16,5 +16,4 @@ public interface ProductCommandService {
     ProductDTO updateDiscount(CreateOrUpdateDiscountRequest createOrUpdateDiscountRequest);
 
     ProductDTO toggleProductVisibility(UUID id);
-
 }

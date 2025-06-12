@@ -37,7 +37,6 @@ public class PaymentController {
 
     @GetMapping("/vn-pay-callback")
     public void payCallbackHandler(HttpServletRequest request, HttpServletResponse response) {
-            paymentCommandService.handlePaymentCallback(request, response);
-
+        paymentCommandService.handlePaymentCallback(request, response);
     }
 }

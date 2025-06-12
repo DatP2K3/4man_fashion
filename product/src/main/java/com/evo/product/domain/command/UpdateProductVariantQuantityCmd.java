@@ -1,12 +1,11 @@
 package com.evo.product.domain.command;
 
-import com.evo.common.dto.event.ProductVariantSync;
+import java.util.UUID;
+
 import com.evo.common.enums.OperationType;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter

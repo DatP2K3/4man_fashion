@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import com.evo.order.infrastructure.adapter.rabbitmq.CashbackEventRabbitMQService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +17,7 @@ import com.evo.order.application.dto.response.GHNOrderLogDTO;
 import com.evo.order.domain.Order;
 import com.evo.order.domain.repository.OrderDomainRepository;
 import com.evo.order.infrastructure.adapter.ghn.client.GHNClient;
+import com.evo.order.infrastructure.adapter.rabbitmq.CashbackEventRabbitMQService;
 import com.evo.order.infrastructure.adapter.rabbitmq.NotiEventRabbitMQService;
 
 import lombok.RequiredArgsConstructor;

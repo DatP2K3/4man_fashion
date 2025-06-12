@@ -3,7 +3,6 @@ package com.evo.profile.application.service.impl.command;
 import java.util.List;
 import java.util.UUID;
 
-import com.evo.profile.domain.UserWallet;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;

@@ -66,7 +66,9 @@ public class RabbitMQConsumerConfig {
 
     @Bean
     public Binding productVariantUpdateBinding() {
-        return BindingBuilder.bind(productUpdateVariantQueue()).to(productExchange()).with(productUpdateVariantRoutingKey);
+        return BindingBuilder.bind(productUpdateVariantQueue())
+                .to(productExchange())
+                .with(productUpdateVariantRoutingKey);
     }
 
     @Bean

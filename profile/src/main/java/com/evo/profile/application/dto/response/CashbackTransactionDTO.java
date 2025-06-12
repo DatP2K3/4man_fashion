@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import com.evo.common.enums.CashbackTransactionType;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -93,12 +93,8 @@ public class ProductQueryServiceImpl implements ProductQueryService {
             return List.of(); // Trả về rỗng nếu không có từ khóa
         }
 
-        Query query = Query.of(q -> q
-                .match(m -> m
-                        .field("name") // hoặc "name" nếu không dùng multi-field
-                        .query(keyword)
-                )
-        );
+        Query query = Query.of(q -> q.match(m -> m.field("name") // hoặc "name" nếu không dùng multi-field
+                .query(keyword)));
 
         NativeQuery nativeQuery = NativeQuery.builder()
                 .withQuery(query)
