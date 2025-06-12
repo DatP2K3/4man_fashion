@@ -117,6 +117,7 @@ public class CreateOrderCmd {
             if (cartItemDTO.getDeleted() == true) continue;
             CreateOrderItemCmd orderItem = new CreateOrderItemCmd();
             orderItem.setProductId(cartItemDTO.getProductId());
+            orderItem.setProductVariantId(cartItemDTO.getProductVariantId());
             orderItem.setQuantity(cartItemDTO.getQuantity());
             orderItem.setPrice(
                     cartItemDTO.getDiscountPrice() != null && cartItemDTO.getDiscountPrice() != 0

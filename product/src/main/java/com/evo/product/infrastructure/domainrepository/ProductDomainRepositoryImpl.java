@@ -66,6 +66,43 @@ public class ProductDomainRepositoryImpl extends AbstractDomainRepository<Produc
     }
 
     @Override
+    public List<Product> saveAll(List<Product> domains) {
+        if (domains == null || domains.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<ProductVariantEntity> allProductVariantEntities = new ArrayList<>();
+        List<ProductImageEntity> allProductImageEntities = new ArrayList<>();
+        List<DiscountEntity> allDiscountEntities = new ArrayList<>();
+
+        for (Product product : domains) {
+            if (product.getProductVariants() != null && !product.getProductVariants().isEmpty()) {
+                allProductVariantEntities.addAll(productVariantEntityMapper.toEntityList(product.getProductVariants()));
+            }
+            if (product.getProductImages() != null && !product.getProductImages().isEmpty()) {
+                allProductImageEntities.addAll(productImageEntityMapper.toEntityList(product.getProductImages()));
+            }
+            if (product.getDiscounts() != null && !product.getDiscounts().isEmpty()) {
+                allDiscountEntities.addAll(discountEntityMapper.toEntityList(product.getDiscounts()));
+            }
+        }
+
+        if (!allProductVariantEntities.isEmpty()) {
+            productVariantEntityRepository.saveAll(allProductVariantEntities);
+        }
+        if (!allProductImageEntities.isEmpty()) {
+            productImageEntityRepository.saveAll(allProductImageEntities);
+        }
+        if (!allDiscountEntities.isEmpty()) {
+            discountEntityRepository.saveAll(allDiscountEntities);
+        }
+
+        List<ProductEntity> productEntities = productEntityMapper.toEntityList(domains);
+        List<ProductEntity> savedProductEntities = productEntityRepository.saveAll(productEntities);
+        return this.enrichList(productEntityMapper.toDomainModelList(savedProductEntities));
+    }
+
+    @Override
     public Product getById(UUID uuid) {
         ProductEntity productEntity = productEntityRepository
                 .findById(uuid)
