@@ -17,9 +17,17 @@ public class RabbitMQPublisherConfig {
     @Value("${rabbitmq.exchange.noti}")
     private String notiExchange;
 
+    @Value("${rabbitmq.exchange.product}")
+    private String productExchange;
+
     @Bean
     public DirectExchange orderExchange() {
         return new DirectExchange(notiExchange);
+    }
+
+    @Bean
+    public DirectExchange productExchange() {
+        return new DirectExchange(productExchange);
     }
 
     @Bean

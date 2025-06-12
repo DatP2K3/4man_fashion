@@ -12,6 +12,9 @@ public enum AppErrorCode {
     PROMOTION_TYPE_IS_EXIST(1047, "Promotion of this product is exist", HttpStatus.BAD_REQUEST),
     DISCOUNT_PRICE_OR_PERCENT_IS_REQUIRED(1048, "Discount price or percent is required", HttpStatus.BAD_REQUEST),
     DISCOUNT_NOT_FOUND(1049, "Discount not found", HttpStatus.NOT_FOUND),
+    PRODUCT_VARIANT_NOT_FOUND(1050, "Product variant not found", HttpStatus.NOT_FOUND),
+    OPERATION_TYPE_IS_REQUIRED(1051, "Operation type is required", HttpStatus.BAD_REQUEST),
+    INVALID_OPERATION_TYPE(1052, "Invalid operation type", HttpStatus.BAD_REQUEST),
     ;
 
     private final int code;

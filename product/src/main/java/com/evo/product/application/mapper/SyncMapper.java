@@ -3,6 +3,8 @@ package com.evo.product.application.mapper;
 import java.util.List;
 import java.util.UUID;
 
+import com.evo.common.dto.event.ProductVariantSync;
+import com.evo.product.domain.command.UpdateProductVariantQuantityCmd;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -27,4 +29,6 @@ public interface SyncMapper {
     }
 
     List<ProductSync> from(List<Product> products);
+
+    List<UpdateProductVariantQuantityCmd> fromProductVariantSyncs(List<ProductVariantSync> productVariantSyncs);
 }

@@ -11,10 +11,12 @@ import java.util.stream.Collectors;
 import com.evo.common.Auditor;
 import com.evo.common.enums.DiscountStatus;
 import com.evo.common.enums.DiscountType;
+import com.evo.common.enums.OperationType;
 import com.evo.product.domain.command.CreateOrUpdateDiscountCmd;
 import com.evo.product.domain.command.CreateOrUpdateProductCmd;
 import com.evo.product.domain.command.CreateOrUpdateProductImageCmd;
 import com.evo.product.domain.command.CreateOrUpdateProductVariantCmd;
+import com.evo.product.domain.command.UpdateProductVariantQuantityCmd;
 import com.evo.product.infrastructure.support.IdUtils;
 import com.evo.product.infrastructure.support.exception.AppErrorCode;
 import com.evo.product.infrastructure.support.exception.AppException;
@@ -37,7 +39,7 @@ public class Product extends Auditor {
     private DiscountType discountType;
     private UUID categoryId;
     private Map<String, String> description;
-    private String introduce; // Introduce is a short description of the product(html)
+    private String introduce;
     private int weight;
     private int length;
     private int width;
@@ -67,6 +69,29 @@ public class Product extends Auditor {
 
         createOrUpdateProductVariant(createOrUpdateProductCmd.getProductVariants());
         createOrUpdateProductImage(createOrUpdateProductCmd.getProductImages());
+    }
+
+    public void updateProductVariantQuantity(UpdateProductVariantQuantityCmd cmd) {
+        if (this.productVariants == null) {
+            throw new AppException(AppErrorCode.PRODUCT_VARIANT_NOT_FOUND);
+        }
+        for (ProductVariant productVariant : this.productVariants) {
+            if (productVariant.getId().equals(cmd.getId())) {
+                if (cmd.getOperationType() == null) {
+                    throw new AppException(AppErrorCode.OPERATION_TYPE_IS_REQUIRED);
+                }
+                if (cmd.getOperationType().equals(OperationType.INCREASE)) {
+                    productVariant.setQuantity(productVariant.getQuantity() + cmd.getTotalQuantity());
+                } else if (cmd.getOperationType().equals(OperationType.DECREASE)) {
+                    productVariant.setQuantity(productVariant.getQuantity() - cmd.getTotalQuantity());
+                } else {
+                    throw new AppException(AppErrorCode.INVALID_OPERATION_TYPE);
+                }
+                return;
+            }
+        }
+        throw new AppException(AppErrorCode.PRODUCT_VARIANT_NOT_FOUND);
+
     }
 
     public void update(CreateOrUpdateProductCmd createOrUpdateProductCmd) {

@@ -1,11 +1,15 @@
 package com.evo.order.application.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.evo.common.dto.event.ProductVariantEvent;
+import com.evo.common.dto.event.ProductVariantSync;
 import com.evo.common.dto.event.UseCashbackEvent;
 import com.evo.order.infrastructure.adapter.rabbitmq.CashbackEventRabbitMQService;
+import com.evo.order.infrastructure.adapter.rabbitmq.ProductEventRabbitMQService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +56,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     private final OrderDTOMapper orderDTOMapper;
     private final NotiEventRabbitMQService notiEventRabbitMQService;
     private final CashbackEventRabbitMQService cashbackEventRabbitMQService;
+    private final ProductEventRabbitMQService productEventRabbitMQService;
 
     @Override
     @Transactional
@@ -111,6 +116,19 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                 .build();
         cashbackEventRabbitMQService.publishUseCashbackEvent(useCashbackEvent);
 
+        List<ProductVariantSync> productVariantSyncs = new ArrayList<>();
+        for (OrderItem orderItem : order.getOrderItems()) {
+            ProductVariantSync productVariantSync = ProductVariantSync.builder()
+                    .id(orderItem.getProductVariantId())
+                    .productId(orderItem.getProductId())
+                    .totalQuantity(orderItem.getQuantity())
+                    .operationType(OperationType.DECREASE)
+                    .build();
+            productVariantSyncs.add(productVariantSync);
+        }
+        ProductVariantEvent productVariantEvent = new ProductVariantEvent(productVariantSyncs);
+        productEventRabbitMQService.publishProductPushEvent(productVariantEvent);
+
         return orderDTOMapper.domainModelToDTO(order);
     }
 
@@ -127,6 +145,9 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                 .filter(order -> order.getGHNOrderCode() != null)
                 .map(Order::getGHNOrderCode)
                 .toList();
+
+        List<ProductVariantSync> productVariantSyncs = new ArrayList<>();
+
         for (Order order : orders) {
             if (order.getOrderStatus().equals(OrderStatus.PENDING_SHIPMENT)
                     || order.getOrderStatus().equals(OrderStatus.WAITING_FOR_PICKUP)) {
@@ -143,9 +164,21 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                         .data(Map.of("orderCode", order.getOrderCode()))
                         .build();
                 notiEventRabbitMQService.publishNotiPushEvent(pushNotificationEvent);
+
+                for (OrderItem orderItem : order.getOrderItems()) {
+                    ProductVariantSync productVariantSync = ProductVariantSync.builder()
+                            .id(orderItem.getProductVariantId())
+                            .productId(orderItem.getProductId())
+                            .totalQuantity(orderItem.getQuantity())
+                            .operationType(OperationType.INCREASE)
+                            .build();
+                    productVariantSyncs.add(productVariantSync);
+                }
             }
         }
         orderDomainRepository.saveAll(orders);
+        ProductVariantEvent productVariantEvent = new ProductVariantEvent(productVariantSyncs);
+        productEventRabbitMQService.publishProductPushEvent(productVariantEvent);
         if (!ghnOrderCodes.isEmpty()) {
             PrintOrCancelGHNOrderRequest request = new PrintOrCancelGHNOrderRequest(ghnOrderCodes);
             ghnClient.cancelShippingOrder(request);

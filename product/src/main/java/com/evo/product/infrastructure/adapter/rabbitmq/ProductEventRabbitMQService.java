@@ -1,5 +1,6 @@
 package com.evo.product.infrastructure.adapter.rabbitmq;
 
+import com.evo.common.dto.event.ProductVariantEvent;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class ProductEventRabbitMQService {
     @Value("${rabbitmq.routing.key.product.delete}")
     private String productDeleteRoutingKey;
 
-    @Value(("${rabbitmq.routing.key.product.update-all}"))
+    @Value("${rabbitmq.routing.key.product.update-all}")
     private String productUpdateAllRoutingKey;
 
     public void publishProductCreatedEvent(ProductEvent event) {
