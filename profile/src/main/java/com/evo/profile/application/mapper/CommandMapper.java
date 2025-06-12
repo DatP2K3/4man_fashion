@@ -1,9 +1,9 @@
 package com.evo.profile.application.mapper;
 
-import com.evo.common.dto.event.ProcessCashbackEvent;
-import com.evo.common.dto.event.UseCashbackEvent;
 import org.mapstruct.Mapper;
 
+import com.evo.common.dto.event.ProcessCashbackEvent;
+import com.evo.common.dto.event.UseCashbackEvent;
 import com.evo.profile.application.dto.request.*;
 import com.evo.profile.domain.command.*;
 

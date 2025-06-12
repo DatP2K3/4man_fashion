@@ -6,11 +6,11 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.evo.common.enums.OrderStatus;
 import com.evo.order.infrastructure.persistence.entity.OrderEntity;
 import com.evo.order.infrastructure.persistence.repository.custom.OrderEntityRepositoryCustom;
-import org.springframework.data.repository.query.Param;
 
 public interface OrderEntityRepository extends JpaRepository<OrderEntity, UUID>, OrderEntityRepositoryCustom {
     Optional<OrderEntity> findByOrderCode(String orderCode);

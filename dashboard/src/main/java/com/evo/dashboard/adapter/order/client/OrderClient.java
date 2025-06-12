@@ -8,8 +8,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.evo.common.dto.response.ApiResponses;
 import com.evo.common.dto.response.OrderDTO;
+import com.evo.common.dto.response.PageApiResponse;
 import com.evo.common.enums.OrderStatus;
 import com.evo.dashboard.adapter.order.config.FeignOrderClientConfiguration;
 
@@ -21,7 +21,7 @@ import com.evo.dashboard.adapter.order.config.FeignOrderClientConfiguration;
         fallbackFactory = OrderClientFallback.class)
 public interface OrderClient {
     @GetMapping("api/orders/search")
-    ApiResponses<List<OrderDTO>> searchOrders(
+    PageApiResponse<List<OrderDTO>> searchOrders(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) UUID userId,
             @RequestParam(required = false) OrderStatus orderStatus,

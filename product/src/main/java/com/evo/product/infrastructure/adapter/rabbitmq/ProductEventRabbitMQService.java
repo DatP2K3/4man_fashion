@@ -1,6 +1,5 @@
 package com.evo.product.infrastructure.adapter.rabbitmq;
 
-import com.evo.common.dto.event.ProductVariantEvent;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

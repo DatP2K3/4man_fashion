@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.evo.common.dto.response.OrderDTO;
 import com.evo.common.enums.DashboardTime;
 import com.evo.dashboard.adapter.order.client.OrderClient;
+import com.evo.dashboard.adapter.user.client.ProfileClient;
 import com.evo.dashboard.dto.response.*;
 
 import lombok.RequiredArgsConstructor;
@@ -22,10 +23,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DashboardServiceImpl implements DashboardService {
     private final OrderClient orderClient;
+    private final ProfileClient profileClient;
 
     @Override
     public DashboardDTO getDashboardData(DashboardTime dashboardTime) {
-        //@TODO: CHƯA TÍNH TỔNG USER MỚI TRONG NGÀY, TUẦN, THÁNG
         if (dashboardTime == DashboardTime.DAY) {
             return getTodayDashboardData();
         } else if (dashboardTime == DashboardTime.WEEK) {
@@ -77,11 +78,16 @@ public class DashboardServiceImpl implements DashboardService {
                         order.getCreatedAt().atZone(vietnamZone).toLocalDate().equals(today))
                 .toList();
 
+        long totalNewUsers = profileClient
+                .searchProfiles("", startDate, endDate)
+                .getPageable()
+                .getTotalElements();
+
         long totalRevenue =
                 todayOrders.stream().mapToLong(OrderDTO::getTotalPrice).sum();
+
         long totalOrders = todayOrders.size();
 
-        long totalNewUsers = 0;
         SummaryTodayDTO todaySummary = new SummaryTodayDTO(totalRevenue, totalOrders, totalNewUsers);
 
         List<OrderStatisticByCityDTO> orderStatisticByCityDTOS =
@@ -146,7 +152,11 @@ public class DashboardServiceImpl implements DashboardService {
                 todayOrders.stream().mapToLong(OrderDTO::getTotalPrice).sum();
         long totalOrders = todayOrders.size();
 
-        long totalNewUsers = 0;
+        long totalNewUsers = profileClient
+                .searchProfiles("", startDate, endDate)
+                .getPageable()
+                .getTotalElements();
+
         SummaryTodayDTO todaySummary = new SummaryTodayDTO(totalRevenue, totalOrders, totalNewUsers);
 
         List<OrderStatisticByCityDTO> orderStatisticByCityDTOS =
@@ -213,7 +223,11 @@ public class DashboardServiceImpl implements DashboardService {
                 todayOrders.stream().mapToLong(OrderDTO::getTotalPrice).sum();
         long totalOrders = todayOrders.size();
 
-        long totalNewUsers = 0;
+        long totalNewUsers = profileClient
+                .searchProfiles("", startDate, endDate)
+                .getPageable()
+                .getTotalElements();
+
         SummaryTodayDTO todaySummary = new SummaryTodayDTO(totalRevenue, totalOrders, totalNewUsers);
         return DashboardDTO.builder()
                 .orderByCity(orderStatisticByCityDTOS)

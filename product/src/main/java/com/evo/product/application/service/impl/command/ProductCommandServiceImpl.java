@@ -6,16 +6,13 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.evo.common.dto.event.FileEvent;
-import com.evo.common.enums.FileUsageStatus;
-import com.evo.product.domain.ProductImage;
-import com.evo.product.domain.command.CreateOrUpdateProductImageCmd;
-import com.evo.product.infrastructure.adapter.rabbitmq.FileEventRabbitMQService;
 import org.springframework.stereotype.Service;
 
+import com.evo.common.dto.event.FileEvent;
 import com.evo.common.dto.event.ProductEvent;
 import com.evo.common.dto.event.ProductSync;
 import com.evo.common.dto.response.ProductDTO;
+import com.evo.common.enums.FileUsageStatus;
 import com.evo.product.application.dto.mapper.ProductDTOMapper;
 import com.evo.product.application.dto.request.CreateOrUpdateDiscountRequest;
 import com.evo.product.application.dto.request.CreateOrUpdateProductRequest;
@@ -23,9 +20,12 @@ import com.evo.product.application.mapper.CommandMapper;
 import com.evo.product.application.mapper.SyncMapper;
 import com.evo.product.application.service.ProductCommandService;
 import com.evo.product.domain.Product;
+import com.evo.product.domain.ProductImage;
 import com.evo.product.domain.command.CreateOrUpdateDiscountCmd;
 import com.evo.product.domain.command.CreateOrUpdateProductCmd;
+import com.evo.product.domain.command.CreateOrUpdateProductImageCmd;
 import com.evo.product.domain.repository.ProductDomainRepository;
+import com.evo.product.infrastructure.adapter.rabbitmq.FileEventRabbitMQService;
 import com.evo.product.infrastructure.adapter.rabbitmq.ProductEventRabbitMQService;
 
 import lombok.RequiredArgsConstructor;
@@ -52,10 +52,7 @@ class ProductCommandServiceImpl implements ProductCommandService {
 
         List<CreateOrUpdateProductImageCmd> productImages = createOrUpdateProductCmd.getProductImages();
         Map<UUID, FileUsageStatus> usageMap = productImages.stream()
-                .collect(Collectors.toMap(
-                        CreateOrUpdateProductImageCmd::getFileId,
-                        img -> FileUsageStatus.USED
-                ));
+                .collect(Collectors.toMap(CreateOrUpdateProductImageCmd::getFileId, img -> FileUsageStatus.USED));
         FileEvent fileEvent = new FileEvent(usageMap);
         fileEventRabbitMQService.publishFileUpdatedEvent(fileEvent);
 
@@ -80,12 +77,12 @@ class ProductCommandServiceImpl implements ProductCommandService {
                 .map(ProductImage::getFileId)
                 .collect(Collectors.toList());
 
-        List<UUID> oldImageFileIds = product.getProductImages() != null ?
-                product.getProductImages().stream()
+        List<UUID> oldImageFileIds = product.getProductImages() != null
+                ? product.getProductImages().stream()
                         .filter(img -> !img.getDeleted())
                         .map(ProductImage::getFileId)
-                        .collect(Collectors.toList()) :
-                List.of();
+                        .collect(Collectors.toList())
+                : List.of();
 
         // Mark old images that are no longer used as UNUSED
         oldImageFileIds.stream()
@@ -143,16 +140,10 @@ class ProductCommandServiceImpl implements ProductCommandService {
         Map<UUID, FileUsageStatus> usageMap = new HashMap<>();
         if (Boolean.TRUE.equals(product.getHidden())) {
             usageMap = productImages.stream()
-                    .collect(Collectors.toMap(
-                            ProductImage::getFileId,
-                            img -> FileUsageStatus.UNUSED
-                    ));
+                    .collect(Collectors.toMap(ProductImage::getFileId, img -> FileUsageStatus.UNUSED));
         } else {
             usageMap = productImages.stream()
-                    .collect(Collectors.toMap(
-                            ProductImage::getFileId,
-                            img -> FileUsageStatus.USED
-                    ));
+                    .collect(Collectors.toMap(ProductImage::getFileId, img -> FileUsageStatus.USED));
         }
         FileEvent fileEvent = new FileEvent(usageMap);
         fileEventRabbitMQService.publishFileUpdatedEvent(fileEvent);

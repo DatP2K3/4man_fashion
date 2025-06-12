@@ -91,7 +91,6 @@ public class Product extends Auditor {
             }
         }
         throw new AppException(AppErrorCode.PRODUCT_VARIANT_NOT_FOUND);
-
     }
 
     public void update(CreateOrUpdateProductCmd createOrUpdateProductCmd) {

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.evo.common.Auditor;
 import com.evo.common.enums.CashbackTransactionType;
 import com.evo.profile.domain.command.CreateOrUpdateShippingAddressCmd;
 import com.evo.profile.domain.command.UpdateProfileInfoCmd;
@@ -18,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Setter
 @Getter
-public class Profile {
+public class Profile extends Auditor {
     private UUID id;
     private String username;
     private String email;

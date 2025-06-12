@@ -40,7 +40,8 @@ public class CashbackCommandServiceImpl implements CashbackCommandService {
             membershipTier = membershipTierDomainRepository.getDefaultMembershipTier();
         }
 
-        Long cashbackAmount = Math.round(processCashbackCmd.getOrderAmount() * membershipTier.getCashbackPercentage() / 100);
+        Long cashbackAmount =
+                Math.round(processCashbackCmd.getOrderAmount() * membershipTier.getCashbackPercentage() / 100);
         processCashbackCmd.setCashbackAmount(cashbackAmount);
         processCashbackCmd.setDescription("Hoàn tiền từ đơn hàng: " + processCashbackCmd.getOrderId());
 

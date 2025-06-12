@@ -10,8 +10,6 @@ import com.evo.profile.application.dto.mapper.CashbackTransactionDTOMapper;
 import com.evo.profile.application.dto.response.CashbackTransactionDTO;
 import com.evo.profile.application.service.CashbackQueryService;
 import com.evo.profile.domain.CashbackTransaction;
-import com.evo.profile.domain.Profile;
-import com.evo.profile.domain.UserWallet;
 import com.evo.profile.domain.repository.CashbackTransactionDomainRepository;
 import com.evo.profile.domain.repository.ProfileDomainRepository;
 

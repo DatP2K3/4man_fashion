@@ -97,7 +97,7 @@ public class ProfileController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all-profiles")
-    public PageApiResponse<List<ProfileDTO>> search(@RequestBody SearchProfileRequest searchProfileRequest) {
+    public PageApiResponse<List<ProfileDTO>> search(SearchProfileRequest searchProfileRequest) {
         Long totalProfiles = profileQueryService.totalProfiles(searchProfileRequest);
         List<ProfileDTO> profileDTOS = Collections.emptyList();
         if (totalProfiles != 0) {

@@ -10,4 +10,3 @@ import com.evo.product.infrastructure.persistence.entity.TagDescriptionEntity;
 public interface TagDescriptionEntityRepository extends JpaRepository<TagDescriptionEntity, UUID> {
     List<TagDescriptionEntity> findByCategoryIdIn(List<UUID> categoryIds);
 }
-
