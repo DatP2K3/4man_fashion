@@ -1,6 +1,6 @@
 package com.evo.product.application.service.impl.command;
 
-import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -38,8 +38,9 @@ public class CategoryCommandServiceImpl implements CategoryCommandService {
     }
 
     @Override
-    public List<CategoryDTO> getCategories() {
-        List<Category> categories = categoryDomainRepository.getAll();
-        return categoryDTOMapper.domainModelsToDTOs(categories);
+    public void visibilityCategory(UUID id) {
+        Category category = categoryDomainRepository.getById(id);
+        category.toggleVisibility();
+        categoryDomainRepository.save(category);
     }
 }

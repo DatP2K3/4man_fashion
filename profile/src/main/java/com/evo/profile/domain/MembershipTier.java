@@ -50,4 +50,8 @@ public class MembershipTier extends Auditor {
             this.defaultTier = updateMembershipTierCmd.getDefaultTier();
         }
     }
+
+    public void toggleVisibility() {
+        this.deleted = !this.deleted;
+    }
 }

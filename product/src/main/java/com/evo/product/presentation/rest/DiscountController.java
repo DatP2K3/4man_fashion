@@ -3,6 +3,7 @@ package com.evo.product.presentation.rest;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.evo.common.dto.response.ApiResponses;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class DiscountController {
     private final DiscountQueryService discountQueryService;
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/discounts")
     public ApiResponses<List<DiscountDTO>> getAll() {
         List<DiscountDTO> discountDTOs = discountQueryService.getAll();
@@ -30,6 +32,7 @@ public class DiscountController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/discounts/{id}")
     public ApiResponses<DiscountDTO> getById(@PathVariable UUID id) {
         DiscountDTO discountDTO = discountQueryService.getById(id);

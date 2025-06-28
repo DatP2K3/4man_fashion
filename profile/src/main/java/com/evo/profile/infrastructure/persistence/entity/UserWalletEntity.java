@@ -27,7 +27,4 @@ public class UserWalletEntity {
 
     @Column(name = "total_points")
     private Integer totalPoints;
-
-    @Column(name = "total_coins")
-    private Long totalCoins;
 }

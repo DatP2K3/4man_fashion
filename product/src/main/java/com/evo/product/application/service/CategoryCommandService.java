@@ -1,6 +1,6 @@
 package com.evo.product.application.service;
 
-import java.util.List;
+import java.util.UUID;
 
 import com.evo.product.application.dto.request.CreateOrUpdateCategoryRequest;
 import com.evo.product.application.dto.response.CategoryDTO;
@@ -10,5 +10,5 @@ public interface CategoryCommandService {
 
     CategoryDTO updateCategory(CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest);
 
-    List<CategoryDTO> getCategories();
+    void visibilityCategory(UUID id);
 }

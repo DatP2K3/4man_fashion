@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.evo.common.dto.event.FileEvent;
 import com.evo.common.dto.response.FileResponse;
 import com.evotek.storage.application.dto.request.UpdateFileRequest;
 
@@ -16,4 +17,6 @@ public interface FileCommandService {
     void deleteFile(UUID fileId);
 
     FileResponse storeOneFile(MultipartFile file, boolean isPublic, String description);
+
+    void updateFileStatus(FileEvent event);
 }

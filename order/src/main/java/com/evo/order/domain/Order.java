@@ -58,6 +58,7 @@ public class Order extends Auditor {
     private int totalProductVariant;
     private int shipmentFee;
     private Long totalPrice;
+    private Long cashbackUsed;
     private String rejectReason;
     private String note;
     private UUID referencesId;
@@ -117,6 +118,7 @@ public class Order extends Auditor {
 
         this.shipmentFee = createOrderCmd.getShipmentFee();
         this.totalPrice = createOrderCmd.getTotalPrice();
+        this.cashbackUsed = createOrderCmd.getCashbackUsed();
         this.rejectReason = createOrderCmd.getRejectReason();
         this.note = createOrderCmd.getNote();
         this.totalWeight = createOrderCmd.getTotalWeight();

@@ -27,7 +27,7 @@ public class ProductEventRabbitMQService {
     @Value("${rabbitmq.routing.key.product.delete}")
     private String productDeleteRoutingKey;
 
-    @Value(("${rabbitmq.routing.key.product.update-all}"))
+    @Value("${rabbitmq.routing.key.product.update-all}")
     private String productUpdateAllRoutingKey;
 
     public void publishProductCreatedEvent(ProductEvent event) {

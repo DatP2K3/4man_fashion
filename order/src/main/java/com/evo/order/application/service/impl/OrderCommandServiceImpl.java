@@ -1,13 +1,20 @@
 package com.evo.order.application.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.evo.common.dto.event.ProductVariantEvent;
+import com.evo.common.dto.event.ProductVariantSync;
+import com.evo.common.dto.event.PushNotificationEvent;
+import com.evo.common.dto.event.UseCashbackEvent;
 import com.evo.common.dto.request.GetPaymentUrlRequest;
 import com.evo.common.dto.response.CartDTO;
+import com.evo.common.dto.response.OrderDTO;
 import com.evo.common.dto.response.ProfileDTO;
 import com.evo.common.dto.response.ShippingAddressDTO;
 import com.evo.common.dto.response.ShopAddressDTO;
@@ -15,7 +22,6 @@ import com.evo.common.enums.*;
 import com.evo.order.application.dto.mapper.OrderDTOMapper;
 import com.evo.order.application.dto.request.*;
 import com.evo.order.application.dto.response.GHNOrderDTO;
-import com.evo.order.application.dto.response.OrderDTO;
 import com.evo.order.application.dto.response.OrderFeeDTO;
 import com.evo.order.application.mapper.CommandMapper;
 import com.evo.order.application.service.OrderCommandService;
@@ -29,6 +35,9 @@ import com.evo.order.infrastructure.adapter.cart.client.CartClient;
 import com.evo.order.infrastructure.adapter.ghn.client.GHNClient;
 import com.evo.order.infrastructure.adapter.payment.client.PaymentClient;
 import com.evo.order.infrastructure.adapter.profile.client.ProfileClient;
+import com.evo.order.infrastructure.adapter.rabbitmq.CashbackEventRabbitMQService;
+import com.evo.order.infrastructure.adapter.rabbitmq.NotiEventRabbitMQService;
+import com.evo.order.infrastructure.adapter.rabbitmq.ProductEventRabbitMQService;
 import com.evo.order.infrastructure.adapter.shopinfo.client.ShopInfoClient;
 
 import lombok.RequiredArgsConstructor;
@@ -45,6 +54,9 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     private final OrderQueryService orderQueryService;
     private final OrderDomainRepository orderDomainRepository;
     private final OrderDTOMapper orderDTOMapper;
+    private final NotiEventRabbitMQService notiEventRabbitMQService;
+    private final CashbackEventRabbitMQService cashbackEventRabbitMQService;
+    private final ProductEventRabbitMQService productEventRabbitMQService;
 
     @Override
     @Transactional
@@ -87,6 +99,36 @@ public class OrderCommandServiceImpl implements OrderCommandService {
 
         order = orderDomainRepository.save(order);
         cartClient.emptyCart(cartDTO.getId());
+
+        PushNotificationEvent pushNotificationEvent = PushNotificationEvent.builder()
+                .title("Đơn hàng" + order.getOrderCode())
+                .body("Đơn hàng đã được tạo thành công")
+                .userId(order.getUserId())
+                .data(Map.of("orderCode", order.getOrderCode()))
+                .build();
+        notiEventRabbitMQService.publishNotiPushEvent(pushNotificationEvent);
+
+        UseCashbackEvent useCashbackEvent = UseCashbackEvent.builder()
+                .userId(order.getUserId())
+                .orderId(order.getId())
+                .amount(order.getCashbackUsed())
+                .type(CashbackTransactionType.USED)
+                .build();
+        cashbackEventRabbitMQService.publishUseCashbackEvent(useCashbackEvent);
+
+        List<ProductVariantSync> productVariantSyncs = new ArrayList<>();
+        for (OrderItem orderItem : order.getOrderItems()) {
+            ProductVariantSync productVariantSync = ProductVariantSync.builder()
+                    .id(orderItem.getProductVariantId())
+                    .productId(orderItem.getProductId())
+                    .totalQuantity(orderItem.getQuantity())
+                    .operationType(OperationType.DECREASE)
+                    .build();
+            productVariantSyncs.add(productVariantSync);
+        }
+        ProductVariantEvent productVariantEvent = new ProductVariantEvent(productVariantSyncs);
+        productEventRabbitMQService.publishProductPushEvent(productVariantEvent);
+
         return orderDTOMapper.domainModelToDTO(order);
     }
 
@@ -103,6 +145,9 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                 .filter(order -> order.getGHNOrderCode() != null)
                 .map(Order::getGHNOrderCode)
                 .toList();
+
+        List<ProductVariantSync> productVariantSyncs = new ArrayList<>();
+
         for (Order order : orders) {
             if (order.getOrderStatus().equals(OrderStatus.PENDING_SHIPMENT)
                     || order.getOrderStatus().equals(OrderStatus.WAITING_FOR_PICKUP)) {
@@ -111,9 +156,29 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                 for (OrderItem orderItem : orderItems) {
                     orderItem.setDeleted(true);
                 }
-                orderDomainRepository.save(order);
+
+                PushNotificationEvent pushNotificationEvent = PushNotificationEvent.builder()
+                        .title("Đơn hàng" + order.getOrderCode())
+                        .body("Đơn hàng đã bị hủy")
+                        .userId(order.getUserId())
+                        .data(Map.of("orderCode", order.getOrderCode()))
+                        .build();
+                notiEventRabbitMQService.publishNotiPushEvent(pushNotificationEvent);
+
+                for (OrderItem orderItem : order.getOrderItems()) {
+                    ProductVariantSync productVariantSync = ProductVariantSync.builder()
+                            .id(orderItem.getProductVariantId())
+                            .productId(orderItem.getProductId())
+                            .totalQuantity(orderItem.getQuantity())
+                            .operationType(OperationType.INCREASE)
+                            .build();
+                    productVariantSyncs.add(productVariantSync);
+                }
             }
         }
+        orderDomainRepository.saveAll(orders);
+        ProductVariantEvent productVariantEvent = new ProductVariantEvent(productVariantSyncs);
+        productEventRabbitMQService.publishProductPushEvent(productVariantEvent);
         if (!ghnOrderCodes.isEmpty()) {
             PrintOrCancelGHNOrderRequest request = new PrintOrCancelGHNOrderRequest(ghnOrderCodes);
             ghnClient.cancelShippingOrder(request);
@@ -146,7 +211,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                     .returnWardName(order.getReturnWard())
                     .returnProvinceName(order.getReturnCity())
                     .clientOrderCode(order.getOrderCode())
-                    .codAmount(order.getTotalPrice() + order.getShipmentFee())
+                    .codAmount(order.getTotalPrice() + order.getShipmentFee() - order.getCashbackUsed())
                     .content("4Man Fashion Luxury")
                     .weight(order.getTotalWeight())
                     .length(order.getTotalLength())
@@ -167,6 +232,14 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                     ghnClient.createShippingOrder(createGHNOrderRequest).getData();
             order.setGHNOrderCode(ghnOrderDTO.getOrderCode());
             order.setOrderStatus(OrderStatus.WAITING_FOR_PICKUP);
+
+            PushNotificationEvent pushNotificationEvent = PushNotificationEvent.builder()
+                    .title("Đơn hàng" + order.getOrderCode())
+                    .body("Đơn hàng đã được sắp xếp vận chuyển")
+                    .userId(order.getUserId())
+                    .data(Map.of("orderCode", order.getOrderCode()))
+                    .build();
+            notiEventRabbitMQService.publishNotiPushEvent(pushNotificationEvent);
         }
         orders = orderDomainRepository.saveAll(orders);
         return orderDTOMapper.domainModelsToDTOs(orders);
@@ -182,5 +255,14 @@ public class OrderCommandServiceImpl implements OrderCommandService {
             order.setPaymentStatus(PaymentStatus.FAILED);
         }
         orderDomainRepository.save(order);
+    }
+
+    @Override
+    public void printGHNOrder(List<String> GHNorderCodes) {
+        List<Order> orders = orderDomainRepository.getByGHNOrderCodeIn(GHNorderCodes);
+        for (Order order : orders) {
+            order.setPrinted(true);
+        }
+        orderDomainRepository.saveAll(orders);
     }
 }

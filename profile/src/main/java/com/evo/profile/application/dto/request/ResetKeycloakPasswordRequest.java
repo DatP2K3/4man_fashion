@@ -2,12 +2,11 @@ package com.evo.profile.application.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(
         value = {"type", "temporary"},

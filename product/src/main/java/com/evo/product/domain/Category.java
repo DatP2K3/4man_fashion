@@ -26,6 +26,7 @@ public class Category extends Auditor {
     private String productType;
     private String description;
     List<TagDescription> tagDescriptions;
+    private Boolean deleted;
 
     public Category(CreateOrUpdateCategoryCmd cmd) {
         this.id = IdUtils.nextId();
@@ -64,6 +65,21 @@ public class Category extends Auditor {
         this.description = cmd.getDescription();
         if (cmd.getTagDescriptions() != null) {
             createOrUpdateTagDescription(cmd.getTagDescriptions());
+        }
+    }
+
+    public void toggleVisibility() {
+        if (this.deleted == null) {
+            this.deleted = false;
+        } else {
+            this.deleted = !this.deleted;
+        }
+        if (this.tagDescriptions != null) {
+            if (this.deleted) {
+                this.tagDescriptions.forEach(tag -> tag.setDeleted(true));
+            } else {
+                this.tagDescriptions.forEach(tag -> tag.setDeleted(false));
+            }
         }
     }
 }

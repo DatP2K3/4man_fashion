@@ -7,8 +7,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.evo.common.dto.event.ProductSync;
+import com.evo.common.dto.event.ProductVariantSync;
 import com.evo.product.domain.Product;
 import com.evo.product.domain.ProductImage;
+import com.evo.product.domain.command.UpdateProductVariantQuantityCmd;
 
 @Mapper(componentModel = "spring")
 public interface SyncMapper {
@@ -27,4 +29,6 @@ public interface SyncMapper {
     }
 
     List<ProductSync> from(List<Product> products);
+
+    List<UpdateProductVariantQuantityCmd> fromProductVariantSyncs(List<ProductVariantSync> productVariantSyncs);
 }

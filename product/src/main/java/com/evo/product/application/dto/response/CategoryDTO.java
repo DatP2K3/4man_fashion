@@ -15,5 +15,6 @@ public class CategoryDTO {
     private String name;
     private String productType;
     private String description;
-    List<TagDescriptionDTO> tagDescriptions;
+    private List<TagDescriptionDTO> tagDescriptions;
+    private Boolean deleted;
 }

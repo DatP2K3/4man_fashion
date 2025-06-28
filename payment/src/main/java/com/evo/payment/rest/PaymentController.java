@@ -3,6 +3,7 @@ package com.evo.payment.rest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.evo.common.dto.request.GetPaymentUrlRequest;
@@ -19,6 +20,7 @@ public class PaymentController {
     private final PaymentCommandService paymentCommandService;
     private final PaymentQueryService paymentQueryService;
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/payment")
     ApiResponses<String> getPaymentUrl(
             @RequestBody GetPaymentUrlRequest getPaymentUrlRequest, HttpServletRequest httpServletRequest) {
@@ -35,6 +37,6 @@ public class PaymentController {
 
     @GetMapping("/vn-pay-callback")
     public void payCallbackHandler(HttpServletRequest request, HttpServletResponse response) {
-         paymentCommandService.handlePaymentCallback(request, response);
+        paymentCommandService.handlePaymentCallback(request, response);
     }
 }

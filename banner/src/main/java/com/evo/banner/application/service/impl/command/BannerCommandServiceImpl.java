@@ -27,7 +27,7 @@ public class BannerCommandServiceImpl implements BannerCommandService {
         CreateBannerCmd createBannerCmd = commandMapper.from(request);
         Banner banner = new Banner(createBannerCmd);
         banner = bannerDomainRepository.save(banner);
-        return bannerDTOMapper.domainModelToDTO(bannerDomainRepository.save(banner));
+        return bannerDTOMapper.domainModelToDTO(banner);
     }
 
     @Override
