@@ -1,58 +1,31 @@
 package com.evotek.elasticsearch.presentation.rest;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.*;
-
-import com.evo.common.dto.response.ApiResponses;
-import com.evo.common.dto.response.PageApiResponse;
+import com.evo.common.dto.response.Response;
+import com.evo.common.dto.response.PagingResponse;
 import com.evotek.elasticsearch.application.dto.request.SearchProductRequest;
 import com.evotek.elasticsearch.application.dto.response.ProductDocumentDTO;
-import com.evotek.elasticsearch.application.dto.response.SearchProductDTO;
-import com.evotek.elasticsearch.application.service.ProductQueryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
-@RestController
+@Tag(name = "Product Search API")
 @RequestMapping("/api")
-@RequiredArgsConstructor
-public class ProductController {
-    private final ProductQueryService productQueryService;
+@Validated
+public interface ProductController {
 
+    @Operation(summary = "Search products")
     @PostMapping("/products/search")
-    PageApiResponse<List<ProductDocumentDTO>> searchProduct(@RequestBody SearchProductRequest request) {
-        SearchProductDTO searchProductResponse = productQueryService.searchProduct(request);
-        PageApiResponse.PageableResponse pageableResponse = PageApiResponse.PageableResponse.builder()
-                .pageIndex(searchProductResponse.getPageIndex())
-                .totalPages(searchProductResponse.getTotalPages())
-                .totalElements(searchProductResponse.getTotalElements())
-                .pageSize(searchProductResponse.getPageSize())
-                .hasPrevious(searchProductResponse.isHasPrevious())
-                .hasNext(searchProductResponse.isHasNext())
-                .build();
+    PagingResponse<ProductDocumentDTO> searchProduct(@RequestBody SearchProductRequest request);
 
-        return PageApiResponse.<List<ProductDocumentDTO>>builder()
-                .data(searchProductResponse.getProducts())
-                .pageable(pageableResponse)
-                .success(true)
-                .code(200)
-                .message("Search products successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
-
+    @Operation(summary = "Autocomplete product names")
     @GetMapping("/products/autocomplete")
-    public ApiResponses<List<String>> autocompleteProductNames(
-            @RequestParam String keyword, @RequestParam(defaultValue = "10") int limit) {
-        List<String> productNames = productQueryService.autocompleteProductNames(keyword, limit);
-        return ApiResponses.<List<String>>builder()
-                .data(productNames)
-                .success(true)
-                .code(200)
-                .message("Autocomplete product names successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<List<String>> autocompleteProductNames(
+            @RequestParam String keyword, @RequestParam(defaultValue = "10") int limit);
 }

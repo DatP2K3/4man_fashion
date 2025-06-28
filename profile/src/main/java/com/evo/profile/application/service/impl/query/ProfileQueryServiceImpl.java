@@ -2,6 +2,7 @@ package com.evo.profile.application.service.impl.query;
 
 import java.util.List;
 
+import com.evo.common.dto.response.PageDTO;
 import org.springframework.stereotype.Service;
 
 import com.evo.common.dto.response.ProfileDTO;
@@ -23,15 +24,19 @@ public class ProfileQueryServiceImpl implements ProfileQueryService {
     private final ProfileDTOMapper profileDTOMapper;
 
     @Override
-    public Long totalProfiles(SearchProfileRequest searchProfileRequest) {
-        SearchProfileQuery query = queryMapper.from(searchProfileRequest);
-        return profileDomainRepository.count(query);
+    public Long totalProfiles(SearchProfileQuery searchProfileQuery) {
+        return profileDomainRepository.count(searchProfileQuery);
     }
 
     @Override
-    public List<ProfileDTO> searchProfiles(SearchProfileRequest searchProfileRequest) {
+    public PageDTO<ProfileDTO> searchProfiles(SearchProfileRequest searchProfileRequest) {
         SearchProfileQuery query = queryMapper.from(searchProfileRequest);
+        Long totalProfiles = this.totalProfiles(query);
+        if (totalProfiles == 0) {
+            return PageDTO.empty();
+        }
+
         List<Profile> profiles = profileDomainRepository.search(query);
-        return profileDTOMapper.domainModelsToDTOs(profiles);
+        return PageDTO.of(profileDTOMapper.domainModelsToDTOs(profiles), query.getPageIndex(), query.getPageSize(), totalProfiles);
     }
 }

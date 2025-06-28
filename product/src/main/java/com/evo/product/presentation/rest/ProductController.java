@@ -1,125 +1,54 @@
 package com.evo.product.presentation.rest;
 
-import java.util.List;
-import java.util.UUID;
-
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.ProductDTO;
 import com.evo.product.application.dto.request.CreateOrUpdateDiscountRequest;
 import com.evo.product.application.dto.request.CreateOrUpdateProductRequest;
-import com.evo.product.application.service.ProductCommandService;
-import com.evo.product.application.service.ProductQueryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.UUID;
 
-@RestController
+@Tag(name = "Product API")
 @RequestMapping("/api")
-@RequiredArgsConstructor
-public class ProductController {
-    private final ProductCommandService productCommandService;
-    private final ProductQueryService productQueryService;
+@Validated
+public interface ProductController {
 
+    @Operation(summary = "Create product")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/products")
-    public ApiResponses<ProductDTO> createProduct(
-            @RequestBody CreateOrUpdateProductRequest createOrUpdateProductRequest) {
-        ProductDTO productDTO = productCommandService.createProduct(createOrUpdateProductRequest);
-        return ApiResponses.<ProductDTO>builder()
-                .data(productDTO)
-                .success(true)
-                .code(201)
-                .message("Product created successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<ProductDTO> createProduct(@RequestBody CreateOrUpdateProductRequest createOrUpdateProductRequest);
 
+    @Operation(summary = "Update product")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/products")
-    public ApiResponses<ProductDTO> updateProduct(
-            @RequestBody CreateOrUpdateProductRequest createOrUpdateProductRequest) {
-        ProductDTO productDTO = productCommandService.updateProduct(createOrUpdateProductRequest);
-        return ApiResponses.<ProductDTO>builder()
-                .data(productDTO)
-                .success(true)
-                .code(200)
-                .message("Product updated successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<ProductDTO> updateProduct(@RequestBody CreateOrUpdateProductRequest createOrUpdateProductRequest);
 
+    @Operation(summary = "Get product by ID")
     @GetMapping("/products/{id}")
-    public ApiResponses<ProductDTO> getProduct(@PathVariable UUID id) {
-        ProductDTO productDTO = productQueryService.getById(id);
-        return ApiResponses.<ProductDTO>builder()
-                .data(productDTO)
-                .success(true)
-                .code(200)
-                .message("Product retrieved successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<ProductDTO> getProduct(@PathVariable UUID id);
 
+    @Operation(summary = "Create discount")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/products/discounts")
-    public ApiResponses<ProductDTO> createDiscount(
-            @RequestBody CreateOrUpdateDiscountRequest createOrUpdateDiscountRequest) {
-        ProductDTO productDTO = productCommandService.createDiscount(createOrUpdateDiscountRequest);
-        return ApiResponses.<ProductDTO>builder()
-                .data(productDTO)
-                .success(true)
-                .code(201)
-                .message("Discount created successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<ProductDTO> createDiscount(@RequestBody CreateOrUpdateDiscountRequest createOrUpdateDiscountRequest);
 
+    @Operation(summary = "Update discount")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/products/discounts")
-    public ApiResponses<ProductDTO> updateDiscount(
-            @RequestBody CreateOrUpdateDiscountRequest createOrUpdateDiscountRequest) {
-        ProductDTO productDTO = productCommandService.updateDiscount(createOrUpdateDiscountRequest);
-        return ApiResponses.<ProductDTO>builder()
-                .data(productDTO)
-                .success(true)
-                .code(200)
-                .message("Discount updated successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<ProductDTO> updateDiscount(@RequestBody CreateOrUpdateDiscountRequest createOrUpdateDiscountRequest);
 
+    @Operation(summary = "Get products with no discount")
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/products-with-no-discount")
-    public ApiResponses<List<ProductDTO>> getAllProductsWithNoDiscount() {
-        List<ProductDTO> productDTOs = productQueryService.getAllProductsWithNoDiscount();
-        return ApiResponses.<List<ProductDTO>>builder()
-                .data(productDTOs)
-                .success(true)
-                .code(200)
-                .message("Products retrieved successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<List<ProductDTO>> getAllProductsWithNoDiscount();
 
+    @Operation(summary = "Toggle product visibility")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/products/{id}/visibility")
-    public ApiResponses<ProductDTO> toggleProductVisibility(@PathVariable UUID id) {
-        ProductDTO productDTO = productCommandService.toggleProductVisibility(id);
-        return ApiResponses.<ProductDTO>builder()
-                .data(productDTO)
-                .success(true)
-                .code(200)
-                .message("Product visibility toggled successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<ProductDTO> toggleProductVisibility(@PathVariable UUID id);
 }

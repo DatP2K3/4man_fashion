@@ -9,9 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.evo.common.dto.request.SearchFileRequest;
 import com.evo.common.dto.request.UpdateFileRequest;
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.FileResponse;
-import com.evo.common.dto.response.PageApiResponse;
+import com.evo.common.dto.response.PagingResponse;
 import com.evo.common.enums.ServiceUnavailableError;
 import com.evo.common.exception.ForwardInnerAlertException;
 import com.evo.common.exception.ResponseException;
@@ -36,52 +36,52 @@ public class StorageClientFallback
         }
 
         @Override
-        public ApiResponses<List<FileResponse>> uploadFiles(
+        public Response<List<FileResponse>> uploadFiles(
                 List<MultipartFile> files, boolean isPublic, String description) {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return Response.fail((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR);
+            return Response.fail(new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR));
         }
 
         @Override
-        public ApiResponses<FileResponse> updateFile(UpdateFileRequest updateFileRequest) {
+        public Response<FileResponse> updateFile(UpdateFileRequest updateFileRequest) {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return Response.fail((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR);
+            return Response.fail(new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR));
         }
 
         @Override
-        public ApiResponses<Void> deleteFile(UUID fileId) {
+        public Response<Void> deleteFile(UUID fileId) {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return Response.fail((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR);
+            return Response.fail(new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR));
         }
 
         @Override
-        public ApiResponses<FileResponse> getFile(UUID fileId) {
+        public Response<FileResponse> getFile(UUID fileId) {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return Response.fail((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR);
+            return Response.fail(new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR));
         }
 
         @Override
-        public PageApiResponse<List<FileResponse>> searchFiles(SearchFileRequest searchFileRequest) {
+        public PagingResponse<FileResponse> searchFiles(SearchFileRequest searchFileRequest) {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return PagingResponse.failPaging((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR);
+            return PagingResponse.failPaging(new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR));
         }
 
         @Override
-        public ApiResponses<Void> testRetry() {
+        public Response<Void> testRetry() {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return Response.fail((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR);
+            return Response.fail(new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR));
         }
     }
 }

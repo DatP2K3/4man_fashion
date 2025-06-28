@@ -1,42 +1,30 @@
 package com.evo.payment.rest;
 
+import com.evo.common.dto.request.GetPaymentUrlRequest;
+import com.evo.common.dto.response.Response;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.evo.common.dto.request.GetPaymentUrlRequest;
-import com.evo.common.dto.response.ApiResponses;
-import com.evo.payment.application.service.PaymentCommandService;
-import com.evo.payment.application.service.PaymentQueryService;
-
-import lombok.RequiredArgsConstructor;
-
-@RestController
+@Tag(name = "Payment API")
 @RequestMapping("/api")
-@RequiredArgsConstructor
-public class PaymentController {
-    private final PaymentCommandService paymentCommandService;
-    private final PaymentQueryService paymentQueryService;
+@Validated
+public interface PaymentController {
 
+    @Operation(summary = "Get payment URL")
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/payment")
-    ApiResponses<String> getPaymentUrl(
-            @RequestBody GetPaymentUrlRequest getPaymentUrlRequest, HttpServletRequest httpServletRequest) {
-        String paymentUrl = paymentQueryService.getPaymentUrl(getPaymentUrlRequest, httpServletRequest);
-        return ApiResponses.<String>builder()
-                .data(paymentUrl)
-                .success(true)
-                .code(201)
-                .message("PaymentUrl created successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<String> getPaymentUrl(
+            @RequestBody GetPaymentUrlRequest getPaymentUrlRequest, HttpServletRequest httpServletRequest);
 
+    @Operation(summary = "VN Pay callback handler")
     @GetMapping("/vn-pay-callback")
-    public void payCallbackHandler(HttpServletRequest request, HttpServletResponse response) {
-        paymentCommandService.handlePaymentCallback(request, response);
-    }
+    Response<Void> payCallbackHandler(HttpServletRequest request, HttpServletResponse response);
 }

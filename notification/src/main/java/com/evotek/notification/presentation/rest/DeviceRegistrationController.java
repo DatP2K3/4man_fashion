@@ -1,41 +1,26 @@
 package com.evotek.notification.presentation.rest;
 
-import org.springframework.web.bind.annotation.*;
-
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evotek.notification.application.dto.request.RegisterOrUpdateDeviceRequest;
 import com.evotek.notification.application.dto.request.UnRegisterDeviceRequest;
-import com.evotek.notification.application.service.push.impl.command.DeviceRegistrationCommandService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import lombok.RequiredArgsConstructor;
-
-@RestController
+@Tag(name = "Device Registration API")
 @RequestMapping("/api/device-registration")
-@RequiredArgsConstructor
-public class DeviceRegistrationController {
-    private final DeviceRegistrationCommandService deviceRegistrationCommandService;
+@Validated
+public interface DeviceRegistrationController {
 
+    @Operation(summary = "Register device for FCM")
     @PostMapping("/register")
-    public ApiResponses<Void> registerDevice(@RequestBody RegisterOrUpdateDeviceRequest request) {
-        deviceRegistrationCommandService.registerDevice(request);
-        return ApiResponses.<Void>builder()
-                .success(true)
-                .code(201)
-                .message("Đăng ký thiết bị cho fcm thành công")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<Void> registerDevice(@RequestBody RegisterOrUpdateDeviceRequest request);
 
+    @Operation(summary = "Unregister device from FCM")
     @DeleteMapping("/unregister")
-    public ApiResponses<Void> unRegisterDevice(@RequestBody UnRegisterDeviceRequest unRegisterDeviceRequest) {
-        deviceRegistrationCommandService.unregisterDevice(unRegisterDeviceRequest);
-        return ApiResponses.<Void>builder()
-                .success(true)
-                .code(201)
-                .message("Huỷ đăng ký thiết bị cho fcm thành công")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<Void> unRegisterDevice(@RequestBody UnRegisterDeviceRequest unRegisterDeviceRequest);
 }

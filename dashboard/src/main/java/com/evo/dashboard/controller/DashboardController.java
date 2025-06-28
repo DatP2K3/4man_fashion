@@ -1,35 +1,23 @@
 package com.evo.dashboard.controller;
 
+import com.evo.common.dto.response.Response;
+import com.evo.common.enums.DashboardTime;
+import com.evo.dashboard.dto.response.DashboardDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-import com.evo.common.dto.response.ApiResponses;
-import com.evo.common.enums.DashboardTime;
-import com.evo.dashboard.dto.response.DashboardDTO;
-import com.evo.dashboard.service.DashboardService;
-
-import lombok.RequiredArgsConstructor;
-
-@RestController
+@Tag(name = "Dashboard API")
 @RequestMapping("/api")
-@RequiredArgsConstructor
-public class DashboardController {
-    private final DashboardService dashboardService;
+@Validated
+public interface DashboardController {
 
+    @Operation(summary = "Get dashboard data")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/dashboard")
-    public ApiResponses<DashboardDTO> getDashboard(@RequestParam DashboardTime dashboardTime) {
-        DashboardDTO dashboardDTO = dashboardService.getDashboardData(dashboardTime);
-        return ApiResponses.<DashboardDTO>builder()
-                .data(dashboardDTO)
-                .success(true)
-                .code(200)
-                .message("Get dashboard successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<DashboardDTO> getDashboard(@RequestParam DashboardTime dashboardTime);
 }

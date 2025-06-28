@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.ShopAddressDTO;
 import com.evo.common.enums.ServiceUnavailableError;
 import com.evo.common.exception.ForwardInnerAlertException;
@@ -29,11 +29,11 @@ public class ShopInfoClientFallback implements FallbackFactory<ShopInfoClient> {
         }
 
         @Override
-        public ApiResponses<List<ShopAddressDTO>> getShopAddress() {
+        public Response<List<ShopAddressDTO>> getShopAddress() {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return Response.fail((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR);
+            return Response.fail(new ResponseException(ServiceUnavailableError.SHOPINFO_SERVICE_UNAVAILABLE_ERROR));
         }
     }
 }

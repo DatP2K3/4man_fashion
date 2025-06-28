@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
 import com.evo.common.dto.response.OrderDTO;
-import com.evo.common.dto.response.PageApiResponse;
+import com.evo.common.dto.response.PagingResponse;
 import com.evo.common.enums.OrderStatus;
 import com.evo.common.enums.ServiceUnavailableError;
 import com.evo.common.exception.ForwardInnerAlertException;
@@ -32,7 +32,7 @@ public class OrderClientFallback implements FallbackFactory<OrderClient> {
         }
 
         @Override
-        public PageApiResponse<List<OrderDTO>> searchOrders(
+        public PagingResponse<List<OrderDTO>> searchOrders(
                 String keyword,
                 UUID userId,
                 OrderStatus orderStatus,
@@ -43,9 +43,9 @@ public class OrderClientFallback implements FallbackFactory<OrderClient> {
                 int pageSize,
                 String sortBy) {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return PagingResponse.failPaging((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.ORDER_SERVICE_UNAVAILABLE_ERROR);
+            return PagingResponse.failPaging(new ResponseException(ServiceUnavailableError.ORDER_SERVICE_UNAVAILABLE_ERROR));
         }
     }
 }

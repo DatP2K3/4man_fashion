@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.CartDTO;
 import com.evo.order.infrastructure.adapter.cart.config.FeignCartClientConfiguration;
 
@@ -19,8 +19,8 @@ import com.evo.order.infrastructure.adapter.cart.config.FeignCartClientConfigura
         fallbackFactory = CartClientFallback.class)
 public interface CartClient {
     @GetMapping("/api/carts/get-or-init")
-    ApiResponses<CartDTO> getCart();
+    Response<CartDTO> getCart();
 
     @PutMapping("/api/carts/empty/{cartId}")
-    ApiResponses<Void> emptyCart(@PathVariable("cartId") UUID cartId);
+    Response<Void> emptyCart(@PathVariable("cartId") UUID cartId);
 }
