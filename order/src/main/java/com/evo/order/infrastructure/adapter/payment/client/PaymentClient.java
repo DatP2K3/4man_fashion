@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.evo.common.dto.request.GetPaymentUrlRequest;
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.order.infrastructure.adapter.payment.config.FeignPaymentClientConfiguration;
 
 @FeignClient(
@@ -16,5 +16,5 @@ import com.evo.order.infrastructure.adapter.payment.config.FeignPaymentClientCon
         fallbackFactory = PaymentClientFallback.class)
 public interface PaymentClient {
     @PostMapping(value = "/api/payment")
-    ApiResponses<String> getPaymentUrl(@RequestBody GetPaymentUrlRequest getPaymentUrlRequest);
+    Response<String> getPaymentUrl(@RequestBody GetPaymentUrlRequest getPaymentUrlRequest);
 }

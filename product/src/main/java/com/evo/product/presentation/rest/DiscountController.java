@@ -1,48 +1,30 @@
 package com.evo.product.presentation.rest;
 
+import com.evo.common.dto.response.Response;
+import com.evo.product.application.dto.response.DiscountDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import com.evo.common.dto.response.ApiResponses;
-import com.evo.product.application.dto.response.DiscountDTO;
-import com.evo.product.application.service.DiscountQueryService;
-
-import lombok.RequiredArgsConstructor;
-
-@RestController
+@Tag(name = "Discount API")
 @RequestMapping("/api")
-@RequiredArgsConstructor
-public class DiscountController {
-    private final DiscountQueryService discountQueryService;
+@Validated
+public interface DiscountController {
 
+    @Operation(summary = "Get all discounts")
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/discounts")
-    public ApiResponses<List<DiscountDTO>> getAll() {
-        List<DiscountDTO> discountDTOs = discountQueryService.getAll();
-        return ApiResponses.<List<DiscountDTO>>builder()
-                .data(discountDTOs)
-                .success(true)
-                .code(200)
-                .message("Discounts retrieved successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<List<DiscountDTO>> getAll();
 
+    @Operation(summary = "Get discount by ID")
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/discounts/{id}")
-    public ApiResponses<DiscountDTO> getById(@PathVariable UUID id) {
-        DiscountDTO discountDTO = discountQueryService.getById(id);
-        return ApiResponses.<DiscountDTO>builder()
-                .data(discountDTO)
-                .success(true)
-                .code(200)
-                .message("Discount retrieved successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<DiscountDTO> getById(@PathVariable UUID id);
 }

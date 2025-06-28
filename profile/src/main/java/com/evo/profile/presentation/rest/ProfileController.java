@@ -1,125 +1,52 @@
 package com.evo.profile.presentation.rest;
 
-import java.util.Collections;
-import java.util.List;
-
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.evo.common.dto.response.ApiResponses;
-import com.evo.common.dto.response.PageApiResponse;
+import com.evo.common.dto.response.Response;
+import com.evo.common.dto.response.PagingResponse;
 import com.evo.common.dto.response.ProfileDTO;
 import com.evo.profile.application.dto.request.CreateOrUpdateAddressRequest;
 import com.evo.profile.application.dto.request.SearchProfileRequest;
 import com.evo.profile.application.dto.request.UpdateProfileInfoRequest;
-import com.evo.profile.application.service.ProfileCommandService;
-import com.evo.profile.application.service.ProfileQueryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
-@RestController
+@Tag(name = "Profile API")
 @RequestMapping("/api")
-@RequiredArgsConstructor
-public class ProfileController {
-    private final ProfileCommandService profileCommandService;
-    private final ProfileQueryService profileQueryService;
+@Validated
+public interface ProfileController {
 
+    @Operation(summary = "Initialize profile")
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/profiles")
-    ApiResponses<ProfileDTO> initProfile() {
-        ProfileDTO profileDTO = profileCommandService.getOrInitProfile();
-        return ApiResponses.<ProfileDTO>builder()
-                .data(profileDTO)
-                .success(true)
-                .code(201)
-                .message("Profile created successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<ProfileDTO> initProfile();
 
+    @Operation(summary = "Create shipping address")
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/profiles/shipping-address")
-    ApiResponses<ProfileDTO> createShippingAddress(@RequestBody CreateOrUpdateAddressRequest request) {
-        ProfileDTO profileDTO = profileCommandService.createShippingAddress(request);
-        return ApiResponses.<ProfileDTO>builder()
-                .data(profileDTO)
-                .success(true)
-                .code(201)
-                .message("ShippingAddress created successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<ProfileDTO> createShippingAddress(@RequestBody CreateOrUpdateAddressRequest request);
 
+    @Operation(summary = "Update shipping address")
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/profiles/shipping-address")
-    ApiResponses<ProfileDTO> updateShippingAddress(@RequestBody CreateOrUpdateAddressRequest request) {
-        ProfileDTO profileDTO = profileCommandService.updateShippingAddress(request);
-        return ApiResponses.<ProfileDTO>builder()
-                .data(profileDTO)
-                .success(true)
-                .code(200)
-                .message("ShippingAddress updated successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<ProfileDTO> updateShippingAddress(@RequestBody CreateOrUpdateAddressRequest request);
 
+    @Operation(summary = "Update profile")
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/profiles")
-    ApiResponses<ProfileDTO> updateProfile(@RequestBody UpdateProfileInfoRequest request) {
-        ProfileDTO profileDTO = profileCommandService.updateProfile(request);
-        return ApiResponses.<ProfileDTO>builder()
-                .data(profileDTO)
-                .success(true)
-                .code(200)
-                .message("Profile updated successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<ProfileDTO> updateProfile(@RequestBody UpdateProfileInfoRequest request);
 
+    @Operation(summary = "Change avatar")
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/profiles/avatar")
-    public ApiResponses<ProfileDTO> changeAvatar(@RequestPart MultipartFile file) {
-        ProfileDTO profileDTO = profileCommandService.changeAvatar(file);
-        return ApiResponses.<ProfileDTO>builder()
-                .data(profileDTO)
-                .success(true)
-                .code(200)
-                .message("Avatar successfully changed")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<ProfileDTO> changeAvatar(@RequestPart MultipartFile file);
 
+    @Operation(summary = "Search profiles")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all-profiles")
-    public PageApiResponse<List<ProfileDTO>> search(SearchProfileRequest searchProfileRequest) {
-        Long totalProfiles = profileQueryService.totalProfiles(searchProfileRequest);
-        List<ProfileDTO> profileDTOS = Collections.emptyList();
-        if (totalProfiles != 0) {
-            profileDTOS = profileQueryService.searchProfiles(searchProfileRequest);
-        }
-        PageApiResponse.PageableResponse pageableResponse = PageApiResponse.PageableResponse.builder()
-                .pageSize(searchProfileRequest.getPageSize())
-                .pageIndex(searchProfileRequest.getPageIndex())
-                .totalElements(totalProfiles)
-                .totalPages((int) (Math.ceil((double) totalProfiles / searchProfileRequest.getPageSize())))
-                .hasNext(searchProfileRequest.getPageIndex() + searchProfileRequest.getPageSize() < totalProfiles)
-                .hasPrevious(searchProfileRequest.getPageIndex() > 1)
-                .build();
-
-        return PageApiResponse.<List<ProfileDTO>>builder()
-                .data(profileDTOS)
-                .pageable(pageableResponse)
-                .success(true)
-                .code(200)
-                .message("Search profiles successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    PagingResponse<ProfileDTO> search(SearchProfileRequest searchProfileRequest);
 }

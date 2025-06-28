@@ -129,7 +129,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
     @Override
     public String printGHNOrder(PrintOrCancelGHNOrderRequest printOrCancelGHNOrderRequest) {
         String token = getGHYNPrintToken(printOrCancelGHNOrderRequest);
-        return ghnClient.print(token);
+        return ghnClient.print(token).getData();
     }
 
     @Override

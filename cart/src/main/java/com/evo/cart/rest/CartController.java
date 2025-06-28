@@ -1,79 +1,43 @@
 package com.evo.cart.rest;
 
+import com.evo.cart.application.dto.request.UpdateCartRequest;
+import com.evo.common.dto.response.Response;
+import com.evo.common.dto.response.CartDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import com.evo.cart.application.dto.request.UpdateCartRequest;
-import com.evo.cart.application.service.CartCommandService;
-import com.evo.cart.application.service.CartQueryService;
-import com.evo.common.dto.response.ApiResponses;
-import com.evo.common.dto.response.CartDTO;
-
-import lombok.RequiredArgsConstructor;
-
-@RestController
+@Tag(name = "Cart API")
 @RequestMapping("/api")
-@RequiredArgsConstructor
-public class CartController {
-    private final CartQueryService cartQueryService;
-    private final CartCommandService cartCommandService;
+@Validated
+public interface CartController {
 
+    @Operation(summary = "Get cart or init cart")
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/carts/get-or-init")
-    ApiResponses<CartDTO> getCartOrInit() {
-        CartDTO cartDTO = cartCommandService.getOrInitCart();
-        return ApiResponses.<CartDTO>builder()
-                .data(cartDTO)
-                .success(true)
-                .code(200)
-                .message("Cart retrieved successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<CartDTO> getCartOrInit();
 
+    @Operation(summary = "Get all carts")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/carts")
-    ApiResponses<List<CartDTO>> getAllCarts() {
-        List<CartDTO> cartDTOs = cartQueryService.getAllCarts();
-        return ApiResponses.<List<CartDTO>>builder()
-                .data(cartDTOs)
-                .success(true)
-                .code(200)
-                .message("Carts retrieved successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<List<CartDTO>> getAllCarts();
 
+    @Operation(summary = "Update cart")
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/carts")
-    ApiResponses<CartDTO> updateCart(@RequestBody UpdateCartRequest updateCartRequest) {
-        CartDTO updatedCart = cartCommandService.updateCart(updateCartRequest);
-        return ApiResponses.<CartDTO>builder()
-                .data(updatedCart)
-                .success(true)
-                .code(200)
-                .message("Cart updated successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<CartDTO> updateCart(@RequestBody UpdateCartRequest updateCartRequest);
 
+    @Operation(summary = "Empty cart")
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/carts/empty/{cartId}")
-    ApiResponses<Void> emptyCart(@PathVariable UUID cartId) {
-        cartCommandService.emptyCart(cartId);
-        return ApiResponses.<Void>builder()
-                .data(null)
-                .success(true)
-                .code(200)
-                .message("Cart emptied successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<Void> emptyCart(@PathVariable UUID cartId);
 }

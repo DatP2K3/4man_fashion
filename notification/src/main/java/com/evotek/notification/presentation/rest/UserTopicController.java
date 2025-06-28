@@ -1,42 +1,28 @@
 package com.evotek.notification.presentation.rest;
 
+import com.evo.common.dto.request.UpdateTopicsOfUserRequest;
+import com.evo.common.dto.response.Response;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import java.util.UUID;
 
-import org.springframework.web.bind.annotation.*;
-
-import com.evo.common.dto.request.UpdateTopicsOfUserRequest;
-import com.evo.common.dto.response.ApiResponses;
-import com.evotek.notification.application.service.push.impl.command.UserTopicCommandService;
-
-import lombok.RequiredArgsConstructor;
-
-@RestController
+@Tag(name = "User Topic API")
 @RequestMapping("/api")
-@RequiredArgsConstructor
-public class UserTopicController {
-    private final UserTopicCommandService userTopicCommandService;
+@Validated
+public interface UserTopicController {
 
+    @Operation(summary = "Initialize user topic")
     @PostMapping("/user-token/{userId}")
-    public ApiResponses<Void> initUserTopic(@PathVariable UUID userId) {
-        userTopicCommandService.initUserTopic(userId);
-        return ApiResponses.<Void>builder()
-                .success(true)
-                .code(201)
-                .message("Init user topic success")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<Void> initUserTopic(@PathVariable UUID userId);
 
+    @Operation(summary = "Update topic of user")
     @PutMapping("/user-token/update")
-    public ApiResponses<Void> updateTopicOfUser(@RequestBody UpdateTopicsOfUserRequest updateTopicsOfUserRequest) {
-        userTopicCommandService.updateTopicOfUser(updateTopicsOfUserRequest);
-        return ApiResponses.<Void>builder()
-                .success(true)
-                .code(201)
-                .message("Update topic of user success")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<Void> updateTopicOfUser(@RequestBody UpdateTopicsOfUserRequest updateTopicsOfUserRequest);
 }

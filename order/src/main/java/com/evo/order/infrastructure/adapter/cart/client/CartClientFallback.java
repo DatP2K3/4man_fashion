@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.CartDTO;
 import com.evo.common.enums.ServiceUnavailableError;
 import com.evo.common.exception.ForwardInnerAlertException;
@@ -29,19 +29,19 @@ public class CartClientFallback implements FallbackFactory<CartClient> {
         }
 
         @Override
-        public ApiResponses<CartDTO> getCart() {
+        public Response<CartDTO> getCart() {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return Response.fail((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.CART_SERVICE_UNAVAILABLE_ERROR);
+            return Response.fail(new ResponseException(ServiceUnavailableError.CART_SERVICE_UNAVAILABLE_ERROR));
         }
 
         @Override
-        public ApiResponses<Void> emptyCart(UUID cartId) {
+        public Response<Void> emptyCart(UUID cartId) {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return Response.fail((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.CART_SERVICE_UNAVAILABLE_ERROR);
+            return Response.fail(new ResponseException(ServiceUnavailableError.CART_SERVICE_UNAVAILABLE_ERROR));
         }
     }
 }

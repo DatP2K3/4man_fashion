@@ -40,8 +40,8 @@
         <module name="elasticsearch" />
         <module name="payment" />
         <module name="location" />
-        <module name="gateway" />
         <module name="dashboard" />
+        <module name="gateway" />
         <module name="order" />
       </profile>
     </annotationProcessing>

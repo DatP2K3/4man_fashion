@@ -1,6 +1,6 @@
 package com.evo.common.dto.error;
 
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Data;
@@ -16,6 +16,6 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @SuperBuilder
-public class ErrorResponse<T> extends ApiResponses<T> {
+public class ErrorResponse<T> extends Response<T> {
     private String error;
 }

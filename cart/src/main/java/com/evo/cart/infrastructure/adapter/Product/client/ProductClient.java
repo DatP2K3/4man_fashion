@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import com.evo.cart.infrastructure.adapter.Product.config.FeignProductClientConfiguration;
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.ProductDTO;
 
 @FeignClient(
@@ -17,5 +17,5 @@ import com.evo.common.dto.response.ProductDTO;
         fallbackFactory = ProductClientFallback.class)
 public interface ProductClient {
     @GetMapping("/api/products/{productId}")
-    ApiResponses<ProductDTO> getProduct(@PathVariable("productId") UUID productId);
+    Response<ProductDTO> getProduct(@PathVariable("productId") UUID productId);
 }

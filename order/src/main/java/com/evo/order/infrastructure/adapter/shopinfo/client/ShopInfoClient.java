@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.ShopAddressDTO;
 import com.evo.order.infrastructure.adapter.shopinfo.config.ShopInfoClientConfiguration;
 
@@ -17,5 +17,5 @@ import com.evo.order.infrastructure.adapter.shopinfo.config.ShopInfoClientConfig
         fallbackFactory = ShopInfoClientFallback.class)
 public interface ShopInfoClient {
     @GetMapping("/api/shop-address")
-    ApiResponses<List<ShopAddressDTO>> getShopAddress();
+    Response<List<ShopAddressDTO>> getShopAddress();
 }
