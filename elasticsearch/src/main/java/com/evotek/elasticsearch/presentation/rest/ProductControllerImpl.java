@@ -4,11 +4,10 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.*;
 
-import com.evo.common.dto.response.ApiResponses;
-import com.evo.common.dto.response.PageApiResponse;
+import com.evo.common.dto.response.Response;
+import com.evo.common.dto.response.PagingResponse;
 import com.evotek.elasticsearch.application.dto.request.SearchProductRequest;
 import com.evotek.elasticsearch.application.dto.response.ProductDocumentDTO;
-import com.evotek.elasticsearch.application.dto.response.SearchProductDTO;
 import com.evotek.elasticsearch.application.service.ProductQueryService;
 
 import lombok.RequiredArgsConstructor;
@@ -20,31 +19,13 @@ public class ProductControllerImpl implements ProductController {
     private final ProductQueryService productQueryService;
 
     @Override
-    public PageApiResponse<List<ProductDocumentDTO>> searchProduct(@RequestBody SearchProductRequest request) {
-        SearchProductDTO searchProductResponse = this.productQueryService.searchProduct(request);
-        PageApiResponse.PageableResponse pageableResponse = PageApiResponse.PageableResponse.builder()
-                .pageIndex(searchProductResponse.getPageIndex())
-                .totalPages(searchProductResponse.getTotalPages())
-                .totalElements(searchProductResponse.getTotalElements())
-                .pageSize(searchProductResponse.getPageSize())
-                .hasPrevious(searchProductResponse.isHasPrevious())
-                .hasNext(searchProductResponse.isHasNext())
-                .build();
-
-        return PageApiResponse.<List<ProductDocumentDTO>>builder()
-                .data(searchProductResponse.getProducts())
-                .pageable(pageableResponse)
-                .success(true)
-                .code(200)
-                .message("Search products successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
+    public PagingResponse<ProductDocumentDTO> searchProduct(@RequestBody SearchProductRequest request) {
+        return PagingResponse.of(this.productQueryService.searchProduct(request));
     }
 
     @Override
-    public ApiResponses<List<String>> autocompleteProductNames(
+    public Response<List<String>> autocompleteProductNames(
             @RequestParam String keyword, @RequestParam(defaultValue = "10") int limit) {
-        return ApiResponses.of(this.productQueryService.autocompleteProductNames(keyword, limit));
+        return Response.of(this.productQueryService.autocompleteProductNames(keyword, limit));
     }
 }

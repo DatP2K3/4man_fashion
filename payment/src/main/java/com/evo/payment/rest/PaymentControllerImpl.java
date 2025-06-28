@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 
 import com.evo.common.dto.request.GetPaymentUrlRequest;
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.payment.application.service.PaymentCommandService;
 import com.evo.payment.application.service.PaymentQueryService;
 
@@ -20,13 +20,14 @@ public class PaymentControllerImpl implements PaymentController {
     private final PaymentQueryService paymentQueryService;
 
     @Override
-    public ApiResponses<String> getPaymentUrl(
+    public Response<String> getPaymentUrl(
             @RequestBody GetPaymentUrlRequest getPaymentUrlRequest, HttpServletRequest httpServletRequest) {
-        return ApiResponses.of(this.paymentQueryService.getPaymentUrl(getPaymentUrlRequest, httpServletRequest));
+        return Response.of(this.paymentQueryService.getPaymentUrl(getPaymentUrlRequest, httpServletRequest));
     }
 
     @Override
-    public void payCallbackHandler(HttpServletRequest request, HttpServletResponse response) {
+    public Response<Void> payCallbackHandler(HttpServletRequest request, HttpServletResponse response) {
         this.paymentCommandService.handlePaymentCallback(request, response);
+        return Response.ok();
     }
 }

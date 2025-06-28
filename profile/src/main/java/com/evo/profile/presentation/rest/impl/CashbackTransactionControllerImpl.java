@@ -1,12 +1,12 @@
-package com.evo.profile.presentation.rest;
+package com.evo.profile.presentation.rest.impl;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import com.evo.profile.presentation.rest.CashbackTransactionController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.profile.application.dto.response.CashbackTransactionDTO;
 import com.evo.profile.application.service.CashbackQueryService;
 
@@ -19,7 +19,7 @@ public class CashbackTransactionControllerImpl implements CashbackTransactionCon
     private final CashbackQueryService cashbackQueryService;
 
     @Override
-    public ApiResponses<List<CashbackTransactionDTO>> getUserCashbackHistory() {
-        return ApiResponses.of(this.cashbackQueryService.getUserCashbackHistory());
+    public Response<List<CashbackTransactionDTO>> getUserCashbackHistory() {
+        return Response.of(this.cashbackQueryService.getUserCashbackHistory());
     }
 }

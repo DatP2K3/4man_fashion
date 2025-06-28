@@ -1,10 +1,11 @@
-package com.evo.profile.presentation.rest;
+package com.evo.profile.presentation.rest.impl;
 
 import java.util.List;
 
+import com.evo.profile.presentation.rest.MembershipTierController;
 import org.springframework.web.bind.annotation.*;
 
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.MembershipTierDTO;
 import com.evo.profile.application.dto.request.CreateOrUpdateMembershipTierRequest;
 import com.evo.profile.application.service.MembershipTierCommandService;
@@ -20,25 +21,25 @@ public class MembershipTierControllerImpl implements MembershipTierController {
     private final MembershipTierQueryService membershipTierQueryService;
 
     @Override
-    public ApiResponses<MembershipTierDTO> createMembershipTier(
+    public Response<MembershipTierDTO> createMembershipTier(
             @RequestBody CreateOrUpdateMembershipTierRequest createMembershipTierRequest) {
-        return ApiResponses.of(this.membershipTierCommandService.create(createMembershipTierRequest));
+        return Response.of(this.membershipTierCommandService.create(createMembershipTierRequest));
     }
 
     @Override
-    public ApiResponses<MembershipTierDTO> updateMembershipTier(
+    public Response<MembershipTierDTO> updateMembershipTier(
             @RequestBody CreateOrUpdateMembershipTierRequest updateMembershipTierRequest) {
-        return ApiResponses.of(this.membershipTierCommandService.update(updateMembershipTierRequest));
+        return Response.of(this.membershipTierCommandService.update(updateMembershipTierRequest));
     }
 
     @Override
-    public ApiResponses<List<MembershipTierDTO>> getAllMembershipTiers() {
-        return ApiResponses.of(this.membershipTierQueryService.findAll());
+    public Response<List<MembershipTierDTO>> getAllMembershipTiers() {
+        return Response.of(this.membershipTierQueryService.findAll());
     }
 
     @Override
-    public ApiResponses<Void> toggleMembershipTierVisibility(@PathVariable String id) {
+    public Response<Void> toggleMembershipTierVisibility(@PathVariable String id) {
         this.membershipTierCommandService.toggleVisibility(id);
-        return ApiResponses.ok();
+        return Response.ok();
     }
 }

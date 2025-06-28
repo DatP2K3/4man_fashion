@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.ProductDTO;
 import com.evo.common.enums.ServiceUnavailableError;
 import com.evo.common.exception.ForwardInnerAlertException;
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class ProductClientFallback
         implements FallbackFactory<
-                ProductClient> { // FallbackFactory: Dùng để xử lý khi gặp lỗi khi gọi api từ Iam Client
+                ProductClient> {
     @Override
     public ProductClient create(Throwable cause) {
         return new FallbackWithFactory(cause);
@@ -31,11 +31,11 @@ public class ProductClientFallback
         }
 
         @Override
-        public ApiResponses<ProductDTO> getProduct(UUID fileId) {
+        public Response<ProductDTO> getProduct(UUID fileId) {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return Response.fail((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR);
+            return Response.fail(new ResponseException(ServiceUnavailableError.PRODUCT_SERVICE_UNAVAILABLE_ERROR));
         }
     }
 }

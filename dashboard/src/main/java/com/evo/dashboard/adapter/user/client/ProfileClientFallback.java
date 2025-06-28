@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
-import com.evo.common.dto.response.PageApiResponse;
+import com.evo.common.dto.response.PagingResponse;
 import com.evo.common.dto.response.ProfileDTO;
 import com.evo.common.enums.ServiceUnavailableError;
 import com.evo.common.exception.ForwardInnerAlertException;
@@ -30,12 +30,12 @@ public class ProfileClientFallback implements FallbackFactory<ProfileClient> {
         }
 
         @Override
-        public PageApiResponse<List<ProfileDTO>> searchProfiles(
+        public PagingResponse<List<ProfileDTO>> searchProfiles(
                 String keyword, Instant createdFrom, Instant createdTo) {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return PagingResponse.failPaging((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.ORDER_SERVICE_UNAVAILABLE_ERROR);
+            return PagingResponse.failPaging(new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR));
         }
     }
 }

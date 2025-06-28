@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.order.application.dto.request.CreateGHNOrderRequest;
 import com.evo.order.application.dto.request.GetGHNFeeRequest;
 import com.evo.order.application.dto.request.GetGHNOrderDetailRequest;
@@ -26,20 +26,20 @@ import com.evo.order.infrastructure.adapter.ghn.config.FeignGHNClientConfigurati
         fallbackFactory = GHNClientFallback.class)
 public interface GHNClient {
     @PostMapping(value = "/shiip/public-api/v2/shipping-order/fee", consumes = MediaType.APPLICATION_JSON_VALUE)
-    ApiResponses<GHNFeeDTO> calculateShippingFee(@RequestBody GetGHNFeeRequest request);
+    Response<GHNFeeDTO> calculateShippingFee(@RequestBody GetGHNFeeRequest request);
 
     @PostMapping(value = "/shiip/public-api/v2/shipping-order/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    ApiResponses<GHNOrderDTO> createShippingOrder(@RequestBody CreateGHNOrderRequest request);
+    Response<GHNOrderDTO> createShippingOrder(@RequestBody CreateGHNOrderRequest request);
 
     @PostMapping(value = "/shiip/public-api/v2/a5/gen-token", consumes = MediaType.APPLICATION_JSON_VALUE)
-    ApiResponses<GHNPrintTokenDTO> getPrintToken(@RequestBody PrintOrCancelGHNOrderRequest request);
+    Response<GHNPrintTokenDTO> getPrintToken(@RequestBody PrintOrCancelGHNOrderRequest request);
 
     @GetMapping(value = "/a5/public-api/printA5", consumes = MediaType.APPLICATION_JSON_VALUE)
-    String print(@RequestParam String token);
+    Response<String> print(@RequestParam String token);
 
     @PostMapping(value = "/shiip/public-api/v2/switch-status/cancel", consumes = MediaType.APPLICATION_JSON_VALUE)
-    ApiResponses<Void> cancelShippingOrder(@RequestBody PrintOrCancelGHNOrderRequest request);
+    Response<Void> cancelShippingOrder(@RequestBody PrintOrCancelGHNOrderRequest request);
 
     @PostMapping(value = "/shiip/public-api/v2/shipping-order/detail", consumes = MediaType.APPLICATION_JSON_VALUE)
-    ApiResponses<GHNOrderDetailDTO> getOrderDetail(@RequestBody GetGHNOrderDetailRequest request);
+    Response<GHNOrderDetailDTO> getOrderDetail(@RequestBody GetGHNOrderDetailRequest request);
 }

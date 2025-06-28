@@ -1,11 +1,12 @@
-package com.evo.product.presentation.rest;
+package com.evo.product.presentation.rest.impl;
 
 import java.util.List;
 import java.util.UUID;
 
+import com.evo.product.presentation.rest.ProductController;
 import org.springframework.web.bind.annotation.*;
 
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.ProductDTO;
 import com.evo.product.application.dto.request.CreateOrUpdateDiscountRequest;
 import com.evo.product.application.dto.request.CreateOrUpdateProductRequest;
@@ -22,37 +23,37 @@ public class ProductControllerImpl implements ProductController {
     private final ProductQueryService productQueryService;
 
     @Override
-    public ApiResponses<ProductDTO> createProduct(@RequestBody CreateOrUpdateProductRequest createOrUpdateProductRequest) {
-        return ApiResponses.of(this.productCommandService.createProduct(createOrUpdateProductRequest));
+    public Response<ProductDTO> createProduct(@RequestBody CreateOrUpdateProductRequest createOrUpdateProductRequest) {
+        return Response.of(this.productCommandService.createProduct(createOrUpdateProductRequest));
     }
 
     @Override
-    public ApiResponses<ProductDTO> updateProduct(@RequestBody CreateOrUpdateProductRequest createOrUpdateProductRequest) {
-        return ApiResponses.of(this.productCommandService.updateProduct(createOrUpdateProductRequest));
+    public Response<ProductDTO> updateProduct(@RequestBody CreateOrUpdateProductRequest createOrUpdateProductRequest) {
+        return Response.of(this.productCommandService.updateProduct(createOrUpdateProductRequest));
     }
 
     @Override
-    public ApiResponses<ProductDTO> getProduct(@PathVariable UUID id) {
-        return ApiResponses.of(this.productQueryService.getById(id));
+    public Response<ProductDTO> getProduct(@PathVariable UUID id) {
+        return Response.of(this.productQueryService.getById(id));
     }
 
     @Override
-    public ApiResponses<ProductDTO> createDiscount(@RequestBody CreateOrUpdateDiscountRequest createOrUpdateDiscountRequest) {
-        return ApiResponses.of(this.productCommandService.createDiscount(createOrUpdateDiscountRequest));
+    public Response<ProductDTO> createDiscount(@RequestBody CreateOrUpdateDiscountRequest createOrUpdateDiscountRequest) {
+        return Response.of(this.productCommandService.createDiscount(createOrUpdateDiscountRequest));
     }
 
     @Override
-    public ApiResponses<ProductDTO> updateDiscount(@RequestBody CreateOrUpdateDiscountRequest createOrUpdateDiscountRequest) {
-        return ApiResponses.of(this.productCommandService.updateDiscount(createOrUpdateDiscountRequest));
+    public Response<ProductDTO> updateDiscount(@RequestBody CreateOrUpdateDiscountRequest createOrUpdateDiscountRequest) {
+        return Response.of(this.productCommandService.updateDiscount(createOrUpdateDiscountRequest));
     }
 
     @Override
-    public ApiResponses<List<ProductDTO>> getAllProductsWithNoDiscount() {
-        return ApiResponses.of(this.productQueryService.getAllProductsWithNoDiscount());
+    public Response<List<ProductDTO>> getAllProductsWithNoDiscount() {
+        return Response.of(this.productQueryService.getAllProductsWithNoDiscount());
     }
 
     @Override
-    public ApiResponses<ProductDTO> toggleProductVisibility(@PathVariable UUID id) {
-        return ApiResponses.of(this.productCommandService.toggleProductVisibility(id));
+    public Response<ProductDTO> toggleProductVisibility(@PathVariable UUID id) {
+        return Response.of(this.productCommandService.toggleProductVisibility(id));
     }
 }

@@ -1,13 +1,14 @@
-package com.evo.profile.presentation.rest;
+package com.evo.profile.presentation.rest.impl;
 
 import java.util.Collections;
 import java.util.List;
 
+import com.evo.profile.presentation.rest.ProfileController;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.evo.common.dto.response.ApiResponses;
-import com.evo.common.dto.response.PageApiResponse;
+import com.evo.common.dto.response.Response;
+import com.evo.common.dto.response.PagingResponse;
 import com.evo.common.dto.response.ProfileDTO;
 import com.evo.profile.application.dto.request.CreateOrUpdateAddressRequest;
 import com.evo.profile.application.dto.request.SearchProfileRequest;
@@ -25,54 +26,32 @@ public class ProfileControllerImpl implements ProfileController {
     private final ProfileQueryService profileQueryService;
 
     @Override
-    public ApiResponses<ProfileDTO> initProfile() {
-        return ApiResponses.of(this.profileCommandService.getOrInitProfile());
+    public Response<ProfileDTO> initProfile() {
+        return Response.of(this.profileCommandService.getOrInitProfile());
     }
 
     @Override
-    public ApiResponses<ProfileDTO> createShippingAddress(@RequestBody CreateOrUpdateAddressRequest request) {
-        return ApiResponses.of(this.profileCommandService.createShippingAddress(request));
+    public Response<ProfileDTO> createShippingAddress(@RequestBody CreateOrUpdateAddressRequest request) {
+        return Response.of(this.profileCommandService.createShippingAddress(request));
     }
 
     @Override
-    public ApiResponses<ProfileDTO> updateShippingAddress(@RequestBody CreateOrUpdateAddressRequest request) {
-        return ApiResponses.of(this.profileCommandService.updateShippingAddress(request));
+    public Response<ProfileDTO> updateShippingAddress(@RequestBody CreateOrUpdateAddressRequest request) {
+        return Response.of(this.profileCommandService.updateShippingAddress(request));
     }
 
     @Override
-    public ApiResponses<ProfileDTO> updateProfile(@RequestBody UpdateProfileInfoRequest request) {
-        return ApiResponses.of(this.profileCommandService.updateProfile(request));
+    public Response<ProfileDTO> updateProfile(@RequestBody UpdateProfileInfoRequest request) {
+        return Response.of(this.profileCommandService.updateProfile(request));
     }
 
     @Override
-    public ApiResponses<ProfileDTO> changeAvatar(@RequestPart MultipartFile file) {
-        return ApiResponses.of(this.profileCommandService.changeAvatar(file));
+    public Response<ProfileDTO> changeAvatar(@RequestPart MultipartFile file) {
+        return Response.of(this.profileCommandService.changeAvatar(file));
     }
 
     @Override
-    public PageApiResponse<List<ProfileDTO>> search(SearchProfileRequest searchProfileRequest) {
-        Long totalProfiles = this.profileQueryService.totalProfiles(searchProfileRequest);
-        List<ProfileDTO> profileDTOS = Collections.emptyList();
-        if (totalProfiles != 0) {
-            profileDTOS = this.profileQueryService.searchProfiles(searchProfileRequest);
-        }
-        PageApiResponse.PageableResponse pageableResponse = PageApiResponse.PageableResponse.builder()
-                .pageSize(searchProfileRequest.getPageSize())
-                .pageIndex(searchProfileRequest.getPageIndex())
-                .totalElements(totalProfiles)
-                .totalPages((int) (Math.ceil((double) totalProfiles / searchProfileRequest.getPageSize())))
-                .hasNext(searchProfileRequest.getPageIndex() + searchProfileRequest.getPageSize() < totalProfiles)
-                .hasPrevious(searchProfileRequest.getPageIndex() > 1)
-                .build();
-
-        return PageApiResponse.<List<ProfileDTO>>builder()
-                .data(profileDTOS)
-                .pageable(pageableResponse)
-                .success(true)
-                .code(200)
-                .message("Search profiles successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
+    public PagingResponse<ProfileDTO> search(SearchProfileRequest searchProfileRequest) {
+        return PagingResponse.of(this.profileQueryService.searchProfiles(searchProfileRequest));
     }
 }

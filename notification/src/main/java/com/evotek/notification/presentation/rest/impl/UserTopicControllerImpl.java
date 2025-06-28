@@ -1,11 +1,12 @@
-package com.evotek.notification.presentation.rest;
+package com.evotek.notification.presentation.rest.impl;
 
 import java.util.UUID;
 
+import com.evotek.notification.presentation.rest.UserTopicController;
 import org.springframework.web.bind.annotation.*;
 
 import com.evo.common.dto.request.UpdateTopicsOfUserRequest;
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evotek.notification.application.service.push.impl.command.UserTopicCommandService;
 
 import lombok.RequiredArgsConstructor;
@@ -17,14 +18,14 @@ public class UserTopicControllerImpl implements UserTopicController {
     private final UserTopicCommandService userTopicCommandService;
 
     @Override
-    public ApiResponses<Void> initUserTopic(@PathVariable UUID userId) {
+    public Response<Void> initUserTopic(@PathVariable UUID userId) {
         this.userTopicCommandService.initUserTopic(userId);
-        return ApiResponses.ok();
+        return Response.ok();
     }
 
     @Override
-    public ApiResponses<Void> updateTopicOfUser(@RequestBody UpdateTopicsOfUserRequest updateTopicsOfUserRequest) {
+    public Response<Void> updateTopicOfUser(@RequestBody UpdateTopicsOfUserRequest updateTopicsOfUserRequest) {
         this.userTopicCommandService.updateTopicOfUser(updateTopicsOfUserRequest);
-        return ApiResponses.ok();
+        return Response.ok();
     }
 }

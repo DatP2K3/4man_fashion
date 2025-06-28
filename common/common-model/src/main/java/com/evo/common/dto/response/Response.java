@@ -17,7 +17,7 @@ import org.springframework.util.StringUtils;
 @SuperBuilder
 @Data
 @AllArgsConstructor
-public class ApiResponses<T> implements Serializable {
+public class Response<T> implements Serializable {
     protected T data;
     private boolean success = true;
     private int code = 200;
@@ -27,33 +27,33 @@ public class ApiResponses<T> implements Serializable {
     @JsonIgnore
     private RuntimeException exception;
 
-    public ApiResponses() {
+    public Response() {
         this.status = ErrorCodeClient.SUCCESS.name();
     }
 
-    public static <T> ApiResponses<T> of(T res) {
-        ApiResponses<T> response = new ApiResponses<>();
+    public static <T> Response<T> of(T res) {
+        Response<T> response = new Response<>();
         response.data = res;
         response.success();
         return response;
     }
 
-    public static <T> ApiResponses<T> ok() {
-        ApiResponses<T> response = new ApiResponses<>();
+    public static <T> Response<T> ok() {
+        Response<T> response = new Response<>();
         response.success();
         return response;
     }
 
-    public static <T> ApiResponses<T> fail(RuntimeException exception) {
-        ApiResponses<T> response = new ApiResponses<>();
+    public static <T> Response<T> fail(RuntimeException exception) {
+        Response<T> response = new Response<>();
         response.setSuccess(false);
         response.setStatus(ErrorCodeClient.FAIL.name());
         response.setException(exception);
         return response;
     }
 
-    public static <T> ApiResponses<T> fail(String message, RuntimeException exception) {
-        ApiResponses<T> response = new ApiResponses<>();
+    public static <T> Response<T> fail(String message, RuntimeException exception) {
+        Response<T> response = new Response<>();
         response.setSuccess(false);
         response.setStatus(ErrorCodeClient.FAIL.name());
         response.setException(exception);
@@ -61,26 +61,26 @@ public class ApiResponses<T> implements Serializable {
         return response;
     }
 
-    public static <T> ApiResponses<T> fail() {
-        ApiResponses<T> response = new ApiResponses<>();
+    public static <T> Response<T> fail() {
+        Response<T> response = new Response<>();
         response.setSuccess(false);
         response.setStatus(ErrorCodeClient.FAIL.name());
         return response;
     }
 
-    public ApiResponses<T> success() {
+    public Response<T> success() {
         this.success = true;
         this.code = 200;
         this.status = ErrorCodeClient.SUCCESS.name();
         return this;
     }
 
-    public ApiResponses<T> data(T res) {
+    public Response<T> data(T res) {
         this.data = res;
         return this;
     }
 
-    public ApiResponses<T> success(String message) {
+    public Response<T> success(String message) {
         this.success = true;
         this.message = message;
         this.code = 200;
@@ -88,7 +88,7 @@ public class ApiResponses<T> implements Serializable {
         return this;
     }
 
-    public ApiResponses<T> fail(String message, ResponseError responseError) {
+    public Response<T> fail(String message, ResponseError responseError) {
         this.success = false;
         this.code = responseError.getCode();
         this.status = ErrorCodeClient.FAIL.name();
@@ -101,7 +101,7 @@ public class ApiResponses<T> implements Serializable {
         return this;
     }
 
-    public ApiResponses<T> fail(Exception ex, ResponseError responseError) {
+    public Response<T> fail(Exception ex, ResponseError responseError) {
         this.success = false;
         this.code = responseError.getCode();
         this.status = ErrorCodeClient.FAIL.name();
@@ -138,10 +138,10 @@ public class ApiResponses<T> implements Serializable {
     public boolean equals(final Object o) {
         if (o == this) {
             return true;
-        } else if (!(o instanceof ApiResponses)) {
+        } else if (!(o instanceof Response)) {
             return false;
         } else {
-            ApiResponses<?> other = (ApiResponses)o;
+            Response<?> other = (Response)o;
             if (!other.canEqual(this)) {
                 return false;
             } else if (this.isSuccess() != other.isSuccess()) {
@@ -197,7 +197,7 @@ public class ApiResponses<T> implements Serializable {
     }
 
     protected boolean canEqual(final Object other) {
-        return other instanceof ApiResponses;
+        return other instanceof Response;
     }
 
     public int hashCode() {

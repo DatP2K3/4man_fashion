@@ -223,6 +223,14 @@ public class Product extends Auditor {
                 } else {
                     discount.setStatus(DiscountStatus.ACTIVE);
                 }
+
+                if (this.startDate.isAfter(now)) {
+                    this.status = DiscountStatus.SCHEDULED;
+                } else if (this.endDate.isBefore(now)) {
+                    this.status = DiscountStatus.EXPIRED;
+                } else {
+                    this.status = DiscountStatus.ACTIVE;
+                }
             }
         }
     }

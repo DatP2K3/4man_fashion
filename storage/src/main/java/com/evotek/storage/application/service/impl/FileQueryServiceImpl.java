@@ -3,10 +3,11 @@ package com.evotek.storage.application.service.impl;
 import java.util.List;
 import java.util.UUID;
 
+import com.evo.common.dto.response.PageDTO;
 import org.springframework.stereotype.Service;
 
 import com.evo.common.dto.response.FileResponse;
-import com.evo.common.dto.response.PageApiResponse;
+import com.evo.common.dto.response.PagingResponse;
 import com.evotek.storage.application.dto.mapper.FileResponseMapper;
 import com.evotek.storage.application.dto.request.SearchFileRequest;
 import com.evotek.storage.application.mapper.QueryMapper;
@@ -25,29 +26,16 @@ public class FileQueryServiceImpl implements FileQueryService {
     private final QueryMapper queryMapper;
 
     @Override
-    public PageApiResponse<List<FileResponse>> search(SearchFileRequest request) {
+    public PageDTO<FileResponse> search(SearchFileRequest request) {
         SearchFileQuery searchFileQuery = queryMapper.from(request);
-        List<File> files = fileDomainRepository.search(searchFileQuery);
         Long totalFiles = fileDomainRepository.count(searchFileQuery);
+        if (totalFiles == 0) {
+            return PageDTO.empty();
+        }
+        List<File> files = fileDomainRepository.search(searchFileQuery);
         List<FileResponse> fileResponses =
                 files.stream().map(fileResponseMapper::domainModelToDTO).toList();
-        PageApiResponse.PageableResponse pageableResponse = PageApiResponse.PageableResponse.builder()
-                .pageSize(request.getPageSize())
-                .pageIndex(request.getPageIndex())
-                .totalElements(totalFiles)
-                .totalPages((int) (Math.ceil((double) totalFiles / request.getPageSize())))
-                .hasNext(((request.getPageIndex() + 1L) * request.getPageSize() < totalFiles))
-                .hasPrevious(request.getPageIndex() > 0)
-                .build();
-        return PageApiResponse.<List<FileResponse>>builder()
-                .data(fileResponses)
-                .success(true)
-                .code(200)
-                .pageable(pageableResponse)
-                .message("Search File successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
+        return PageDTO.of(fileResponses, searchFileQuery.getPageIndex(), searchFileQuery.getPageSize(), totalFiles);
     }
 
     @Override

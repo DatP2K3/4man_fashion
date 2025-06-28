@@ -3,7 +3,7 @@ package com.evo.order.infrastructure.adapter.ghn.client;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.common.enums.ServiceUnavailableError;
 import com.evo.common.exception.ForwardInnerAlertException;
 import com.evo.common.exception.ResponseException;
@@ -34,51 +34,51 @@ public class GHNClientFallback implements FallbackFactory<GHNClient> {
         }
 
         @Override
-        public ApiResponses<GHNFeeDTO> calculateShippingFee(GetGHNFeeRequest request) {
+        public Response<GHNFeeDTO> calculateShippingFee(GetGHNFeeRequest request) {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return Response.fail((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.GHN_SERVICE_UNAVAILABLE_ERROR);
+            return Response.fail(new ResponseException(ServiceUnavailableError.GHN_SERVICE_UNAVAILABLE_ERROR));
         }
 
         @Override
-        public ApiResponses<GHNOrderDTO> createShippingOrder(CreateGHNOrderRequest request) {
+        public Response<GHNOrderDTO> createShippingOrder(CreateGHNOrderRequest request) {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return Response.fail((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.GHN_SERVICE_UNAVAILABLE_ERROR);
+            return Response.fail(new ResponseException(ServiceUnavailableError.GHN_SERVICE_UNAVAILABLE_ERROR));
         }
 
         @Override
-        public ApiResponses<GHNPrintTokenDTO> getPrintToken(PrintOrCancelGHNOrderRequest request) {
+        public Response<GHNPrintTokenDTO> getPrintToken(PrintOrCancelGHNOrderRequest request) {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return Response.fail((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.GHN_SERVICE_UNAVAILABLE_ERROR);
+            return Response.fail(new ResponseException(ServiceUnavailableError.GHN_SERVICE_UNAVAILABLE_ERROR));
         }
 
         @Override
-        public String print(String token) {
+        public Response<String> print(String token) {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return Response.fail((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.GHN_SERVICE_UNAVAILABLE_ERROR);
+            return Response.fail(new ResponseException(ServiceUnavailableError.GHN_SERVICE_UNAVAILABLE_ERROR));
         }
 
         @Override
-        public ApiResponses<Void> cancelShippingOrder(PrintOrCancelGHNOrderRequest request) {
+        public Response<Void> cancelShippingOrder(PrintOrCancelGHNOrderRequest request) {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return Response.fail((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.GHN_SERVICE_UNAVAILABLE_ERROR);
+            return Response.fail(new ResponseException(ServiceUnavailableError.GHN_SERVICE_UNAVAILABLE_ERROR));
         }
 
         @Override
-        public ApiResponses<GHNOrderDetailDTO> getOrderDetail(GetGHNOrderDetailRequest request) {
+        public Response<GHNOrderDetailDTO> getOrderDetail(GetGHNOrderDetailRequest request) {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return Response.fail((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.GHN_SERVICE_UNAVAILABLE_ERROR);
+            return Response.fail(new ResponseException(ServiceUnavailableError.GHN_SERVICE_UNAVAILABLE_ERROR));
         }
     }
 }

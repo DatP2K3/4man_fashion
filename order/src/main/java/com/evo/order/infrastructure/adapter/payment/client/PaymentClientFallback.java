@@ -4,7 +4,7 @@ import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
 import com.evo.common.dto.request.GetPaymentUrlRequest;
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.common.enums.ServiceUnavailableError;
 import com.evo.common.exception.ForwardInnerAlertException;
 import com.evo.common.exception.ResponseException;
@@ -27,11 +27,11 @@ public class PaymentClientFallback implements FallbackFactory<PaymentClient> {
         }
 
         @Override
-        public ApiResponses<String> getPaymentUrl(GetPaymentUrlRequest getPaymentUrlRequest) {
+        public Response<String> getPaymentUrl(GetPaymentUrlRequest getPaymentUrlRequest) {
             if (cause instanceof ForwardInnerAlertException) {
-                throw (RuntimeException) cause;
+                return Response.fail((RuntimeException) cause);
             }
-            throw new ResponseException(ServiceUnavailableError.PAYMENT_SERVICE_UNAVAILABLE_ERROR);
+            return Response.fail(new ResponseException(ServiceUnavailableError.PAYMENT_SERVICE_UNAVAILABLE_ERROR));
         }
     }
 }

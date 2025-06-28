@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.*;
 
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.ShopAddressDTO;
 import com.evo.shopinfo.application.dto.request.CreateOrUpdateShopAddressRequest;
 import com.evo.shopinfo.application.service.ShopAddressCommandService;
@@ -20,12 +20,12 @@ public class ShopAddressControllerImpl implements ShopAddressController {
     private final ShopAddressQueryService shopAddressQueryService;
 
     @Override
-    public ApiResponses<ShopAddressDTO> updateShopAddress(@RequestBody CreateOrUpdateShopAddressRequest request) {
-        return ApiResponses.of(this.shopAddressCommandService.update(request));
+    public Response<ShopAddressDTO> updateShopAddress(@RequestBody CreateOrUpdateShopAddressRequest request) {
+        return Response.of(this.shopAddressCommandService.update(request));
     }
 
     @Override
-    public ApiResponses<List<ShopAddressDTO>> getAllShopAddresses() {
-        return ApiResponses.of(this.shopAddressQueryService.getAllShopAddresses());
+    public Response<List<ShopAddressDTO>> getAllShopAddresses() {
+        return Response.of(this.shopAddressQueryService.getAllShopAddresses());
     }
 }

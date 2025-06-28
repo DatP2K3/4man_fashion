@@ -1,103 +1,46 @@
 package com.evo.product.presentation.rest;
 
+import com.evo.common.dto.response.Response;
+import com.evo.product.application.dto.request.CreateOrUpdateCategoryRequest;
+import com.evo.product.application.dto.response.CategoryDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import com.evo.common.dto.response.ApiResponses;
-import com.evo.product.application.dto.request.CreateOrUpdateCategoryRequest;
-import com.evo.product.application.dto.response.CategoryDTO;
-import com.evo.product.application.service.CategoryCommandService;
-import com.evo.product.application.service.CategoryQueryService;
-
-import lombok.RequiredArgsConstructor;
-
-@RestController
+@Tag(name = "Category API")
 @RequestMapping("/api")
-@RequiredArgsConstructor
-public class CategoryController {
-    private final CategoryCommandService categoryCommandService;
-    private final CategoryQueryService categoryQueryService;
+@Validated
+public interface CategoryController {
 
+    @Operation(summary = "Create category")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/category")
-    ApiResponses<CategoryDTO> createCategory(@RequestBody CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest) {
-        CategoryDTO categoryDTO = categoryCommandService.createCategory(createOrUpdateCategoryRequest);
-        return ApiResponses.<CategoryDTO>builder()
-                .data(categoryDTO)
-                .success(true)
-                .code(201)
-                .message("Category created successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<CategoryDTO> createCategory(@RequestBody CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest);
 
+    @Operation(summary = "Update category")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/category")
-    ApiResponses<CategoryDTO> updateCategory(@RequestBody CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest) {
-        CategoryDTO categoryDTO = categoryCommandService.updateCategory(createOrUpdateCategoryRequest);
-        return ApiResponses.<CategoryDTO>builder()
-                .data(categoryDTO)
-                .success(true)
-                .code(200)
-                .message("Category updated successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<CategoryDTO> updateCategory(@RequestBody CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest);
 
+    @Operation(summary = "Get all categories")
     @GetMapping("/category")
-    ApiResponses<List<CategoryDTO>> getCategory() {
-        List<CategoryDTO> categories = categoryQueryService.getCategories();
-        return ApiResponses.<List<CategoryDTO>>builder()
-                .data(categories)
-                .success(true)
-                .code(200)
-                .message("Category retrieved successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<List<CategoryDTO>> getCategory();
 
+    @Operation(summary = "Get category by ID")
     @GetMapping("/category/{id}")
-    ApiResponses<CategoryDTO> getCategoryById(@PathVariable UUID id) {
-        CategoryDTO categoryDTO = categoryQueryService.getCategoryById(id);
-        return ApiResponses.<CategoryDTO>builder()
-                .data(categoryDTO)
-                .success(true)
-                .code(200)
-                .message("Category retrieved successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<CategoryDTO> getCategoryById(@PathVariable UUID id);
 
+    @Operation(summary = "Get categories by product type")
     @GetMapping("/category/category-by-productType")
-    ApiResponses<List<CategoryDTO>> getCategoryByProductType(@RequestParam String productType) {
-        List<CategoryDTO> categories = categoryQueryService.getCategoriesByProductType(productType);
-        return ApiResponses.<List<CategoryDTO>>builder()
-                .data(categories)
-                .success(true)
-                .code(200)
-                .message("Category retrieved successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<List<CategoryDTO>> getCategoryByProductType(@RequestParam String productType);
 
-    @PutMapping("/category/{id}/visibility")
+    @Operation(summary = "Toggle category visibility")
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponses<Void> visibilityCategory(@PathVariable UUID id) {
-        categoryCommandService.visibilityCategory(id);
-        return ApiResponses.<Void>builder()
-                .success(true)
-                .code(204)
-                .message("Category deleted successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    @PutMapping("/category/{id}/visibility")
+    Response<Void> visibilityCategory(@PathVariable UUID id);
 }

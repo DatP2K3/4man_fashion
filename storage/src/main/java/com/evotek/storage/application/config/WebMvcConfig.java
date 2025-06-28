@@ -10,6 +10,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/api/uploads/**")
+<<<<<<< HEAD
                 .addResourceLocations("file:/Users/macbookairm3/Documents/Store Project/4Man/4ManFashion/uploads/");
+=======
+                .addResourceLocations("file:/Volumes/DatPhanCoder/Store Project/4Man/4ManFashion/uploads/");
+>>>>>>> keycloak_security
     }
 }

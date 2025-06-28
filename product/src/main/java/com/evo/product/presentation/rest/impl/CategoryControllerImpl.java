@@ -1,11 +1,12 @@
-package com.evo.product.presentation.rest;
+package com.evo.product.presentation.rest.impl;
 
 import java.util.List;
 import java.util.UUID;
 
+import com.evo.product.presentation.rest.CategoryController;
 import org.springframework.web.bind.annotation.*;
 
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.Response;
 import com.evo.product.application.dto.request.CreateOrUpdateCategoryRequest;
 import com.evo.product.application.dto.response.CategoryDTO;
 import com.evo.product.application.service.CategoryCommandService;
@@ -21,33 +22,33 @@ public class CategoryControllerImpl implements CategoryController {
     private final CategoryQueryService categoryQueryService;
 
     @Override
-    public ApiResponses<CategoryDTO> createCategory(@RequestBody CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest) {
-        return ApiResponses.of(this.categoryCommandService.createCategory(createOrUpdateCategoryRequest));
+    public Response<CategoryDTO> createCategory(@RequestBody CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest) {
+        return Response.of(this.categoryCommandService.createCategory(createOrUpdateCategoryRequest));
     }
 
     @Override
-    public ApiResponses<CategoryDTO> updateCategory(@RequestBody CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest) {
-        return ApiResponses.of(this.categoryCommandService.updateCategory(createOrUpdateCategoryRequest));
+    public Response<CategoryDTO> updateCategory(@RequestBody CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest) {
+        return Response.of(this.categoryCommandService.updateCategory(createOrUpdateCategoryRequest));
     }
 
     @Override
-    public ApiResponses<List<CategoryDTO>> getCategory() {
-        return ApiResponses.of(this.categoryQueryService.getCategories());
+    public Response<List<CategoryDTO>> getCategory() {
+        return Response.of(this.categoryQueryService.getCategories());
     }
 
     @Override
-    public ApiResponses<CategoryDTO> getCategoryById(@PathVariable UUID id) {
-        return ApiResponses.of(this.categoryQueryService.getCategoryById(id));
+    public Response<CategoryDTO> getCategoryById(@PathVariable UUID id) {
+        return Response.of(this.categoryQueryService.getCategoryById(id));
     }
 
     @Override
-    public ApiResponses<List<CategoryDTO>> getCategoryByProductType(@RequestParam String productType) {
-        return ApiResponses.of(this.categoryQueryService.getCategoriesByProductType(productType));
+    public Response<List<CategoryDTO>> getCategoryByProductType(@RequestParam String productType) {
+        return Response.of(this.categoryQueryService.getCategoriesByProductType(productType));
     }
 
     @Override
-    public ApiResponses<Void> visibilityCategory(@PathVariable UUID id) {
+    public Response<Void> visibilityCategory(@PathVariable UUID id) {
         this.categoryCommandService.visibilityCategory(id);
-        return ApiResponses.ok();
+        return Response.ok();
     }
 }

@@ -1,104 +1,68 @@
 package com.evotek.storage.presentation.rest;
 
-import java.util.List;
-import java.util.UUID;
-
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.evo.common.dto.response.ApiResponses;
+import com.evo.common.dto.response.PagingResponse;
+import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.FileResponse;
 import com.evotek.storage.application.dto.request.SearchFileRequest;
 import com.evotek.storage.application.dto.request.UpdateFileRequest;
-import com.evotek.storage.application.service.FileCommandService;
-import com.evotek.storage.application.service.FileQueryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.UUID;
 
-@RestController
+@Tag(name = "File API")
 @RequestMapping("/api")
-@RequiredArgsConstructor
-public class FileController {
-    private final FileCommandService fileCommandService;
-    private final FileQueryService fileQueryService;
+@Validated
+public interface FileController {
 
+<<<<<<< HEAD
+=======
+    @Operation(summary = "Upload multiple files")
+>>>>>>> keycloak_security
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/file/upload")
-    public ApiResponses<List<FileResponse>> storeFile(
-            @RequestPart List<MultipartFile> files, @RequestParam boolean isPublic, @RequestParam String description) {
-        List<FileResponse> fileResponses = fileCommandService.storeFile(files, isPublic, description);
-        return ApiResponses.<List<FileResponse>>builder()
-                .data(fileResponses)
-                .success(true)
-                .code(201)
-                .message("Files stored successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<List<FileResponse>> storeFile(
+            @RequestPart List<MultipartFile> files, @RequestParam boolean isPublic, @RequestParam String description);
 
+<<<<<<< HEAD
+=======
+    @Operation(summary = "Upload single file")
+>>>>>>> keycloak_security
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/file/upload-only-one")
-    public ApiResponses<FileResponse> storeOneFile(
-            @RequestPart MultipartFile file, @RequestParam boolean isPublic, @RequestParam String description) {
-        FileResponse fileResponse = fileCommandService.storeOneFile(file, isPublic, description);
-        return ApiResponses.<FileResponse>builder()
-                .data(fileResponse)
-                .success(true)
-                .code(201)
-                .message("Files stored successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<FileResponse> storeOneFile(
+            @RequestPart MultipartFile file, @RequestParam boolean isPublic, @RequestParam String description);
 
+    @Operation(summary = "Get file by ID")
     @PreAuthorize("hasPermission(null, 'file.read')")
     @GetMapping("/file/{filedId}")
-    public ApiResponses<FileResponse> getFile(@PathVariable UUID filedId) {
-        FileResponse fileResponse = fileQueryService.getPrivateFile(filedId);
-        return ApiResponses.<FileResponse>builder()
-                .data(fileResponse)
-                .success(true)
-                .code(200)
-                .message("File retrieved successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<FileResponse> getFile(@PathVariable UUID filedId);
 
+    @Operation(summary = "Search files")
     @PreAuthorize("hasPermission(null, 'file.admin')")
     @GetMapping("/file")
-    public ApiResponses<List<FileResponse>> searchFiles(@RequestBody SearchFileRequest searchFileRequest) {
-        return fileQueryService.search(searchFileRequest);
-    }
+    PagingResponse<FileResponse> searchFiles(@RequestBody SearchFileRequest searchFileRequest);
 
+<<<<<<< HEAD
+=======
+    @Operation(summary = "Update file")
+>>>>>>> keycloak_security
     @PreAuthorize("hasRole('USER')")
     @PutMapping("file/update")
-    public ApiResponses<FileResponse> updateFile(@RequestBody UpdateFileRequest updateFileRequest) {
-        FileResponse fileResponse = fileCommandService.updateFile(updateFileRequest);
-        return ApiResponses.<FileResponse>builder()
-                .data(fileResponse)
-                .success(true)
-                .code(200)
-                .message("File updated successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<FileResponse> updateFile(@RequestBody UpdateFileRequest updateFileRequest);
 
+<<<<<<< HEAD
+=======
+    @Operation(summary = "Delete file")
+>>>>>>> keycloak_security
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("file/delete/{fileId}")
-    public ApiResponses<Void> deleteFile(@PathVariable UUID fileId) {
-        fileCommandService.deleteFile(fileId);
-        return ApiResponses.<Void>builder()
-                .success(true)
-                .code(204)
-                .message("File deleted successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<Void> deleteFile(@PathVariable UUID fileId);
 }
 
 // TODO: Chuyển đổi get private file không trả về url nữa mà gender ảnh luôn//tham khảo Quân

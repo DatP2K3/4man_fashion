@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.evo.common.dto.response.OrderDTO;
-import com.evo.common.dto.response.PageApiResponse;
+import com.evo.common.dto.response.PagingResponse;
 import com.evo.common.enums.OrderStatus;
 import com.evo.dashboard.adapter.order.config.FeignOrderClientConfiguration;
 
@@ -21,7 +21,7 @@ import com.evo.dashboard.adapter.order.config.FeignOrderClientConfiguration;
         fallbackFactory = OrderClientFallback.class)
 public interface OrderClient {
     @GetMapping("api/orders/search")
-    PageApiResponse<List<OrderDTO>> searchOrders(
+    PagingResponse<List<OrderDTO>> searchOrders(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) UUID userId,
             @RequestParam(required = false) OrderStatus orderStatus,
