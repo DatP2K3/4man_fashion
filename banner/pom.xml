@@ -9,7 +9,11 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.evo</groupId>
+<<<<<<<< HEAD:iam/pom.xml
+	<artifactId>iam</artifactId>
+========
 	<artifactId>banner</artifactId>
+>>>>>>>> main:banner/pom.xml
 	<version>0.0.1-SNAPSHOT</version>
 	<name>banner</name>
 	<description>Demo project for Spring Boot</description>
