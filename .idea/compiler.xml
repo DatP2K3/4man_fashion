@@ -32,7 +32,6 @@
         </processorPath>
         <module name="product" />
         <module name="profile" />
-        <module name="banner" />
         <module name="storage" />
         <module name="cart" />
         <module name="shopinfo" />
@@ -46,6 +45,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="banner" target="21" />
       <module name="baseddd" target="21" />
       <module name="common-persistence" target="21" />
       <module name="iam" target="21" />

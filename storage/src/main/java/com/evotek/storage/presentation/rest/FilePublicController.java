@@ -1,34 +1,22 @@
 package com.evotek.storage.presentation.rest;
 
-import java.util.UUID;
-
+import com.evo.common.dto.response.Response;
+import com.evo.common.dto.response.FileResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import com.evo.common.dto.response.ApiResponses;
-import com.evo.common.dto.response.FileResponse;
-import com.evotek.storage.application.service.FileQueryService;
+import java.util.UUID;
 
-import lombok.RequiredArgsConstructor;
-
-@RestController
+@Tag(name = "File Public API")
 @RequestMapping("/api/public/file")
-@RequiredArgsConstructor
-public class FilePublicController {
-    private final FileQueryService fileQueryService;
+@Validated
+public interface FilePublicController {
 
+    @Operation(summary = "Get public file by ID")
     @GetMapping("/{filedId}")
-    public ApiResponses<FileResponse> getFile(@PathVariable UUID filedId) {
-        FileResponse fileResponse = fileQueryService.getPublicFile(filedId);
-        return ApiResponses.<FileResponse>builder()
-                .data(fileResponse)
-                .success(true)
-                .code(200)
-                .message("File retrieved successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
-    }
+    Response<FileResponse> getFile(@PathVariable UUID filedId);
 }

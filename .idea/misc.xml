@@ -32,6 +32,7 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/banner/pom.xml" />
         <option value="$PROJECT_DIR$/common/common-persistence/pom.xml" />
         <option value="$PROJECT_DIR$/iam/pom.xml" />
         <option value="$PROJECT_DIR$/../profile/pom.xml" />
