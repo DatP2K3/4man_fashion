@@ -1,10 +1,10 @@
-package com.evotek.iam.infrastructure.persistence.mapper;
+package com.evo.product.infrastructure.persistence.mapper;
 
 import org.mapstruct.Mapper;
 
 import com.evo.common.mapper.EntityMapper;
-import com.evotek.iam.domain.User;
-import com.evotek.iam.infrastructure.persistence.entity.UserEntity;
+import com.evo.product.domain.Product;
+import com.evo.product.infrastructure.persistence.entity.ProductEntity;
 
 @Mapper(componentModel = "Spring")
-public interface UserEntityMapper extends EntityMapper<User, UserEntity> {}
+public interface ProductEntityMapper extends EntityMapper<Product, ProductEntity> {}

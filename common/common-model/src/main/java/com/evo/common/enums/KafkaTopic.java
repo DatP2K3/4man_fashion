@@ -8,6 +8,6 @@ import lombok.RequiredArgsConstructor;
 public enum KafkaTopic {
     SEND_NOTIFICATION_GROUP("send-notification-group"),
     PUSH_NOTIFICATION_GROUP("push-notification-group"),
-    SYNC_USER_GROUP("sync-user-group");
+    SYNC_PRODUCT_GROUP("sync-product-group");
     private final String topicName;
 }

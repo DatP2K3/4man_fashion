@@ -5,10 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import javax.imageio.ImageIO;
 
 import jakarta.annotation.PostConstruct;
@@ -17,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.evo.common.dto.event.FileEvent;
 import com.evo.common.dto.response.FileResponse;
+import com.evo.common.enums.FileUsageStatus;
 import com.evotek.storage.application.config.FileStorageProperties;
 import com.evotek.storage.application.dto.mapper.FileResponseMapper;
 import com.evotek.storage.application.dto.request.UpdateFileRequest;
@@ -122,6 +121,16 @@ public class FileCommandServiceImpl implements FileCommandService {
     @Override
     public void deleteFile(UUID fileId) {
         File file = fileDomainRepository.getById(fileId);
+
+        Path storageLocation = file.getIsPublic() ? publicStorageLocation : privateStorageLocation;
+        Path targetLocation = storageLocation.resolve(file.getMd5Name());
+
+        try {
+            Files.deleteIfExists(targetLocation);
+        } catch (IOException e) {
+            throw new AppException(AppErrorCode.CANT_DELETE_FILE);
+        }
+
         file.setDeleted(true);
         WriteHistoryCmd writeHistoryCmd = WriteHistoryCmd.builder()
                 .fileId(file.getId())
@@ -130,6 +139,65 @@ public class FileCommandServiceImpl implements FileCommandService {
         FileHistory fileHistory = new FileHistory(writeHistoryCmd);
         file.setHistory(fileHistory);
         fileDomainRepository.save(file);
+    }
+
+    @Override
+    public FileResponse storeOneFile(MultipartFile file, boolean isPublic, String description) {
+        try {
+            validateFile(file);
+            int fileWidth = 0;
+            int fileHeight = 0;
+            if (isImage(file)) {
+                BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
+                fileWidth = bufferedImage.getWidth();
+                fileHeight = bufferedImage.getHeight();
+            }
+            StoreFileCmd storeFilecmd = StoreFileCmd.builder()
+                    .originName(file.getOriginalFilename())
+                    .fileType(file.getContentType())
+                    .fileSize(file.getSize())
+                    .fileWidth(fileWidth)
+                    .fileHeight(fileHeight)
+                    .description(description)
+                    .isPublic(isPublic)
+                    .build();
+
+            File fileDomain = new File(storeFilecmd);
+            Path storageLocation = isPublic ? publicStorageLocation : privateStorageLocation;
+            Path targetLocation = storageLocation.resolve(fileDomain.getMd5Name());
+            file.transferTo(targetLocation.toFile());
+
+            WriteHistoryCmd writeHistoryCmd = WriteHistoryCmd.builder()
+                    .fileId(fileDomain.getId())
+                    .action("Store file")
+                    .build();
+            FileHistory fileHistory = new FileHistory(writeHistoryCmd);
+            fileDomain.setHistory(fileHistory);
+            fileDomain = fileDomainRepository.save(fileDomain);
+            return fileResponseMapper.domainModelToDTO(fileDomain);
+        } catch (IOException e) {
+            throw new AppException(AppErrorCode.CANT_STORE_FILE);
+        }
+    }
+
+    @Override
+    public void updateFileStatus(FileEvent event) {
+        Map<UUID, FileUsageStatus> fileUsageStatusMap = event.getFileUsageStatusMap();
+        for (UUID fileId : fileUsageStatusMap.keySet()) {
+            File file = fileDomainRepository.getById(fileId);
+            FileUsageStatus usageStatus = fileUsageStatusMap.get(fileId);
+            if (usageStatus == null) {
+                throw new AppException(AppErrorCode.FILE_NOT_FOUND);
+            }
+            file.setUsageStatus(usageStatus);
+            WriteHistoryCmd writeHistoryCmd = WriteHistoryCmd.builder()
+                    .fileId(file.getId())
+                    .action("Update file status to " + usageStatus)
+                    .build();
+            FileHistory fileHistory = new FileHistory(writeHistoryCmd);
+            file.setHistory(fileHistory);
+            fileDomainRepository.save(file);
+        }
     }
 
     public void validateFile(MultipartFile file) {

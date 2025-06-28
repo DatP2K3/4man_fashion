@@ -40,6 +40,9 @@ public abstract class AbstractDomainRepository<D, E, ID> implements DomainReposi
     }
 
     protected D enrich(D d) {
+        if (d == null) {
+            return null;
+        }
         List<D> ds = List.of(d);
         return this.enrichList(ds).getFirst();
     }

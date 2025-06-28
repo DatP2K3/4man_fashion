@@ -1,0 +1,30 @@
+body {
+  background: url("../img/keycloak-bg.png") no-repeat center center fixed;
+  background-size: cover;
+}
+
+.kc-header-wrapper {
+  margin-bottom: 0;
+}
+
+.kc-logo-text {
+  width: 300px; /* Đặt chiều rộng phần tử */
+  height: 83px; /* Đặt chiều cao phù hợp */
+  background-image: url("../img/keycloak-logo-text.png");
+  background-size: contain; /* Đảm bảo ảnh nền hiển thị đầy đủ */
+  background-repeat: no-repeat; /* Tránh lặp lại ảnh */
+  background-position: center;
+}
+
+h1 {
+  font-weight: 900px !important;
+}
+
+.card-pf {
+  border-radius: 10px !important;
+}
+
+.btn-lg {
+  border-radius: 10px !important;
+  padding: 5px 0 !important;
+}

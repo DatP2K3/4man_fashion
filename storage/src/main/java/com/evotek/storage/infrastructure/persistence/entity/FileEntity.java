@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.evo.common.entity.AuditEntity;
+import com.evo.common.enums.FileUsageStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,6 +49,10 @@ public class FileEntity extends AuditEntity {
 
     @Column(name = "url")
     private String url;
+
+    @Column(name = "usage_status")
+    @Enumerated(EnumType.STRING)
+    private FileUsageStatus usageStatus;
 
     @Column(name = "is_public", nullable = false)
     private Boolean isPublic;

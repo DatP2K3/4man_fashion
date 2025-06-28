@@ -1,14 +1,20 @@
 package com.evo.product.infrastructure.persistence.entity;
 
+import java.time.Instant;
+import java.util.UUID;
+
 import jakarta.persistence.*;
+
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.evo.common.entity.AuditEntity;
+import com.evo.common.enums.DiscountStatus;
+import com.evo.common.enums.DiscountType;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.Instant;
-import java.util.UUID;
 
 @Entity
 @Data
@@ -17,10 +23,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "discounts")
-public class DiscountEntity {
+public class DiscountEntity extends AuditEntity {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "product_id")
     private UUID productId;
@@ -32,17 +42,16 @@ public class DiscountEntity {
     private Instant endDate;
 
     @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private DiscountStatus status;
 
-    @Column(name = "priority")
-    private int priority;
+    @Column(name = "discount_type")
+    @Enumerated(EnumType.STRING)
+    private DiscountType discountType;
 
     @Column(name = "percentage")
-    private int percentage;
+    private Integer discountPercentage;
 
     @Column(name = "discount_price")
-    private double discountPrice;
-
-    @Column(name = "discount_quantity")
-    private int discountQuantity;
+    private Long discountPrice;
 }

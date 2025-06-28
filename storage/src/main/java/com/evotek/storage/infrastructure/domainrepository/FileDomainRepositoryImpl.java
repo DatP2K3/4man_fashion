@@ -1,5 +1,6 @@
 package com.evotek.storage.infrastructure.domainrepository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,6 +49,18 @@ public class FileDomainRepositoryImpl extends AbstractDomainRepository<File, Fil
     @Override
     public Long count(SearchFileQuery searchFileQuery) {
         return fileEntityRepository.count(searchFileQuery);
+    }
+
+    @Override
+    public List<File> getAll() {
+        List<FileEntity> fileEntities = fileEntityRepository.findAll();
+        return fileEntityMapper.toDomainModelList(fileEntities);
+    }
+
+    @Override
+    public List<File> findTemporaryFilesCreatedBefore(Instant cutoffTime) {
+        List<FileEntity> fileEntities = fileEntityRepository.findTemporaryFilesCreatedBefore(cutoffTime);
+        return fileEntityMapper.toDomainModelList(fileEntities);
     }
 
     @Override

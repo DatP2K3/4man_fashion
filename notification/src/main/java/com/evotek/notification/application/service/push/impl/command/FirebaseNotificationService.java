@@ -3,8 +3,6 @@ package com.evotek.notification.application.service.push.impl.command;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import com.evo.common.dto.event.PushNotificationEvent;
@@ -12,7 +10,6 @@ import com.evotek.notification.infrastructure.support.exception.AppErrorCode;
 import com.evotek.notification.infrastructure.support.exception.AppException;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 
 import lombok.RequiredArgsConstructor;
@@ -63,10 +60,6 @@ public class FirebaseNotificationService {
                 .build();
     }
 
-    @Retryable(
-            retryFor = {FirebaseMessagingException.class},
-            maxAttempts = 3,
-            backoff = @Backoff(delay = 1000))
     private String sendAndGetResponse(Message message) throws ExecutionException, InterruptedException {
         return FirebaseMessaging.getInstance(FirebaseApp.getInstance("my-app"))
                 .sendAsync(message)
