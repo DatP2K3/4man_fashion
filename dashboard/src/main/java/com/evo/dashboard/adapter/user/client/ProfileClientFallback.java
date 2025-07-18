@@ -30,12 +30,12 @@ public class ProfileClientFallback implements FallbackFactory<ProfileClient> {
         }
 
         @Override
-        public PagingResponse<List<ProfileDTO>> searchProfiles(
-                String keyword, Instant createdFrom, Instant createdTo) {
+        public PagingResponse<List<ProfileDTO>> searchProfiles(String keyword, Instant createdFrom, Instant createdTo) {
             if (cause instanceof ForwardInnerAlertException) {
                 return PagingResponse.failPaging((RuntimeException) cause);
             }
-            return PagingResponse.failPaging(new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR));
+            return PagingResponse.failPaging(
+                    new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR));
         }
     }
 }

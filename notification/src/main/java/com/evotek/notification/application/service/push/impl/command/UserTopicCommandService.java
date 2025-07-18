@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.evo.common.dto.request.UpdateTopicsOfUserRequest;
 import com.evo.common.enums.FCMTopic;
+import com.evo.common.exception.ResponseException;
 import com.evotek.notification.domain.UserTopic;
 import com.evotek.notification.domain.command.CreateUserTopicCmd;
 import com.evotek.notification.domain.repository.DeviceRegistrationDomainRepository;
 import com.evotek.notification.domain.repository.UserTopicDomainRepository;
-import com.evotek.notification.infrastructure.support.exception.AppErrorCode;
-import com.evotek.notification.infrastructure.support.exception.AppException;
+import com.evotek.notification.infrastructure.support.exception.BadRequestError;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
@@ -80,7 +80,7 @@ public class UserTopicCommandService {
                             .unsubscribeFromTopic(deviceTokens, userTopic.getTopic());
                 }
             } catch (FirebaseMessagingException e) {
-                throw new AppException(AppErrorCode.FIREBASE_SUBSCRIBE_TOPIC_FAILED);
+                throw new ResponseException(BadRequestError.FIREBASE_SUBSCRIBE_TOPIC_FAILED);
             }
         });
     }

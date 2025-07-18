@@ -1,0 +1,82 @@
+spring:
+  application:
+    name: payment-service
+
+  datasource:
+    url: ${DBMS_CONNECTION:jdbc:postgresql://localhost:5433/payment_db}
+    username: ${DBMS_USERNAME:postgres}
+    password: ${DBMS_PASSWORD:14062003}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+
+  main:
+    allow-bean-definition-overriding: true
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+  doc:
+    swagger-ui:
+      path: /swagger-doc/payment/swagger-ui.html
+    api-docs:
+      path: /swagger-doc/v3/api-docs/payment
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${JWK_URI:http://localhost:8180/realms/IamService}
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+
+rabbitmq:
+  exchange:
+    product: order.exchange
+  routing:
+    key:
+      order:
+        update: order.update
+
+server:
+  port: ${SERVER_PORT:8008}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true
+
+app:
+  product-service:
+    url: http://localhost:8765
+
+payment:
+  vnPay:
+    url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+    tmnCode: ${VNPAY_TMNCODE:S8N2XOX9}
+    secretKey: ${VNPAY_SECRET_KEY:K2DKGJ2B55MPJAK3CJB0DNYI58TS22BY}
+    returnUrl: ${VNPAY_RETURN_URL:http://localhost:8008/api/vn-pay-callback}
+    version: 2.1.0
+    command: pay
+    orderType: other
+  redirectUrl: ${PAYMENT_REDIRECT_URL:http://localhost:4200/order-successed}
+#TODO: Nhớ chỉnh lại giơí hạn ram và cpu của docker

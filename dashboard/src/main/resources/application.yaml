@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: dashboard-service
+
+  main:
+    allow-bean-definition-overriding: true
+
+  config:
+    import: "optional:configserver:http://localhost:6969/"
+
+  doc:
+    swagger-ui:
+      path: /swagger-doc/dashboard/swagger-ui.html
+    api-docs:
+      path: /swagger-doc/v3/api-docs/dashboard
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${JWK_URI:http://localhost:8180/realms/IamService}
+
+server:
+  port: ${SERVER_PORT:2222}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true
+
+app:
+  order-service:
+    url: ${ORDER_SERVICE_URL:http://localhost:6666}
+  profile-service:
+    url: ${PROFILE_SERVICE_URL:http://localhost:9999}

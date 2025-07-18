@@ -1,19 +1,21 @@
 package com.evo.order.rest;
 
-import com.evo.common.dto.request.SearchOrderRequest;
-import com.evo.common.dto.response.Response;
-import com.evo.common.dto.response.OrderDTO;
-import com.evo.common.dto.response.PagingResponse;
-import com.evo.order.application.dto.request.*;
-import com.evo.order.application.dto.response.OrderFeeDTO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.UUID;
+import com.evo.common.dto.request.SearchOrderRequest;
+import com.evo.common.dto.response.OrderDTO;
+import com.evo.common.dto.response.PagingResponse;
+import com.evo.common.dto.response.Response;
+import com.evo.order.application.dto.request.*;
+import com.evo.order.application.dto.response.OrderFeeDTO;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Order API")
 @RequestMapping("/api")
@@ -38,7 +40,7 @@ public interface OrderController {
     @Operation(summary = "Search orders")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("orders/search")
-    PagingResponse<List<OrderDTO>> searchOrders(SearchOrderRequest request);
+    PagingResponse<OrderDTO> searchOrders(SearchOrderRequest request);
 
     @Operation(summary = "Create order")
     @PreAuthorize("hasRole('USER')")

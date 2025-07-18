@@ -1,19 +1,19 @@
 package com.evo.profile.presentation.rest;
 
-import com.evo.common.dto.response.Response;
-import com.evo.common.dto.response.PagingResponse;
-import com.evo.common.dto.response.ProfileDTO;
-import com.evo.profile.application.dto.request.CreateOrUpdateAddressRequest;
-import com.evo.profile.application.dto.request.SearchProfileRequest;
-import com.evo.profile.application.dto.request.UpdateProfileInfoRequest;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import com.evo.common.dto.response.PagingResponse;
+import com.evo.common.dto.response.ProfileDTO;
+import com.evo.common.dto.response.Response;
+import com.evo.profile.application.dto.request.CreateOrUpdateAddressRequest;
+import com.evo.profile.application.dto.request.SearchProfileRequest;
+import com.evo.profile.application.dto.request.UpdateProfileInfoRequest;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Profile API")
 @RequestMapping("/api")

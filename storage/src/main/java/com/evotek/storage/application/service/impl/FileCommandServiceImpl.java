@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.evo.common.dto.event.FileEvent;
 import com.evo.common.dto.response.FileResponse;
 import com.evo.common.enums.FileUsageStatus;
+import com.evo.common.exception.ResponseException;
 import com.evotek.storage.application.config.FileStorageProperties;
 import com.evotek.storage.application.dto.mapper.FileResponseMapper;
 import com.evotek.storage.application.dto.request.UpdateFileRequest;
@@ -28,8 +29,8 @@ import com.evotek.storage.domain.command.StoreFileCmd;
 import com.evotek.storage.domain.command.UpdateFileCmd;
 import com.evotek.storage.domain.command.WriteHistoryCmd;
 import com.evotek.storage.domain.repository.FileDomainRepository;
-import com.evotek.storage.infrastructure.support.exception.AppErrorCode;
-import com.evotek.storage.infrastructure.support.exception.AppException;
+import com.evotek.storage.infrastructure.support.exception.BadRequestError;
+import com.evotek.storage.infrastructure.support.exception.NotFoundError;
 
 import lombok.RequiredArgsConstructor;
 
@@ -56,7 +57,7 @@ public class FileCommandServiceImpl implements FileCommandService {
             Files.createDirectories(publicStorageLocation);
             Files.createDirectories(privateStorageLocation);
         } catch (Exception ex) {
-            throw new AppException(AppErrorCode.CANT_CREATE_DIR);
+            throw new ResponseException(BadRequestError.CANT_CREATE_DIR);
         }
     }
 
@@ -96,7 +97,7 @@ public class FileCommandServiceImpl implements FileCommandService {
                 fileDomain.setHistory(fileHistory);
                 fileDomains.add(fileDomain);
             } catch (IOException e) {
-                throw new AppException(AppErrorCode.CANT_STORE_FILE);
+                throw new ResponseException(BadRequestError.CANT_STORE_FILE);
             }
         }
 
@@ -128,7 +129,7 @@ public class FileCommandServiceImpl implements FileCommandService {
         try {
             Files.deleteIfExists(targetLocation);
         } catch (IOException e) {
-            throw new AppException(AppErrorCode.CANT_DELETE_FILE);
+            throw new ResponseException(BadRequestError.CANT_DELETE_FILE);
         }
 
         file.setDeleted(true);
@@ -176,7 +177,7 @@ public class FileCommandServiceImpl implements FileCommandService {
             fileDomain = fileDomainRepository.save(fileDomain);
             return fileResponseMapper.domainModelToDTO(fileDomain);
         } catch (IOException e) {
-            throw new AppException(AppErrorCode.CANT_STORE_FILE);
+            throw new ResponseException(BadRequestError.CANT_STORE_FILE);
         }
     }
 
@@ -187,7 +188,7 @@ public class FileCommandServiceImpl implements FileCommandService {
             File file = fileDomainRepository.getById(fileId);
             FileUsageStatus usageStatus = fileUsageStatusMap.get(fileId);
             if (usageStatus == null) {
-                throw new AppException(AppErrorCode.FILE_NOT_FOUND);
+                throw new ResponseException(NotFoundError.FILE_NOT_FOUND);
             }
             file.setUsageStatus(usageStatus);
             WriteHistoryCmd writeHistoryCmd = WriteHistoryCmd.builder()
@@ -211,11 +212,11 @@ public class FileCommandServiceImpl implements FileCommandService {
         String fileExtension = StringUtils.getFilenameExtension(fileName);
 
         if (contentType == null || !allowedMimeTypes.contains(contentType)) {
-            throw new AppException(AppErrorCode.FILE_TYPE_NOT_ALLOWED);
+            throw new ResponseException(BadRequestError.FILE_TYPE_NOT_ALLOWED);
         }
 
         if (fileExtension == null || !allowedExtensions.contains(fileExtension.toLowerCase())) {
-            throw new AppException(AppErrorCode.FILE_EXTENSION_NOT_ALLOWED);
+            throw new ResponseException(BadRequestError.FILE_EXTENSION_NOT_ALLOWED);
         }
     }
 

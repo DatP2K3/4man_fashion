@@ -3,11 +3,13 @@ package com.evo.profile.infrastructure.persistence.entity;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import com.evo.common.entity.AuditEntity;
 import jakarta.persistence.*;
 
-import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.evo.common.entity.AuditEntity;
+
+import lombok.*;
 
 @Entity
 @Data

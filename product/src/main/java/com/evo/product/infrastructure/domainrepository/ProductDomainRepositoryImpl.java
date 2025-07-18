@@ -6,14 +6,14 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
 
 import com.evo.common.enums.DiscountStatus;
+import com.evo.common.exception.ResponseException;
 import com.evo.common.repository.AbstractDomainRepository;
 import com.evo.product.domain.*;
 import com.evo.product.domain.repository.ProductDomainRepository;
 import com.evo.product.infrastructure.persistence.entity.*;
 import com.evo.product.infrastructure.persistence.mapper.*;
 import com.evo.product.infrastructure.persistence.repository.*;
-import com.evo.product.infrastructure.support.exception.AppErrorCode;
-import com.evo.product.infrastructure.support.exception.AppException;
+import com.evo.product.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class ProductDomainRepositoryImpl extends AbstractDomainRepository<Product, ProductEntity, UUID>
@@ -108,7 +108,7 @@ public class ProductDomainRepositoryImpl extends AbstractDomainRepository<Produc
     public Product getById(UUID uuid) {
         ProductEntity productEntity = productEntityRepository
                 .findById(uuid)
-                .orElseThrow(() -> new AppException(AppErrorCode.PRODUCT_NOT_FOUND));
+                .orElseThrow(() -> new ResponseException(NotFoundError.PRODUCT_NOT_FOUND));
         return this.enrich(productEntityMapper.toDomainModel(productEntity));
     }
 

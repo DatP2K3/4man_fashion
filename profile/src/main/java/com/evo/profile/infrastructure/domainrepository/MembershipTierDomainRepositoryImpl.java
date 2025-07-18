@@ -4,14 +4,14 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
+import com.evo.common.exception.ResponseException;
 import com.evo.common.repository.AbstractDomainRepository;
 import com.evo.profile.domain.MembershipTier;
 import com.evo.profile.domain.repository.MembershipTierDomainRepository;
 import com.evo.profile.infrastructure.persistence.entity.MembershipTierEntity;
 import com.evo.profile.infrastructure.persistence.mapper.MembershipTierEntityMapper;
 import com.evo.profile.infrastructure.persistence.repository.MembershipTierEntityRepository;
-import com.evo.profile.infrastructure.support.exception.AppErrorCode;
-import com.evo.profile.infrastructure.support.exception.AppException;
+import com.evo.profile.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class MembershipTierDomainRepositoryImpl
@@ -32,7 +32,7 @@ public class MembershipTierDomainRepositoryImpl
     public MembershipTier getById(UUID membershipTierId) {
         return membershipTierEntityMapper.toDomainModel(membershipTierEntityRepository
                 .findById(membershipTierId)
-                .orElseThrow(() -> new AppException(AppErrorCode.MEMBERSHIP_TIER_NOT_FOUND)));
+                .orElseThrow(() -> new ResponseException(NotFoundError.MEMBERSHIP_TIER_NOT_FOUND)));
     }
 
     @Override

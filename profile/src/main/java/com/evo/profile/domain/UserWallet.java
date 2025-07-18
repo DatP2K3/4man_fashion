@@ -2,8 +2,8 @@ package com.evo.profile.domain;
 
 import java.util.UUID;
 
-import com.evo.profile.infrastructure.support.exception.AppErrorCode;
-import com.evo.profile.infrastructure.support.exception.AppException;
+import com.evo.common.exception.ResponseException;
+import com.evo.profile.infrastructure.support.exception.BadRequestError;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -28,7 +28,7 @@ public class UserWallet {
 
     public void plusCashbackBalance(Long amount) {
         if (amount < 0) {
-            throw new AppException(AppErrorCode.INVALID_CASHBACK_AMOUNT);
+            throw new ResponseException(BadRequestError.INVALID_CASHBACK_AMOUNT);
         }
         this.totalPoints = totalPoints + amount / 1000;
         this.cashbackBalance += amount;
@@ -36,7 +36,7 @@ public class UserWallet {
 
     public void minusCashbackBalance(Long amount) {
         if (amount < 0 || amount > this.cashbackBalance) {
-            throw new AppException(AppErrorCode.INVALID_CASHBACK_AMOUNT);
+            throw new ResponseException(BadRequestError.INVALID_CASHBACK_AMOUNT);
         }
         this.cashbackBalance -= amount;
     }

@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
+import com.evo.common.exception.ResponseException;
 import com.evo.common.repository.AbstractDomainRepository;
 import com.evo.product.domain.Category;
 import com.evo.product.domain.TagDescription;
@@ -15,8 +16,7 @@ import com.evo.product.infrastructure.persistence.mapper.CategoryEntityMapper;
 import com.evo.product.infrastructure.persistence.mapper.TagDescriptionEntityMapper;
 import com.evo.product.infrastructure.persistence.repository.CategoryEntityRepository;
 import com.evo.product.infrastructure.persistence.repository.TagDescriptionEntityRepository;
-import com.evo.product.infrastructure.support.exception.AppErrorCode;
-import com.evo.product.infrastructure.support.exception.AppException;
+import com.evo.product.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class CategoryDomainRepositoryImpl extends AbstractDomainRepository<Category, CategoryEntity, UUID>
@@ -42,7 +42,7 @@ public class CategoryDomainRepositoryImpl extends AbstractDomainRepository<Categ
     public Category getById(UUID uuid) {
         CategoryEntity categoryEntity = categoryEntityRepository
                 .findById(uuid)
-                .orElseThrow(() -> new AppException(AppErrorCode.CATEGORY_NOT_FOUND));
+                .orElseThrow(() -> new ResponseException(NotFoundError.CATEGORY_NOT_FOUND));
         return enrich(categoryEntityMapper.toDomainModel(categoryEntity));
     }
 

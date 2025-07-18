@@ -1,20 +1,17 @@
 package com.evo.profile.presentation.rest.impl;
 
-import java.util.Collections;
-import java.util.List;
-
-import com.evo.profile.presentation.rest.ProfileController;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.PagingResponse;
 import com.evo.common.dto.response.ProfileDTO;
+import com.evo.common.dto.response.Response;
 import com.evo.profile.application.dto.request.CreateOrUpdateAddressRequest;
 import com.evo.profile.application.dto.request.SearchProfileRequest;
 import com.evo.profile.application.dto.request.UpdateProfileInfoRequest;
 import com.evo.profile.application.service.ProfileCommandService;
 import com.evo.profile.application.service.ProfileQueryService;
+import com.evo.profile.presentation.rest.ProfileController;
 
 import lombok.RequiredArgsConstructor;
 

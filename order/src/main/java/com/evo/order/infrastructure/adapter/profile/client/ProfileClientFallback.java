@@ -3,8 +3,8 @@ package com.evo.order.infrastructure.adapter.profile.client;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
-import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.ProfileDTO;
+import com.evo.common.dto.response.Response;
 import com.evo.common.enums.ServiceUnavailableError;
 import com.evo.common.exception.ForwardInnerAlertException;
 import com.evo.common.exception.ResponseException;

@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.evo.common.exception.ResponseException;
 import com.evo.product.application.dto.mapper.CategoryDTOMapper;
 import com.evo.product.application.dto.response.CategoryDTO;
 import com.evo.product.application.service.CategoryQueryService;
@@ -12,8 +13,7 @@ import com.evo.product.domain.Category;
 import com.evo.product.domain.repository.CategoryDomainRepository;
 import com.evo.product.infrastructure.persistence.entity.CategoryEntity;
 import com.evo.product.infrastructure.persistence.repository.CategoryEntityRepository;
-import com.evo.product.infrastructure.support.exception.AppErrorCode;
-import com.evo.product.infrastructure.support.exception.AppException;
+import com.evo.product.infrastructure.support.exception.NotFoundError;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,7 +40,7 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
     public CategoryDTO getCategoryById(UUID id) {
         CategoryEntity categoryEntity = categoryEntityRepository
                 .findById(id)
-                .orElseThrow(() -> new AppException(AppErrorCode.CATEGORY_NOT_FOUND));
+                .orElseThrow(() -> new ResponseException(NotFoundError.CATEGORY_NOT_FOUND));
         return categoryDTOMapper.entityToDTO(categoryEntity);
     }
 }

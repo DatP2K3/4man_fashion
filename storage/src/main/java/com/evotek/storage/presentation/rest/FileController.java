@@ -1,38 +1,34 @@
 package com.evotek.storage.presentation.rest;
 
-import com.evo.common.dto.response.PagingResponse;
-import com.evo.common.dto.response.Response;
-import com.evo.common.dto.response.FileResponse;
-import com.evotek.storage.application.dto.request.SearchFileRequest;
-import com.evotek.storage.application.dto.request.UpdateFileRequest;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.UUID;
+import com.evo.common.dto.response.FileResponse;
+import com.evo.common.dto.response.PagingResponse;
+import com.evo.common.dto.response.Response;
+import com.evotek.storage.application.dto.request.SearchFileRequest;
+import com.evotek.storage.application.dto.request.UpdateFileRequest;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "File API")
 @RequestMapping("/api")
 @Validated
 public interface FileController {
 
-<<<<<<< HEAD
-=======
     @Operation(summary = "Upload multiple files")
->>>>>>> keycloak_security
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/file/upload")
     Response<List<FileResponse>> storeFile(
             @RequestPart List<MultipartFile> files, @RequestParam boolean isPublic, @RequestParam String description);
 
-<<<<<<< HEAD
-=======
     @Operation(summary = "Upload single file")
->>>>>>> keycloak_security
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/file/upload-only-one")
     Response<FileResponse> storeOneFile(
@@ -48,18 +44,12 @@ public interface FileController {
     @GetMapping("/file")
     PagingResponse<FileResponse> searchFiles(@RequestBody SearchFileRequest searchFileRequest);
 
-<<<<<<< HEAD
-=======
     @Operation(summary = "Update file")
->>>>>>> keycloak_security
     @PreAuthorize("hasRole('USER')")
     @PutMapping("file/update")
     Response<FileResponse> updateFile(@RequestBody UpdateFileRequest updateFileRequest);
 
-<<<<<<< HEAD
-=======
     @Operation(summary = "Delete file")
->>>>>>> keycloak_security
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("file/delete/{fileId}")
     Response<Void> deleteFile(@PathVariable UUID fileId);

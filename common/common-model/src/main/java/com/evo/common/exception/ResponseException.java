@@ -3,8 +3,6 @@ package com.evo.common.exception;
 import java.text.MessageFormat;
 import java.util.Objects;
 
-import com.evo.common.dto.error.ResponseError;
-
 import lombok.Getter;
 
 @Getter

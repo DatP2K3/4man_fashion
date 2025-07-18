@@ -5,14 +5,14 @@ import java.util.*;
 import org.springframework.stereotype.Repository;
 
 import com.evo.common.enums.DiscountStatus;
+import com.evo.common.exception.ResponseException;
 import com.evo.common.repository.AbstractDomainRepository;
 import com.evo.product.domain.Discount;
 import com.evo.product.domain.repository.DiscountDomainRepository;
 import com.evo.product.infrastructure.persistence.entity.DiscountEntity;
 import com.evo.product.infrastructure.persistence.mapper.DiscountEntityMapper;
 import com.evo.product.infrastructure.persistence.repository.DiscountEntityRepository;
-import com.evo.product.infrastructure.support.exception.AppErrorCode;
-import com.evo.product.infrastructure.support.exception.AppException;
+import com.evo.product.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class DiscountDomainRepositoryImpl extends AbstractDomainRepository<Discount, DiscountEntity, UUID>
@@ -31,7 +31,7 @@ public class DiscountDomainRepositoryImpl extends AbstractDomainRepository<Disco
     public Discount getById(UUID uuid) {
         DiscountEntity discountEntity = discountEntityRepository
                 .findById(uuid)
-                .orElseThrow(() -> new AppException(AppErrorCode.DISCOUNT_NOT_FOUND));
+                .orElseThrow(() -> new ResponseException(NotFoundError.DISCOUNT_NOT_FOUND));
         return discountEntityMapper.toDomainModel(discountEntity);
     }
 

@@ -6,14 +6,14 @@ import java.util.UUID;
 import org.springframework.stereotype.Repository;
 
 import com.evo.common.enums.CashbackTransactionType;
+import com.evo.common.exception.ResponseException;
 import com.evo.common.repository.AbstractDomainRepository;
 import com.evo.profile.domain.CashbackTransaction;
 import com.evo.profile.domain.repository.CashbackTransactionDomainRepository;
 import com.evo.profile.infrastructure.persistence.entity.CashbackTransactionEntity;
 import com.evo.profile.infrastructure.persistence.mapper.CashbackTransactionEntityMapper;
 import com.evo.profile.infrastructure.persistence.repository.CashbackTransactionEntityRepository;
-import com.evo.profile.infrastructure.support.exception.AppErrorCode;
-import com.evo.profile.infrastructure.support.exception.AppException;
+import com.evo.profile.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class CashbackTransactionDomainRepositoryImpl
@@ -47,7 +47,7 @@ public class CashbackTransactionDomainRepositoryImpl
     public CashbackTransaction getById(UUID uuid) {
         CashbackTransactionEntity entity = cashbackTransactionEntityRepository
                 .findById(uuid)
-                .orElseThrow(() -> new AppException(AppErrorCode.CASHBACK_TRANSACTION_NOT_FOUND));
+                .orElseThrow(() -> new ResponseException(NotFoundError.CASHBACK_TRANSACTION_NOT_FOUND));
         return cashbackTransactionEntityMapper.toDomainModel(entity);
     }
 }

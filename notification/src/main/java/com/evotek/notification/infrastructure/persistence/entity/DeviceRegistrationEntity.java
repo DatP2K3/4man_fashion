@@ -8,6 +8,8 @@ import jakarta.persistence.*;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.evo.common.entity.AuditEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "device_registrations", uniqueConstraints = @UniqueConstraint(columnNames = {"device_id", "user_id"}))
-public class DeviceRegistrationEntity {
+public class DeviceRegistrationEntity extends AuditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")

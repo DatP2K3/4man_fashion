@@ -5,8 +5,8 @@ import java.util.UUID;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
-import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.ProductDTO;
+import com.evo.common.dto.response.Response;
 import com.evo.common.enums.ServiceUnavailableError;
 import com.evo.common.exception.ForwardInnerAlertException;
 import com.evo.common.exception.ResponseException;
@@ -14,9 +14,7 @@ import com.evo.common.exception.ResponseException;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
-public class ProductClientFallback
-        implements FallbackFactory<
-                ProductClient> {
+public class ProductClientFallback implements FallbackFactory<ProductClient> {
     @Override
     public ProductClient create(Throwable cause) {
         return new FallbackWithFactory(cause);

@@ -1,25 +1,16 @@
 package com.evo.common.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.function.Function;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PagingResponse<T> extends Response<List<T>> {
     private PageableResponse page = new PageableResponse();
 
-    public PagingResponse() {
-    }
+    public PagingResponse() {}
 
     public PagingResponse(List<T> data, int pageIndex, int pageSize, long total) {
         this.page.setPageIndex(pageIndex);
@@ -42,11 +33,10 @@ public class PagingResponse<T> extends Response<List<T>> {
         this.page.setPageIndex(pageable.getPageIndex());
         this.page.setPageSize(pageable.getPageSize());
         this.page.setTotal(pageable.getTotal());
-        List<T> content = (List)mapper.apply(pageInput.getData());
+        List<T> content = (List) mapper.apply(pageInput.getData());
         if (content != null) {
             this.data = content;
         }
-
     }
 
     public static <T> PagingResponse<T> of(List<T> data, int pageIndex, int pageSize, long total) {
@@ -70,7 +60,7 @@ public class PagingResponse<T> extends Response<List<T>> {
         } else if (!(o instanceof PagingResponse)) {
             return false;
         } else {
-            PagingResponse<?> other = (PagingResponse)o;
+            PagingResponse<?> other = (PagingResponse) o;
             if (!other.canEqual(this)) {
                 return false;
             } else if (!super.equals(o)) {
@@ -150,7 +140,7 @@ public class PagingResponse<T> extends Response<List<T>> {
             } else if (!(o instanceof PageableResponse)) {
                 return false;
             } else {
-                PageableResponse other = (PageableResponse)o;
+                PageableResponse other = (PageableResponse) o;
                 if (!other.canEqual(this)) {
                     return false;
                 } else if (this.getPageIndex() != other.getPageIndex()) {
@@ -173,13 +163,14 @@ public class PagingResponse<T> extends Response<List<T>> {
             result = result * 59 + this.getPageIndex();
             result = result * 59 + this.getPageSize();
             long $total = this.getTotal();
-            result = result * 59 + (int)($total >>> 32 ^ $total);
+            result = result * 59 + (int) ($total >>> 32 ^ $total);
             return result;
         }
 
         public String toString() {
             int var10000 = this.getPageIndex();
-            return "PagingResponse.PageableResponse(pageIndex=" + var10000 + ", pageSize=" + this.getPageSize() + ", total=" + this.getTotal() + ")";
+            return "PagingResponse.PageableResponse(pageIndex=" + var10000 + ", pageSize=" + this.getPageSize()
+                    + ", total=" + this.getTotal() + ")";
         }
     }
 }

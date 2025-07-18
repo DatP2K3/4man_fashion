@@ -1,7 +1,6 @@
 package com.evo.dashboard.adapter.order.client;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.cloud.openfeign.FallbackFactory;
@@ -32,7 +31,7 @@ public class OrderClientFallback implements FallbackFactory<OrderClient> {
         }
 
         @Override
-        public PagingResponse<List<OrderDTO>> searchOrders(
+        public PagingResponse<OrderDTO> searchOrders(
                 String keyword,
                 UUID userId,
                 OrderStatus orderStatus,
@@ -45,7 +44,8 @@ public class OrderClientFallback implements FallbackFactory<OrderClient> {
             if (cause instanceof ForwardInnerAlertException) {
                 return PagingResponse.failPaging((RuntimeException) cause);
             }
-            return PagingResponse.failPaging(new ResponseException(ServiceUnavailableError.ORDER_SERVICE_UNAVAILABLE_ERROR));
+            return PagingResponse.failPaging(
+                    new ResponseException(ServiceUnavailableError.ORDER_SERVICE_UNAVAILABLE_ERROR));
         }
     }
 }

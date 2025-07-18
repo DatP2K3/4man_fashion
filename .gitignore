@@ -1,6 +1,3 @@
 logs/
 uploads/
 exports/
-notification/src/main/resources/firebase-service-account.json
-application.yaml
-docker-compose.yml

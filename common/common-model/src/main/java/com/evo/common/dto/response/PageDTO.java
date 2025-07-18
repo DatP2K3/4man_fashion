@@ -1,17 +1,19 @@
 package com.evo.common.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @SuperBuilder
@@ -38,7 +40,6 @@ public class PageDTO<T> implements Serializable {
         if (content != null) {
             this.data = content;
         }
-
     }
 
     public static <T> PageDTO<T> of(List<T> data, int pageIndex, int pageSize, long total) {
@@ -181,7 +182,8 @@ public class PageDTO<T> implements Serializable {
 
         public String toString() {
             int var10000 = this.getPageIndex();
-            return "PageDTO.PageableDTO(pageIndex=" + var10000 + ", pageSize=" + this.getPageSize() + ", total=" + this.getTotal() + ")";
+            return "PageDTO.PageableDTO(pageIndex=" + var10000 + ", pageSize=" + this.getPageSize() + ", total="
+                    + this.getTotal() + ")";
         }
     }
 }

@@ -4,14 +4,14 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
+import com.evo.common.exception.ResponseException;
 import com.evo.common.repository.AbstractDomainRepository;
 import com.evo.payment.domain.PaymentTransaction;
 import com.evo.payment.domain.repository.PaymentTransactionDomainRepository;
 import com.evo.payment.infrastructure.persistence.entity.PaymentTransactionEntity;
 import com.evo.payment.infrastructure.persistence.mapper.PaymentTransactionEntityMapper;
 import com.evo.payment.infrastructure.persistence.repository.PaymentTransactionEntityRepository;
-import com.evo.payment.infrastructure.support.exception.AppErrorCode;
-import com.evo.payment.infrastructure.support.exception.AppException;
+import com.evo.payment.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class PaymentTransactionDomainRepositoryImpl
@@ -32,7 +32,7 @@ public class PaymentTransactionDomainRepositoryImpl
     public PaymentTransaction getById(UUID uuid) {
         PaymentTransactionEntity paymentTransactionEntity = paymentTransactionEntityRepository
                 .findById(uuid)
-                .orElseThrow(() -> new AppException(AppErrorCode.PAYMENT_TRANSACTION_NOT_FOUND));
+                .orElseThrow(() -> new ResponseException(NotFoundError.PAYMENT_TRANSACTION_NOT_FOUND));
         return paymentTransactionEntityMapper.toDomainModel(paymentTransactionEntity);
     }
 }

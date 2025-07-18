@@ -8,7 +8,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="common-client" />
-        <module name="config" />
         <module name="discovery" />
       </profile>
       <profile name="Annotation profile for common" enabled="true">
@@ -32,6 +31,7 @@
         </processorPath>
         <module name="product" />
         <module name="profile" />
+        <module name="banner" />
         <module name="storage" />
         <module name="cart" />
         <module name="shopinfo" />
@@ -39,16 +39,15 @@
         <module name="elasticsearch" />
         <module name="payment" />
         <module name="location" />
-        <module name="dashboard" />
         <module name="gateway" />
+        <module name="dashboard" />
         <module name="order" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="banner" target="21" />
       <module name="baseddd" target="21" />
       <module name="common-persistence" target="21" />
-      <module name="iam" target="21" />
+      <module name="config" target="21" />
       <module name="spring-boot-starter-parent" target="1.5" />
     </bytecodeTargetLevel>
   </component>
@@ -66,7 +65,6 @@
       <module name="discovery" options="-parameters" />
       <module name="elasticsearch" options="-parameters" />
       <module name="gateway" options="-parameters" />
-      <module name="iam" options="-parameters" />
       <module name="location" options="-parameters" />
       <module name="notification" options="-parameters" />
       <module name="order" options="-parameters" />

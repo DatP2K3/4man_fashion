@@ -1,0 +1,77 @@
+spring:
+  application:
+    name: notification-service
+
+  datasource:
+    url: ${DBMS_CONNECTION:jdbc:postgresql://localhost:5433/noti}
+    username: ${DBMS_USERNAME:postgres}
+    password: ${DBMS_PASSWORD:14062003}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:testmailsender2k3@gmail.com}
+    password: ${MAIL_PASSWORD:tbfyoopqxhoompgm}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+  doc:
+    swagger-ui:
+      path: /swagger-doc/notification/swagger-ui.html
+    api-docs:
+      path: /swagger-doc/v3/api-docs/notification
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:admin}
+    password: ${RABBITMQ_PASSWORD:admin}
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${JWK_URI:http://localhost:8180/realms/IamService}
+
+rabbitmq:
+  exchange:
+    noti: noti.exchange
+    noti-dlx: noti.exchange.dlx
+  queue:
+    noti:
+      push: noti.queue.push
+      dlq: noti.queue.dlq
+  routing:
+    noti:
+      push: noti.push
+      dlk: product.dlk
+
+server:
+  port: ${SERVER_PORT:3333}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true

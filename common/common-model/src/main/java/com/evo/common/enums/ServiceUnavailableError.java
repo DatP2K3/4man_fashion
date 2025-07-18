@@ -1,6 +1,6 @@
 package com.evo.common.enums;
 
-import com.evo.common.dto.error.ResponseError;
+import com.evo.common.exception.ResponseError;
 
 public enum ServiceUnavailableError implements ResponseError {
     SERVICE_UNAVAILABLE_ERROR(50300001, "Service unavailable"),
@@ -13,8 +13,7 @@ public enum ServiceUnavailableError implements ResponseError {
     CART_SERVICE_UNAVAILABLE_ERROR(50300008, "Cart Service unavailable"),
     LOCATION_SERVICE_UNAVAILABLE_ERROR(50300009, "Location Service unavailable"),
     GHN_SERVICE_UNAVAILABLE_ERROR(50300010, "GHN Service unavailable"),
-    SHOPINFO_SERVICE_UNAVAILABLE_ERROR(50300011, "ShopInfo Service unavailable")
-    ;
+    SHOPINFO_SERVICE_UNAVAILABLE_ERROR(50300011, "ShopInfo Service unavailable");
 
     private final Integer code;
     private final String message;

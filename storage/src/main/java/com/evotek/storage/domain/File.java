@@ -7,11 +7,11 @@ import java.util.UUID;
 
 import com.evo.common.Auditor;
 import com.evo.common.enums.FileUsageStatus;
+import com.evo.common.exception.ResponseException;
 import com.evotek.storage.domain.command.StoreFileCmd;
 import com.evotek.storage.domain.command.UpdateFileCmd;
 import com.evotek.storage.infrastructure.support.IdUtils;
-import com.evotek.storage.infrastructure.support.exception.AppErrorCode;
-import com.evotek.storage.infrastructure.support.exception.AppException;
+import com.evotek.storage.infrastructure.support.exception.BadRequestError;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -62,7 +62,7 @@ public class File extends Auditor {
         this.md5Name = hashFileName(this.originName);
         this.description = cmd.getDescription();
         if (originName == null || originName.contains("..")) {
-            throw new AppException(AppErrorCode.INVALID_FILENAME);
+            throw new ResponseException(BadRequestError.INVALID_FILENAME);
         }
     }
 
@@ -77,13 +77,13 @@ public class File extends Auditor {
             }
             return stringBuilder + fileExtension;
         } catch (NoSuchAlgorithmException e) {
-            throw new AppException(AppErrorCode.CANT_HASH_FILE_NAME);
+            throw new ResponseException(BadRequestError.CANT_HASH_FILE_NAME);
         }
     }
 
     private void validateFileName(String fileName) {
         if (fileName == null || fileName.contains("..")) {
-            throw new AppException(AppErrorCode.INVALID_FILENAME);
+            throw new ResponseException(BadRequestError.INVALID_FILENAME);
         }
     }
 }

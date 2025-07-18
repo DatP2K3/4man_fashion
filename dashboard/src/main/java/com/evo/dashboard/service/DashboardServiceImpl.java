@@ -78,10 +78,8 @@ public class DashboardServiceImpl implements DashboardService {
                         order.getCreatedAt().atZone(vietnamZone).toLocalDate().equals(today))
                 .toList();
 
-        long totalNewUsers = profileClient
-                .searchProfiles("", startDate, endDate)
-                .getPageable()
-                .getTotalElements();
+        long totalNewUsers =
+                profileClient.searchProfiles("", startDate, endDate).getPage().getTotal();
 
         long totalRevenue =
                 todayOrders.stream().mapToLong(OrderDTO::getTotalPrice).sum();
@@ -152,10 +150,8 @@ public class DashboardServiceImpl implements DashboardService {
                 todayOrders.stream().mapToLong(OrderDTO::getTotalPrice).sum();
         long totalOrders = todayOrders.size();
 
-        long totalNewUsers = profileClient
-                .searchProfiles("", startDate, endDate)
-                .getPageable()
-                .getTotalElements();
+        long totalNewUsers =
+                profileClient.searchProfiles("", startDate, endDate).getPage().getTotal();
 
         SummaryTodayDTO todaySummary = new SummaryTodayDTO(totalRevenue, totalOrders, totalNewUsers);
 
@@ -223,10 +219,8 @@ public class DashboardServiceImpl implements DashboardService {
                 todayOrders.stream().mapToLong(OrderDTO::getTotalPrice).sum();
         long totalOrders = todayOrders.size();
 
-        long totalNewUsers = profileClient
-                .searchProfiles("", startDate, endDate)
-                .getPageable()
-                .getTotalElements();
+        long totalNewUsers =
+                profileClient.searchProfiles("", startDate, endDate).getPage().getTotal();
 
         SummaryTodayDTO todaySummary = new SummaryTodayDTO(totalRevenue, totalOrders, totalNewUsers);
         return DashboardDTO.builder()

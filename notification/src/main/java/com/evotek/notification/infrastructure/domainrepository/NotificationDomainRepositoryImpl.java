@@ -4,14 +4,14 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
+import com.evo.common.exception.ResponseException;
 import com.evo.common.repository.AbstractDomainRepository;
 import com.evotek.notification.domain.Notification;
 import com.evotek.notification.domain.repository.NotificationDomainRepository;
 import com.evotek.notification.infrastructure.persistence.entity.NotificationEntity;
 import com.evotek.notification.infrastructure.persistence.mapper.NotificationEntityMapper;
 import com.evotek.notification.infrastructure.persistence.repository.NotificationEntityRepository;
-import com.evotek.notification.infrastructure.support.exception.AppErrorCode;
-import com.evotek.notification.infrastructure.support.exception.AppException;
+import com.evotek.notification.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class NotificationDomainRepositoryImpl extends AbstractDomainRepository<Notification, NotificationEntity, UUID>
@@ -31,7 +31,7 @@ public class NotificationDomainRepositoryImpl extends AbstractDomainRepository<N
     public Notification getById(UUID uuid) {
         NotificationEntity notificationEntity = notificationEntityRepository
                 .findById(uuid)
-                .orElseThrow(() -> new AppException(AppErrorCode.NOTIFICATION_NOT_FOUND));
+                .orElseThrow(() -> new ResponseException(NotFoundError.NOTIFICATION_NOT_FOUND));
         return notificationEntityMapper.toDomainModel(notificationEntity);
     }
 }
