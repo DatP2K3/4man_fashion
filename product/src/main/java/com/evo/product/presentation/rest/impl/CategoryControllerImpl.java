@@ -3,7 +3,6 @@ package com.evo.product.presentation.rest.impl;
 import java.util.List;
 import java.util.UUID;
 
-import com.evo.product.presentation.rest.CategoryController;
 import org.springframework.web.bind.annotation.*;
 
 import com.evo.common.dto.response.Response;
@@ -11,6 +10,7 @@ import com.evo.product.application.dto.request.CreateOrUpdateCategoryRequest;
 import com.evo.product.application.dto.response.CategoryDTO;
 import com.evo.product.application.service.CategoryCommandService;
 import com.evo.product.application.service.CategoryQueryService;
+import com.evo.product.presentation.rest.CategoryController;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,12 +22,14 @@ public class CategoryControllerImpl implements CategoryController {
     private final CategoryQueryService categoryQueryService;
 
     @Override
-    public Response<CategoryDTO> createCategory(@RequestBody CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest) {
+    public Response<CategoryDTO> createCategory(
+            @RequestBody CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest) {
         return Response.of(this.categoryCommandService.createCategory(createOrUpdateCategoryRequest));
     }
 
     @Override
-    public Response<CategoryDTO> updateCategory(@RequestBody CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest) {
+    public Response<CategoryDTO> updateCategory(
+            @RequestBody CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest) {
         return Response.of(this.categoryCommandService.updateCategory(createOrUpdateCategoryRequest));
     }
 

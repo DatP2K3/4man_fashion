@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
+import com.evo.common.exception.ResponseException;
 import com.evo.common.repository.AbstractDomainRepository;
 import com.evotek.notification.domain.DeviceRegistration;
 import com.evotek.notification.domain.NotificationDelivery;
@@ -18,8 +19,7 @@ import com.evotek.notification.infrastructure.persistence.mapper.DeviceRegistrat
 import com.evotek.notification.infrastructure.persistence.mapper.NotificationDeliveryEntityMapper;
 import com.evotek.notification.infrastructure.persistence.repository.DeviceRegistrationEntityRepository;
 import com.evotek.notification.infrastructure.persistence.repository.NotificationDeliveryEntityRepository;
-import com.evotek.notification.infrastructure.support.exception.AppErrorCode;
-import com.evotek.notification.infrastructure.support.exception.AppException;
+import com.evotek.notification.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class DeviceRegistrationDomainRepositoryImpl
@@ -61,7 +61,7 @@ public class DeviceRegistrationDomainRepositoryImpl
     public DeviceRegistration getById(UUID uuid) {
         DeviceRegistrationEntity deviceRegistrationEntity = deviceRegistrationEntityRepository
                 .findById(uuid)
-                .orElseThrow(() -> new AppException(AppErrorCode.DEVICE_REGISTRATION_NOT_FOUND));
+                .orElseThrow(() -> new ResponseException(NotFoundError.DEVICE_REGISTRATION_NOT_FOUND));
         return this.enrich(deviceRegistrationEntityMapper.toDomainModel(deviceRegistrationEntity));
     }
 

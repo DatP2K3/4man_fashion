@@ -1,0 +1,479 @@
+name: datp2k3_microservice
+services:
+  postgres:
+    image: postgres:latest
+    container_name: my_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 14062003
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - 4man_network
+
+  rabbitmq:
+    image: rabbitmq:4.1.0-rc.2-management
+    container_name: my_rabbitmq
+    ports:
+      - "5672:5672"    # AMQP port
+      - "15672:15672"  # Management UI port
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - rabbitmq_log:/var/log/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    restart: unless-stopped
+    networks:
+      - 4man_network
+
+  elasticsearch:
+    image: elasticsearch:8.17.3
+    container_name: my_elasticsearch
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ELASTICSEARCH_URI=http://elasticsearch:9200
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -q '\"status\":\"green\"\\|\"status\":\"yellow\"'" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 50s
+    networks:
+      - 4man_network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: my_keycloak
+    restart: always
+    command: ["start-dev"]
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak_db
+      - KC_DB_USERNAME=postgres
+      - KC_DB_PASSWORD=14062003
+    ports:
+      - "8180:8080"
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+    depends_on:
+      - postgres
+    networks:
+      - 4man_network
+
+  discovery-service:
+    build:
+      context: ./discovery
+      dockerfile: Dockerfile
+    container_name: my_discovery_service
+    image: datp2k3/discovery_service
+    restart: always
+    ports:
+      - "8761:8761"
+    environment:
+      - SERVER_PORT=8761
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+    networks:
+      - 4man_network
+
+  storage-service:
+    build:
+      context: ./storage
+      dockerfile: Dockerfile
+    container_name: my_storage_service
+    image: datp2k3/storage_service
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/storage_db
+      - DBMS_USERNAME=postgres
+      - DBMS_PASSWORD=14062003
+      - JWK_URI=http://keycloak:8080/realms/IamService
+      - EUREKA_URL=http://discovery-service:8761/eureka
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+    networks:
+      - 4man_network
+
+  payment-service:
+    build:
+      context: ./payment
+      dockerfile: Dockerfile
+    container_name: my_payment_service
+    image: datp2k3/payment_service
+    restart: always
+    ports:
+      - "8008:8008"
+    environment:
+      - SERVER_PORT=8008
+      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/payment_db
+      - DBMS_USERNAME=postgres
+      - DBMS_PASSWORD=14062003
+      - EUREKA_URL=http://discovery-service:8761/eureka
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=admin
+      - SPRING_RABBITMQ_PASSWORD=admin
+      - VNPAY_TMNCODE=S8N2XOX9
+      - VNPAY_SECRET_KEY=K2DKGJ2B55MPJAK3CJB0DNYI58TS22BY
+      - VNPAY_RETURN_URL=http://my_payment_service:8008/api/vn-pay-callback
+      - PAYMENT_REDIRECT_URL=http://localhost:4200/order-successed
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+    networks:
+      - 4man_network
+
+  dashboard-service:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    container_name: my_dashboard_service
+    image: datp2k3/dashboard_service
+    restart: always
+    ports:
+      - "2222:2222"
+    environment:
+      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/profile_db
+      - DBMS_USERNAME=postgres
+      - DBMS_PASSWORD=14062003
+      - SERVER_PORT=2222
+      - JWK_URI=http://keycloak:8080/realms/IamService
+      - EUREKA_URL=http://discovery-service:8761/eureka
+      - STORAGE_SERVICE_URL=http://my_storage_service:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+    networks:
+      - 4man_network
+
+  profile-service:
+    build:
+      context: ./profile
+      dockerfile: Dockerfile
+    container_name: my_profile_service
+    image: datp2k3/profile_service
+    restart: always
+    ports:
+      - "9999:9999"
+    environment:
+      - KEYCLOAK_URL=http://keycloak:8080
+      - KEYCLOAK_CLIENT_ID=iam_service
+      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/banner_db
+      - DBMS_USERNAME=postgres
+      - DBMS_PASSWORD=14062003
+      - KEYCLOAK_CLIENT_SECRET=nYW29NN8ATLJ7UpQ9kfrAl35SlsTUWS8
+      - JWK_URI=http://keycloak:8080/realms/IamService
+      - EUREKA_URL=http://discovery-service:8761/eureka
+      - ORDER_SERVICE_URL=http://my_order_service:6666
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+    networks:
+      - 4man_network
+
+  banner-service:
+    build:
+      context: ./banner
+      dockerfile: Dockerfile
+    container_name: my_banner_service
+    image: datp2k3/banner_service
+    restart: always
+    ports:
+      - "6565:6565"
+    environment:
+      - JWK_URI=http://keycloak:8080/realms/IamService
+      - EUREKA_URL=http://discovery-service:8761/eureka
+      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/banner_db
+      - DBMS_USERNAME=postgres
+      - DBMS_PASSWORD=14062003
+      - SERVER_PORT=6565
+      - STORAGE_SERVICE_URL=http://my_storage_service:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+    networks:
+      - 4man_network
+
+  shopinfo-service:
+    build:
+      context: ./shopinfo
+      dockerfile: Dockerfile
+    container_name: my_shopinfo_service
+    image: datp2k3/shopinfo_service
+    restart: always
+    ports:
+      - "8222:8222"
+    environment:
+      - JWK_URI=http://keycloak:8080/realms/IamService
+      - EUREKA_URL=http://discovery-service:8761/eureka
+      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/location_db
+      - DBMS_USERNAME=postgres
+      - DBMS_PASSWORD=14062003
+      - SERVER_PORT=8222
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+    networks:
+      - 4man_network
+
+  notification-service:
+    build:
+      context: ./notification
+      dockerfile: Dockerfile
+    container_name: my_notification_service
+    image: datp2k3/notification_service
+    restart: always
+    ports:
+      - "3333:3333"
+    environment:
+      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/noti
+      - DBMS_USERNAME=postgres
+      - DBMS_PASSWORD=14062003
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=admin
+      - RABBITMQ_PASSWORD=admin
+      - SERVER_PORT=3333
+      - EUREKA_URL=http://discovery-service:8761/eureka
+      - PRODUCT_SERVICE_URL=http://my_product_service:8765
+      - MAIL_USERNAME=testmailsender2k3@gmail.com
+      - MAIL_PASSWORD=tbfyoopqxhoompgm
+      - JWK_URI=http://keycloak:8080/realms/IamService
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+    networks:
+      - 4man_network
+
+  location-service:
+    build:
+      context: ./location
+      dockerfile: Dockerfile
+    container_name: my_location_service
+    image: datp2k3/location_service
+    restart: always
+    ports:
+      - "8111:8111"
+    environment:
+      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/location_db
+      - DBMS_USERNAME=postgres
+      - DBMS_PASSWORD=14062003
+      - SERVER_PORT=8111
+      - EUREKA_URL=http://discovery-service:8761/eureka
+      - JWK_URI=http://keycloak:8080/realms/IamService
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+    networks:
+      - 4man_network
+
+  product-service:
+    build:
+      context: ./product
+      dockerfile: Dockerfile
+    container_name: my_product_service
+    image: datp2k3/product_service
+    restart: always
+    ports:
+      - "8765:8765"
+    environment:
+      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/product_db
+      - DBMS_USERNAME=postgres
+      - DBMS_PASSWORD=14062003
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=admin
+      - RABBITMQ_PASSWORD=admin
+      - SERVER_PORT=8765
+      - EUREKA_URL=http://discovery-service:8761/eureka
+      - JWK_URI=http://keycloak:8080/realms/IamService
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+    networks:
+      - 4man_network
+
+  order-service:
+    build:
+      context: ./order
+      dockerfile: Dockerfile
+    container_name: my_order_service
+    image: datp2k3/order_service
+    restart: always
+    ports:
+      - "6666:6666"
+    environment:
+      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/order_db
+      - DBMS_USERNAME=postgres
+      - DBMS_PASSWORD=14062003
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=admin
+      - RABBITMQ_PASSWORD=admin
+      - EUREKA_URL=http://discovery-service:8761/eureka
+      - CART_SERVICE_URL=http://my_cart_service:8000
+      - PROFILE_SERVICE_URL=http://my_profile_service:9999
+      - SHOPINFO_SERVICE_URL=http://my_shopinfo_service:8222
+      - PAYMENT_SERVICE_URL=http://my_payment_service:8008
+      - GHN_URL=https://online-gateway.ghn.vn
+      - GHN_TOKEN=b9f6edbb-2b60-11f0-a0cd-12f647571c0a
+      - JWK_URI=http://keycloak:8080/realms/IamService
+      - GHN_ID=5766264
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+    networks:
+      - 4man_network
+
+  gateway-service:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: my_gateway_service
+    image: datp2k3/gateway_service
+    restart: always
+    ports:
+      - "8686:8686"
+    environment:
+      - STORAGE_HOST=my_storage_service
+      - SERVER_PORT=8686
+      - JWK_URI=http://keycloak:8080/realms/IamService
+      - EUREKA_URL=http://discovery-service:8761/eureka
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+    networks:
+      - 4man_network
+
+  elasticsearch-service:
+    build:
+      context: ./elasticsearch
+      dockerfile: Dockerfile
+    container_name: my_elasticsearch_service
+    image: datp2k3/elasticsearch_service
+    restart: always
+    ports:
+      - "5566:5566"
+    environment:
+      - ELASTICSEARCH_URI=http://elasticsearch:9200
+      - SERVER_PORT=5566
+      - EUREKA_URL=http://discovery-service:8761/eureka
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=admin
+      - RABBITMQ_PASSWORD=admin
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      elasticsearch:
+        condition: service_healthy
+    networks:
+      - 4man_network
+
+  cart-service:
+    build:
+      context: ./cart
+      dockerfile: Dockerfile
+    container_name: my_cart_service
+    image: datp2k3/cart_service
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/cart_db
+      - DBMS_USERNAME=postgres
+      - DBMS_PASSWORD=14062003
+      - SERVER_PORT=8000
+      - EUREKA_URL=http://discovery-service:8761/eureka
+      - PRODUCT_SERVICE_URL=http://my_product_service:8765
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      elasticsearch:
+        condition: service_healthy
+    networks:
+      - 4man_network
+
+volumes:
+  postgres_data:
+  elasticsearch_data:
+  keycloak_data:
+  rabbitmq_data:
+  rabbitmq_log:
+
+networks:
+  4man_network:

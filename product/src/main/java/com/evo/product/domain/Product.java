@@ -12,14 +12,15 @@ import com.evo.common.Auditor;
 import com.evo.common.enums.DiscountStatus;
 import com.evo.common.enums.DiscountType;
 import com.evo.common.enums.OperationType;
+import com.evo.common.exception.ResponseException;
 import com.evo.product.domain.command.CreateOrUpdateDiscountCmd;
 import com.evo.product.domain.command.CreateOrUpdateProductCmd;
 import com.evo.product.domain.command.CreateOrUpdateProductImageCmd;
 import com.evo.product.domain.command.CreateOrUpdateProductVariantCmd;
 import com.evo.product.domain.command.UpdateProductVariantQuantityCmd;
 import com.evo.product.infrastructure.support.IdUtils;
-import com.evo.product.infrastructure.support.exception.AppErrorCode;
-import com.evo.product.infrastructure.support.exception.AppException;
+import com.evo.product.infrastructure.support.exception.BadRequestError;
+import com.evo.product.infrastructure.support.exception.NotFoundError;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -73,24 +74,24 @@ public class Product extends Auditor {
 
     public void updateProductVariantQuantity(UpdateProductVariantQuantityCmd cmd) {
         if (this.productVariants == null) {
-            throw new AppException(AppErrorCode.PRODUCT_VARIANT_NOT_FOUND);
+            throw new ResponseException(NotFoundError.PRODUCT_VARIANT_NOT_FOUND);
         }
         for (ProductVariant productVariant : this.productVariants) {
             if (productVariant.getId().equals(cmd.getId())) {
                 if (cmd.getOperationType() == null) {
-                    throw new AppException(AppErrorCode.OPERATION_TYPE_IS_REQUIRED);
+                    throw new ResponseException(BadRequestError.OPERATION_TYPE_IS_REQUIRED);
                 }
                 if (cmd.getOperationType().equals(OperationType.INCREASE)) {
                     productVariant.setQuantity(productVariant.getQuantity() + cmd.getTotalQuantity());
                 } else if (cmd.getOperationType().equals(OperationType.DECREASE)) {
                     productVariant.setQuantity(productVariant.getQuantity() - cmd.getTotalQuantity());
                 } else {
-                    throw new AppException(AppErrorCode.INVALID_OPERATION_TYPE);
+                    throw new ResponseException(BadRequestError.INVALID_OPERATION_TYPE);
                 }
                 return;
             }
         }
-        throw new AppException(AppErrorCode.PRODUCT_VARIANT_NOT_FOUND);
+        throw new ResponseException(NotFoundError.PRODUCT_VARIANT_NOT_FOUND);
     }
 
     public void update(CreateOrUpdateProductCmd createOrUpdateProductCmd) {
@@ -177,7 +178,7 @@ public class Product extends Auditor {
         }
         this.discounts.forEach(discount -> {
             if (discount.getDiscountType().equals(createOrUpdateDiscountCmd.getDiscountType())) {
-                throw new AppException(AppErrorCode.PROMOTION_TYPE_IS_EXIST);
+                throw new ResponseException(BadRequestError.PROMOTION_TYPE_IS_EXIST);
             }
         });
 
@@ -223,14 +224,6 @@ public class Product extends Auditor {
                 } else {
                     discount.setStatus(DiscountStatus.ACTIVE);
                 }
-
-                if (this.startDate.isAfter(now)) {
-                    this.status = DiscountStatus.SCHEDULED;
-                } else if (this.endDate.isBefore(now)) {
-                    this.status = DiscountStatus.EXPIRED;
-                } else {
-                    this.status = DiscountStatus.ACTIVE;
-                }
             }
         }
     }
@@ -244,7 +237,7 @@ public class Product extends Auditor {
                     } else if (discount.getDiscountPercentage() != null && discount.getDiscountPercentage() > 0) {
                         this.caculateByDiscountPercent(discount.getDiscountPercentage());
                     } else {
-                        throw new AppException(AppErrorCode.DISCOUNT_PRICE_OR_PERCENT_IS_REQUIRED);
+                        throw new ResponseException(BadRequestError.DISCOUNT_PRICE_OR_PERCENT_IS_REQUIRED);
                     }
                     if (discount.getDiscountType() != null) {
                         this.discountType = discount.getDiscountType();

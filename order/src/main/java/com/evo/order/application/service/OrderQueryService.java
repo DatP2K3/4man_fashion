@@ -5,13 +5,15 @@ import java.util.UUID;
 
 import com.evo.common.dto.request.SearchOrderRequest;
 import com.evo.common.dto.response.OrderDTO;
+import com.evo.common.dto.response.PageDTO;
 import com.evo.order.application.dto.request.PrintOrCancelGHNOrderRequest;
 import com.evo.order.application.dto.response.OrderFeeDTO;
+import com.evo.order.domain.query.SearchOrderQuery;
 
 public interface OrderQueryService {
-    List<OrderDTO> search(SearchOrderRequest request);
+    PageDTO<OrderDTO> search(SearchOrderRequest request);
 
-    Long count(SearchOrderRequest request);
+    Long count(SearchOrderQuery query);
 
     OrderFeeDTO caculateFeeByAddressId(UUID toAddressId);
 

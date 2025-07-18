@@ -12,9 +12,9 @@ import com.evo.cart.application.service.CartCommandService;
 import com.evo.cart.domain.Cart;
 import com.evo.cart.domain.command.UpdateCartCmd;
 import com.evo.cart.domain.repository.CartDomainRepository;
-import com.evo.cart.infrastructure.support.exception.AppErrorCode;
-import com.evo.cart.infrastructure.support.exception.AppException;
+import com.evo.cart.infrastructure.support.exception.NotFoundError;
 import com.evo.common.dto.response.CartDTO;
+import com.evo.common.exception.ResponseException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -45,7 +45,7 @@ public class CartCommandServiceImpl implements CartCommandService {
         UpdateCartCmd updateCartCmd = commandMapper.from(request);
         Cart cart = cartDomainRepository.getById(updateCartCmd.getId());
         if (cart == null) {
-            throw new AppException(AppErrorCode.CART_NOT_FOUND);
+            throw new ResponseException(NotFoundError.CART_NOT_FOUND);
         }
         cart.update(updateCartCmd);
         cart = cartDomainRepository.save(cart);

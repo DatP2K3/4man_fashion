@@ -3,8 +3,8 @@ package com.evo.order.infrastructure.adapter.profile.client;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.ProfileDTO;
+import com.evo.common.dto.response.Response;
 import com.evo.order.infrastructure.adapter.profile.config.FeignProfileClientConfiguration;
 
 @FeignClient(

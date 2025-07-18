@@ -1,0 +1,80 @@
+spring:
+  application:
+    name: profile-service
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+
+  main:
+    banner-mode: off
+    allow-bean-definition-overriding: true
+
+  datasource:
+    url: ${DBMS_CONNECTION:jdbc:postgresql://localhost:5433/profile_db}
+    username: ${DBMS_USERNAME:postgres}
+    password: ${DBMS_PASSWORD:14062003}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${JWK_URI:http://localhost:8180/realms/IamService}
+
+  doc:
+    swagger-ui:
+      path: /swagger-doc/product/swagger-ui.html
+    api-docs:
+      path: /swagger-doc/v3/api-docs/product
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:admin}
+    password: ${RABBITMQ_PASSWORD:admin}
+
+rabbitmq:
+  exchange:
+    cashback: cashback.exchange
+    cashback-dlx: cashback.exchange.dlx
+  queue:
+    cashback:
+      earn: cashback.queue.earn
+      use: cashback.queue.use
+      dlq: cashback.queue.dlq
+  routing:
+    cashback:
+      earn: cashback.earn
+      use: cashback.use
+      dlk: cashback.dlk
+
+server:
+  port: ${SERVER_PORT:9999}
+
+
+storage-service:
+  url: ${STORAGE_SERVICE_URL:http://localhost:8080}
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true
+
+idp:
+  url: ${KEYCLOAK_URL:http://localhost:8180}
+  client-id: ${KEYCLOAK_CLIENT_ID:iam_service}
+  client-secret: ${KEYCLOAK_CLIENT_SECRET:nYW29NN8ATLJ7UpQ9kfrAl35SlsTUWS8}

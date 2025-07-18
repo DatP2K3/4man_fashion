@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.evo.common.dto.response.MembershipTierDTO;
+import com.evo.common.exception.ResponseException;
 import com.evo.profile.application.dto.mapper.MembershipTierDTOMapper;
 import com.evo.profile.application.dto.request.CreateOrUpdateMembershipTierRequest;
 import com.evo.profile.application.mapper.CommandMapper;
@@ -16,8 +17,7 @@ import com.evo.profile.domain.command.CreateOrUpdateMembershipTierCmd;
 import com.evo.profile.domain.repository.MembershipTierDomainRepository;
 import com.evo.profile.infrastructure.persistence.entity.MembershipTierEntity;
 import com.evo.profile.infrastructure.persistence.repository.MembershipTierEntityRepository;
-import com.evo.profile.infrastructure.support.exception.AppErrorCode;
-import com.evo.profile.infrastructure.support.exception.AppException;
+import com.evo.profile.infrastructure.support.exception.BadRequestError;
 
 import lombok.RequiredArgsConstructor;
 
@@ -71,7 +71,7 @@ public class MembershipTierCommandServiceImpl implements MembershipTierCommandSe
     public void delete(UUID id, boolean deleted) {
         MembershipTier membershipTier = membershipTierDomainRepository.getById(id);
         if (membershipTier.isDefaultTier()) {
-            throw new AppException(AppErrorCode.CANT_DELETE_DEFAULT_MEMBERSHIP_TIER);
+            throw new ResponseException(BadRequestError.CANT_DELETE_DEFAULT_MEMBERSHIP_TIER);
         }
         membershipTier.setDeleted(deleted);
         membershipTierDomainRepository.save(membershipTier);
@@ -94,7 +94,7 @@ public class MembershipTierCommandServiceImpl implements MembershipTierCommandSe
     public void toggleVisibility(String id) {
         MembershipTier membershipTier = membershipTierDomainRepository.getById(UUID.fromString(id));
         if (membershipTier.isDefaultTier()) {
-            throw new AppException(AppErrorCode.CANT_TOGGLE_VISIBILITY_DEFAULT_MEMBERSHIP_TIER);
+            throw new ResponseException(BadRequestError.CANT_TOGGLE_VISIBILITY_DEFAULT_MEMBERSHIP_TIER);
         }
         membershipTier.toggleVisibility();
         membershipTierDomainRepository.save(membershipTier);

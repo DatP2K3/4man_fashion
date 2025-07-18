@@ -2,8 +2,6 @@ package com.evotek.elasticsearch.application.service.impl.query;
 
 import java.util.List;
 
-import com.evo.common.dto.response.PageDTO;
-import com.evotek.elasticsearch.application.dto.response.ProductDocumentDTO;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
@@ -13,8 +11,10 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.evo.common.dto.response.PageDTO;
 import com.evotek.elasticsearch.application.dto.mapper.ProductDocumentDTOMapper;
 import com.evotek.elasticsearch.application.dto.request.SearchProductRequest;
+import com.evotek.elasticsearch.application.dto.response.ProductDocumentDTO;
 import com.evotek.elasticsearch.application.service.ProductQueryService;
 import com.evotek.elasticsearch.infrastructure.persistence.document.ProductDocumentEntity;
 
@@ -77,30 +77,8 @@ public class ProductQueryServiceImpl implements ProductQueryService {
 
         List<ProductDocumentDTO> productDocumentDTOs = productDocumentDTOMapper.entitiesToDTOs(productDocumentEntities);
 
-        return PageDTO.of(productDocumentDTOs, request.getPageIndex(), request.getPageSize(), searchHits.getTotalHits());
-    }
-
-    @Override
-    public List<String> autocompleteProductNames(String keyword, int limit) {
-        if (!StringUtils.hasText(keyword)) {
-            return List.of(); // Trả về rỗng nếu không có từ khóa
-        }
-
-        Query query = Query.of(q -> q.match(m -> m.field("name") // hoặc "name" nếu không dùng multi-field
-                .query(keyword)));
-
-        NativeQuery nativeQuery = NativeQuery.builder()
-                .withQuery(query)
-                .withPageable(PageRequest.of(0, limit))
-                .build();
-
-        SearchHits<ProductDocumentEntity> hits =
-                elasticsearchOperations.search(nativeQuery, ProductDocumentEntity.class);
-
-        return hits.getSearchHits().stream()
-                .map(hit -> hit.getContent().getName())
-                .distinct()
-                .toList();
+        return PageDTO.of(
+                productDocumentDTOs, request.getPageIndex(), request.getPageSize(), searchHits.getTotalHits());
     }
 
     @Override

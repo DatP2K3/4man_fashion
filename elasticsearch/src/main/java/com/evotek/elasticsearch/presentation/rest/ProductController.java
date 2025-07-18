@@ -1,11 +1,7 @@
 package com.evotek.elasticsearch.presentation.rest;
 
-import com.evo.common.dto.response.Response;
-import com.evo.common.dto.response.PagingResponse;
-import com.evotek.elasticsearch.application.dto.request.SearchProductRequest;
-import com.evotek.elasticsearch.application.dto.response.ProductDocumentDTO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +9,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import com.evo.common.dto.response.PagingResponse;
+import com.evo.common.dto.response.Response;
+import com.evotek.elasticsearch.application.dto.request.SearchProductRequest;
+import com.evotek.elasticsearch.application.dto.response.ProductDocumentDTO;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Product Search API")
 @RequestMapping("/api")

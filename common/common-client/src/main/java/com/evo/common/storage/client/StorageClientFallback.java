@@ -9,9 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.evo.common.dto.request.SearchFileRequest;
 import com.evo.common.dto.request.UpdateFileRequest;
-import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.FileResponse;
 import com.evo.common.dto.response.PagingResponse;
+import com.evo.common.dto.response.Response;
 import com.evo.common.enums.ServiceUnavailableError;
 import com.evo.common.exception.ForwardInnerAlertException;
 import com.evo.common.exception.ResponseException;
@@ -73,7 +73,8 @@ public class StorageClientFallback
             if (cause instanceof ForwardInnerAlertException) {
                 return PagingResponse.failPaging((RuntimeException) cause);
             }
-            return PagingResponse.failPaging(new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR));
+            return PagingResponse.failPaging(
+                    new ResponseException(ServiceUnavailableError.STORAGE_SERVICE_UNAVAILABLE_ERROR));
         }
 
         @Override

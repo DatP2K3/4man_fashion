@@ -1,15 +1,17 @@
 package com.evotek.notification.presentation.rest;
 
-import com.evo.common.dto.response.Response;
-import com.evotek.notification.application.dto.request.RegisterOrUpdateDeviceRequest;
-import com.evotek.notification.application.dto.request.UnRegisterDeviceRequest;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.evo.common.dto.response.Response;
+import com.evotek.notification.application.dto.request.RegisterOrUpdateDeviceRequest;
+import com.evotek.notification.application.dto.request.UnRegisterDeviceRequest;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Device Registration API")
 @RequestMapping("/api/device-registration")

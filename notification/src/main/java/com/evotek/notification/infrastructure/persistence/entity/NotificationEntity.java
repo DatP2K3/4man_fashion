@@ -1,13 +1,14 @@
 package com.evotek.notification.infrastructure.persistence.entity;
 
-import java.util.Map;
 import java.util.UUID;
 
 import jakarta.persistence.*;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
+import com.evo.common.entity.AuditEntity;
+import com.evotek.notification.infrastructure.support.enums.NotificationStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,8 +21,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EnableJpaAuditing
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "notification")
-public class NotificationEntity {
+public class NotificationEntity extends AuditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
@@ -33,16 +35,12 @@ public class NotificationEntity {
     @Column(name = "body")
     private String body;
 
-    @Column(name = "image_url")
-    private String imageUrl;
-
     @Column(name = "topic")
     private String topic;
 
     @Column(name = "user_id")
     private UUID userId;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "data", columnDefinition = "jsonb")
-    private Map<String, String> data;
+    @Column(name = "status")
+    private NotificationStatus status;
 }

@@ -6,8 +6,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import com.evo.cart.infrastructure.adapter.Product.config.FeignProductClientConfiguration;
-import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.ProductDTO;
+import com.evo.common.dto.response.Response;
 
 @FeignClient(
         name = "product-service",

@@ -1,11 +1,9 @@
 package com.evotek.storage.application.service;
 
-import java.util.List;
 import java.util.UUID;
 
 import com.evo.common.dto.response.FileResponse;
 import com.evo.common.dto.response.PageDTO;
-import com.evo.common.dto.response.PagingResponse;
 import com.evotek.storage.application.dto.request.SearchFileRequest;
 
 public interface FileQueryService {

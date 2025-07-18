@@ -3,15 +3,15 @@ package com.evo.product.presentation.rest.impl;
 import java.util.List;
 import java.util.UUID;
 
-import com.evo.product.presentation.rest.ProductController;
 import org.springframework.web.bind.annotation.*;
 
-import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.ProductDTO;
+import com.evo.common.dto.response.Response;
 import com.evo.product.application.dto.request.CreateOrUpdateDiscountRequest;
 import com.evo.product.application.dto.request.CreateOrUpdateProductRequest;
 import com.evo.product.application.service.ProductCommandService;
 import com.evo.product.application.service.ProductQueryService;
+import com.evo.product.presentation.rest.ProductController;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,12 +38,14 @@ public class ProductControllerImpl implements ProductController {
     }
 
     @Override
-    public Response<ProductDTO> createDiscount(@RequestBody CreateOrUpdateDiscountRequest createOrUpdateDiscountRequest) {
+    public Response<ProductDTO> createDiscount(
+            @RequestBody CreateOrUpdateDiscountRequest createOrUpdateDiscountRequest) {
         return Response.of(this.productCommandService.createDiscount(createOrUpdateDiscountRequest));
     }
 
     @Override
-    public Response<ProductDTO> updateDiscount(@RequestBody CreateOrUpdateDiscountRequest createOrUpdateDiscountRequest) {
+    public Response<ProductDTO> updateDiscount(
+            @RequestBody CreateOrUpdateDiscountRequest createOrUpdateDiscountRequest) {
         return Response.of(this.productCommandService.updateDiscount(createOrUpdateDiscountRequest));
     }
 

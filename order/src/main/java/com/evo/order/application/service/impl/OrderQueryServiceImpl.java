@@ -40,15 +40,19 @@ public class OrderQueryServiceImpl implements OrderQueryService {
     private final OrderEntityRepository orderEntityRepository;
 
     @Override
-    public List<OrderDTO> search(SearchOrderRequest request) {
+    public PageDTO<OrderDTO> search(SearchOrderRequest request) {
         SearchOrderQuery searchOrderQuery = queryMapper.from(request);
+        Long total = this.count(searchOrderQuery);
+        if (total == 0) {
+            return PageDTO.empty();
+        }
         List<OrderEntity> orderEntities = orderEntityRepository.search(searchOrderQuery);
-        return orderDTOMapper.entitiesToDTOs(orderEntities);
+        List<OrderDTO> orderDTOs = orderDTOMapper.entitiesToDTOs(orderEntities);
+        return PageDTO.of(orderDTOs, searchOrderQuery.getPageIndex(), searchOrderQuery.getPageSize(), total);
     }
 
     @Override
-    public Long count(SearchOrderRequest request) {
-        SearchOrderQuery searchOrderQuery = queryMapper.from(request);
+    public Long count(SearchOrderQuery searchOrderQuery) {
         return orderEntityRepository.count(searchOrderQuery);
     }
 

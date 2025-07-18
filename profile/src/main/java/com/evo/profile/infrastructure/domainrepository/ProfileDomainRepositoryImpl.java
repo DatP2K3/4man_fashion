@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
+import com.evo.common.exception.ResponseException;
 import com.evo.common.repository.AbstractDomainRepository;
 import com.evo.profile.domain.Profile;
 import com.evo.profile.domain.ShippingAddress;
@@ -22,8 +23,7 @@ import com.evo.profile.infrastructure.persistence.mapper.UserWalletEntityMapper;
 import com.evo.profile.infrastructure.persistence.repository.ProfileEntityRepository;
 import com.evo.profile.infrastructure.persistence.repository.ShippingAddressEntityRepository;
 import com.evo.profile.infrastructure.persistence.repository.UserWalletEntityRepository;
-import com.evo.profile.infrastructure.support.exception.AppErrorCode;
-import com.evo.profile.infrastructure.support.exception.AppException;
+import com.evo.profile.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class ProfileDomainRepositoryImpl extends AbstractDomainRepository<Profile, ProfileEntity, UUID>
@@ -92,7 +92,7 @@ public class ProfileDomainRepositoryImpl extends AbstractDomainRepository<Profil
     public Profile getById(UUID profileId) {
         return this.enrich(profileEntityMapper.toDomainModel(profileEntityRepository
                 .findById(profileId)
-                .orElseThrow(() -> new AppException(AppErrorCode.PROFILE_NOT_FOUND))));
+                .orElseThrow(() -> new ResponseException(NotFoundError.PROFILE_NOT_FOUND))));
     }
 
     @Override

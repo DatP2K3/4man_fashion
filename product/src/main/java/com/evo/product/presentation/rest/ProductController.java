@@ -1,17 +1,19 @@
 package com.evo.product.presentation.rest;
 
-import com.evo.common.dto.response.Response;
-import com.evo.common.dto.response.ProductDTO;
-import com.evo.product.application.dto.request.CreateOrUpdateDiscountRequest;
-import com.evo.product.application.dto.request.CreateOrUpdateProductRequest;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.UUID;
+import com.evo.common.dto.response.ProductDTO;
+import com.evo.common.dto.response.Response;
+import com.evo.product.application.dto.request.CreateOrUpdateDiscountRequest;
+import com.evo.product.application.dto.request.CreateOrUpdateProductRequest;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Product API")
 @RequestMapping("/api")

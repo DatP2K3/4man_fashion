@@ -10,8 +10,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import com.evotek.notification.infrastructure.support.exception.AppErrorCode;
-import com.evotek.notification.infrastructure.support.exception.AppException;
+import com.evo.common.exception.ResponseException;
+import com.evotek.notification.infrastructure.support.exception.BadRequestError;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +46,7 @@ public class EmailService {
             log.info("Template email '{}' đã gửi thành công đến: {}", templateName, to);
         } catch (MessagingException e) {
             log.error("Lỗi gửi template email '{}' đến {}: {}", templateName, to, e.getMessage());
-            throw new AppException(AppErrorCode.CANT_SEND_EMAIL);
+            throw new ResponseException(BadRequestError.CANT_SEND_EMAIL);
         }
     }
 }

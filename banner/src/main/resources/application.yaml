@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: banner-service
+
+  main:
+    banner-mode: off
+    allow-bean-definition-overriding: true
+
+  datasource:
+    url: ${DBMS_CONNECTION:jdbc:postgresql://localhost:5433/banner_db}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:14062003}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog-master.xml
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${JWK_URI:http://localhost:8180/realms/IamService}
+
+  doc:
+    swagger-ui:
+      path: /swagger-doc/banner/swagger-ui.html
+    api-docs:
+      path: /swagger-doc/v3/api-docs/banner
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health
+
+server:
+  port: ${SERVER_PORT:6565}
+
+storage-service:
+  url: ${STORAGE_SERVICE_URL:http://localhost:8080}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true

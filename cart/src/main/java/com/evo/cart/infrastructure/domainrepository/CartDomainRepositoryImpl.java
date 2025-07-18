@@ -15,10 +15,10 @@ import com.evo.cart.infrastructure.persistence.mapper.CartEntityMapper;
 import com.evo.cart.infrastructure.persistence.mapper.CartItemEntityMapper;
 import com.evo.cart.infrastructure.persistence.repository.CartEntityRepository;
 import com.evo.cart.infrastructure.persistence.repository.CartItemEntityRepository;
-import com.evo.cart.infrastructure.support.exception.AppErrorCode;
-import com.evo.cart.infrastructure.support.exception.AppException;
+import com.evo.cart.infrastructure.support.exception.NotFoundError;
 import com.evo.common.dto.response.ProductDTO;
 import com.evo.common.dto.response.ProductVariantDTO;
+import com.evo.common.exception.ResponseException;
 import com.evo.common.repository.AbstractDomainRepository;
 
 @Repository
@@ -72,7 +72,7 @@ public class CartDomainRepositoryImpl extends AbstractDomainRepository<Cart, Car
     public Cart getById(UUID uuid) {
         CartEntity cartEntity = this.cartEntityRepository
                 .findById(uuid)
-                .orElseThrow(() -> new AppException(AppErrorCode.CART_NOT_FOUND));
+                .orElseThrow(() -> new ResponseException(NotFoundError.CART_NOT_FOUND));
         return this.enrich(this.cartEntityMapper.toDomainModel(cartEntity));
     }
 

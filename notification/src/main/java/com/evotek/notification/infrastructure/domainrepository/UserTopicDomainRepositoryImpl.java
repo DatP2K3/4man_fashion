@@ -5,14 +5,14 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
+import com.evo.common.exception.ResponseException;
 import com.evo.common.repository.AbstractDomainRepository;
 import com.evotek.notification.domain.UserTopic;
 import com.evotek.notification.domain.repository.UserTopicDomainRepository;
 import com.evotek.notification.infrastructure.persistence.entity.UserTopicEntity;
 import com.evotek.notification.infrastructure.persistence.mapper.UserTopicEntityMapper;
 import com.evotek.notification.infrastructure.persistence.repository.UserTopicEntityRepository;
-import com.evotek.notification.infrastructure.support.exception.AppErrorCode;
-import com.evotek.notification.infrastructure.support.exception.AppException;
+import com.evotek.notification.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class UserTopicDomainRepositoryImpl extends AbstractDomainRepository<UserTopic, UserTopicEntity, UUID>
@@ -31,7 +31,7 @@ public class UserTopicDomainRepositoryImpl extends AbstractDomainRepository<User
     public UserTopic getById(UUID userId) {
         UserTopicEntity userTopicEntity = userTopicEntityRepository
                 .findById(userId)
-                .orElseThrow(() -> new AppException(AppErrorCode.USER_TOPIC_NOT_FOUND));
+                .orElseThrow(() -> new ResponseException(NotFoundError.USER_TOPIC_NOT_FOUND));
         return userTopicEntityMapper.toDomainModel(userTopicEntity);
     }
 

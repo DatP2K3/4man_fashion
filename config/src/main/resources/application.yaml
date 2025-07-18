@@ -1,0 +1,37 @@
+  spring:
+    application:
+      name: config
+    profiles:
+      active: git
+    cloud:
+      config:
+        server:
+          git:
+            uri: ${GIT_URI:https://github.com/DatP2K3/4man_fashion_config.git}
+            default-label: main
+            timeout: 5
+            clone-on-start: true
+            force-pull: true
+            username: ${GIT_USERNAME:DATP2K3}
+            password: ${GIT_PASSWORD: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}
+
+  server:
+    port: ${SERVER_PORT:6969}
+
+  encrypt:
+    key: "45D81EC1EF61DF9AD8D3E5BB397F9"
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+    health:
+      readiness-state:
+        enabled: true
+      liveness-state:
+        enabled: true
+    endpoint:
+      health:
+        probes:
+          enabled: true

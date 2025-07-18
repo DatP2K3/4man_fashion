@@ -1,15 +1,14 @@
 package com.evo.order.rest;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.web.bind.annotation.*;
 
 import com.evo.common.dto.request.SearchOrderRequest;
-import com.evo.common.dto.response.Response;
 import com.evo.common.dto.response.OrderDTO;
 import com.evo.common.dto.response.PagingResponse;
+import com.evo.common.dto.response.Response;
 import com.evo.order.application.dto.request.*;
 import com.evo.order.application.dto.response.OrderFeeDTO;
 import com.evo.order.application.service.OrderCommandService;
@@ -41,29 +40,8 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public PagingResponse<List<OrderDTO>> searchOrders(SearchOrderRequest request) {
-        Long totalOrders = this.orderQueryService.count(request);
-        List<OrderDTO> orderDTOs = Collections.emptyList();
-        if (totalOrders != 0) {
-            orderDTOs = this.orderQueryService.search(request);
-        }
-        PagingResponse.PageableResponse pageableResponse = PagingResponse.PageableResponse.builder()
-                .pageIndex(request.getPageIndex())
-                .pageSize(request.getPageSize())
-                .totalPages((int) (Math.ceil((double) totalOrders / request.getPageSize())))
-                .hasNext(request.getPageIndex() * request.getPageSize() < totalOrders)
-                .hasPrevious(request.getPageIndex() > 1)
-                .totalElements(totalOrders)
-                .build();
-        return PagingResponse.<List<OrderDTO>>builder()
-                .data(orderDTOs)
-                .success(true)
-                .code(200)
-                .pageable(pageableResponse)
-                .message("Search orders successfully")
-                .timestamp(System.currentTimeMillis())
-                .status("OK")
-                .build();
+    public PagingResponse<OrderDTO> searchOrders(SearchOrderRequest request) {
+        return PagingResponse.of(this.orderQueryService.search(request));
     }
 
     @Override

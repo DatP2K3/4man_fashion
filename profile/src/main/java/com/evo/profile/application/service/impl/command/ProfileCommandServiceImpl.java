@@ -66,6 +66,7 @@ public class ProfileCommandServiceImpl implements ProfileCommandService {
         cmd.setMembershipTierId(membershipTierId);
         cmd.setEmail(email);
         cmd.setId(profileId);
+        cmd.setUsername(username);
         profile = new Profile(cmd);
         profileDomainRepository.save(profile);
         return profileDTOMapper.domainModelToDTO(profile);

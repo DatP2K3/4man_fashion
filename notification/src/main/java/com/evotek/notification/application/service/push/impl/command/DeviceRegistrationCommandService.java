@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.evo.common.exception.ResponseException;
 import com.evotek.notification.application.dto.request.RegisterOrUpdateDeviceRequest;
 import com.evotek.notification.application.dto.request.UnRegisterDeviceRequest;
 import com.evotek.notification.application.mapper.CommandMapper;
@@ -12,8 +13,7 @@ import com.evotek.notification.domain.DeviceRegistration;
 import com.evotek.notification.domain.command.RegisterOrUpdateDeviceCmd;
 import com.evotek.notification.domain.repository.DeviceRegistrationDomainRepository;
 import com.evotek.notification.domain.repository.UserTopicDomainRepository;
-import com.evotek.notification.infrastructure.support.exception.AppErrorCode;
-import com.evotek.notification.infrastructure.support.exception.AppException;
+import com.evotek.notification.infrastructure.support.exception.BadRequestError;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
@@ -61,7 +61,7 @@ public class DeviceRegistrationCommandService {
                 FirebaseMessaging.getInstance(FirebaseApp.getInstance("my-app"))
                         .subscribeToTopic(List.of(deviceToken), topic);
             } catch (FirebaseMessagingException e) {
-                throw new AppException(AppErrorCode.FIREBASE_SUBSCRIBE_TOPIC_FAILED);
+                throw new ResponseException(BadRequestError.FIREBASE_SUBSCRIBE_TOPIC_FAILED);
             }
         });
     }
@@ -72,7 +72,7 @@ public class DeviceRegistrationCommandService {
                 FirebaseMessaging.getInstance(FirebaseApp.getInstance("my-app"))
                         .unsubscribeFromTopic(List.of(unRegisterDeviceRequest.getDeviceToken()), topic);
             } catch (FirebaseMessagingException e) {
-                throw new AppException(AppErrorCode.FIREBASE_SUBSCRIBE_TOPIC_FAILED);
+                throw new ResponseException(BadRequestError.FIREBASE_SUBSCRIBE_TOPIC_FAILED);
             }
         });
     }

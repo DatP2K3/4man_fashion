@@ -1,7 +1,6 @@
 package com.evo.dashboard.adapter.order.client;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.cloud.openfeign.FeignClient;
@@ -21,7 +20,7 @@ import com.evo.dashboard.adapter.order.config.FeignOrderClientConfiguration;
         fallbackFactory = OrderClientFallback.class)
 public interface OrderClient {
     @GetMapping("api/orders/search")
-    PagingResponse<List<OrderDTO>> searchOrders(
+    PagingResponse<OrderDTO> searchOrders(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) UUID userId,
             @RequestParam(required = false) OrderStatus orderStatus,

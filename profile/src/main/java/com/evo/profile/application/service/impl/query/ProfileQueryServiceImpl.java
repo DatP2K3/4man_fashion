@@ -2,9 +2,9 @@ package com.evo.profile.application.service.impl.query;
 
 import java.util.List;
 
-import com.evo.common.dto.response.PageDTO;
 import org.springframework.stereotype.Service;
 
+import com.evo.common.dto.response.PageDTO;
 import com.evo.common.dto.response.ProfileDTO;
 import com.evo.profile.application.dto.mapper.ProfileDTOMapper;
 import com.evo.profile.application.dto.request.SearchProfileRequest;
@@ -37,6 +37,10 @@ public class ProfileQueryServiceImpl implements ProfileQueryService {
         }
 
         List<Profile> profiles = profileDomainRepository.search(query);
-        return PageDTO.of(profileDTOMapper.domainModelsToDTOs(profiles), query.getPageIndex(), query.getPageSize(), totalProfiles);
+        return PageDTO.of(
+                profileDTOMapper.domainModelsToDTOs(profiles),
+                query.getPageIndex(),
+                query.getPageSize(),
+                totalProfiles);
     }
 }

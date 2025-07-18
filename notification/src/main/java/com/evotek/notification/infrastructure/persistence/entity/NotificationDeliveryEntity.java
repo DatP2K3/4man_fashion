@@ -7,7 +7,10 @@ import jakarta.persistence.*;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
+import com.evo.common.entity.AuditEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,8 +23,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EnableJpaAuditing
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "notification_deliveries")
-public class NotificationDeliveryEntity {
+public class NotificationDeliveryEntity extends AuditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
@@ -33,8 +37,8 @@ public class NotificationDeliveryEntity {
     @Column(name = "device_registration_id")
     private UUID deviceRegistrationId;
 
-    @Column(name = "status")
-    private String status;
+    @Column(name = "read")
+    private Boolean read;
 
     @CreatedDate
     @Column(name = "send_at")

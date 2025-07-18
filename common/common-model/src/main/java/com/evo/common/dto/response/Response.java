@@ -3,15 +3,16 @@ package com.evo.common.dto.response;
 import java.io.Serializable;
 import java.time.Instant;
 
-import com.evo.common.dto.error.ResponseError;
+import org.springframework.util.StringUtils;
+
 import com.evo.common.enums.ErrorCodeClient;
+import com.evo.common.exception.ResponseError;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
-import org.springframework.util.StringUtils;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @SuperBuilder
@@ -24,6 +25,7 @@ public class Response<T> implements Serializable {
     private String message;
     private long timestamp = Instant.now().toEpochMilli();
     private String status;
+
     @JsonIgnore
     private RuntimeException exception;
 
@@ -127,7 +129,9 @@ public class Response<T> implements Serializable {
 
     public String toString() {
         String var10000 = String.valueOf(this.data);
-        return "Response {data=" + var10000 + ", success=" + this.success + ", status=" + this.status + ", code=" + this.code + ", message='" + this.message + "', timestamp=" + this.timestamp + ", exception=" + this.exception + "}";
+        return "Response {data=" + var10000 + ", success=" + this.success + ", status=" + this.status + ", code="
+                + this.code + ", message='" + this.message + "', timestamp=" + this.timestamp + ", exception="
+                + this.exception + "}";
     }
 
     @JsonIgnore
@@ -141,7 +145,7 @@ public class Response<T> implements Serializable {
         } else if (!(o instanceof Response)) {
             return false;
         } else {
-            Response<?> other = (Response)o;
+            Response<?> other = (Response) o;
             if (!other.canEqual(this)) {
                 return false;
             } else if (this.isSuccess() != other.isSuccess()) {
@@ -205,7 +209,7 @@ public class Response<T> implements Serializable {
         result = result * 59 + (this.isSuccess() ? 79 : 97);
         result = result * 59 + this.getCode();
         long $timestamp = this.getTimestamp();
-        result = result * 59 + (int)($timestamp >>> 32 ^ $timestamp);
+        result = result * 59 + (int) ($timestamp >>> 32 ^ $timestamp);
         Object $data = this.getData();
         result = result * 59 + ($data == null ? 43 : $data.hashCode());
         Object $message = this.getMessage();

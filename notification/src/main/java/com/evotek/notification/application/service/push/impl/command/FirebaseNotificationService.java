@@ -6,8 +6,8 @@ import java.util.concurrent.ExecutionException;
 import org.springframework.stereotype.Service;
 
 import com.evo.common.dto.event.PushNotificationEvent;
-import com.evotek.notification.infrastructure.support.exception.AppErrorCode;
-import com.evotek.notification.infrastructure.support.exception.AppException;
+import com.evo.common.exception.ResponseException;
+import com.evotek.notification.infrastructure.support.exception.BadRequestError;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
@@ -24,7 +24,7 @@ public class FirebaseNotificationService {
             Message message = buildNotificationMessage(pushNotificationEvent);
             sendAndGetResponse(message);
         } catch (Exception e) {
-            throw new AppException(AppErrorCode.FIREBASE_SEND_NOTIFICATION_FAILED);
+            throw new ResponseException(BadRequestError.FIREBASE_SEND_NOTIFICATION_FAILED);
         }
     }
 
@@ -33,7 +33,7 @@ public class FirebaseNotificationService {
             Message message = buildNotificationMessageForTopic(pushNotificationEvent);
             sendAndGetResponse(message);
         } catch (Exception e) {
-            throw new AppException(AppErrorCode.FIREBASE_SEND_NOTIFICATION_FAILED);
+            throw new ResponseException(BadRequestError.FIREBASE_SEND_NOTIFICATION_FAILED);
         }
     }
 
