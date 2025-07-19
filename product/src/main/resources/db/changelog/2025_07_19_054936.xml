@@ -1,0 +1,150 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="DatDZ2k3" id="1752904178109-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="discounts"/>
+            </not>
+        </preConditions>
+        <createTable tableName="discounts">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="discounts_pkey"/>
+            </column>
+            <column name="percentage" type="INTEGER"/>
+            <column name="discount_price" type="BIGINT"/>
+            <column name="discount_quantity" type="INTEGER"/>
+            <column name="discount_type" type="VARCHAR(255)"/>
+            <column name="end_date" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="product_id" type="UUID"/>
+            <column name="start_date" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="last_modified_by" type="UUID"/>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DatDZ2k3" id="1752904178109-2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="categories"/>
+            </not>
+        </preConditions>
+        <createTable tableName="categories">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="categories_pkey"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="last_modified_by" type="UUID"/>
+            <column name="description" type="TEXT"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="product_type" type="VARCHAR(255)"/>
+            <column name="deleted" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DatDZ2k3" id="1752904178109-3">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="comments"/>
+            </not>
+        </preConditions>
+        <createTable tableName="comments">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="comments_pkey"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="last_modified_by" type="UUID"/>
+            <column name="content" type="TEXT"/>
+            <column name="product_id" type="UUID"/>
+            <column name="rating" type="INTEGER"/>
+            <column name="user_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DatDZ2k3" id="1752904178109-4">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product_images"/>
+            </not>
+        </preConditions>
+        <createTable tableName="product_images">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="product_images_pkey"/>
+            </column>
+            <column name="avatar" type="BOOLEAN"/>
+            <column name="deleted" type="BOOLEAN"/>
+            <column name="file_id" type="UUID"/>
+            <column name="product_id" type="UUID"/>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="last_modified_by" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DatDZ2k3" id="1752904178109-5">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product_variants"/>
+            </not>
+        </preConditions>
+        <createTable tableName="product_variants">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="product_variants_pkey"/>
+            </column>
+            <column name="color" type="VARCHAR(255)"/>
+            <column name="deleted" type="BOOLEAN"/>
+            <column name="product_id" type="UUID"/>
+            <column name="quantity" type="INTEGER"/>
+            <column name="size" type="VARCHAR(255)"/>
+            <column name="sku" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="last_modified_by" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DatDZ2k3" id="1752904178109-6">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="products"/>
+            </not>
+        </preConditions>
+        <createTable tableName="products">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="products_pkey"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="last_modified_by" type="UUID"/>
+            <column name="average_rating" type="numeric(2, 1)"/>
+            <column name="category_id" type="UUID"/>
+            <column name="description" type="JSONB"/>
+            <column name="height" type="INTEGER"/>
+            <column name="hidden" type="BOOLEAN"/>
+            <column name="introduce" type="TEXT"/>
+            <column name="length" type="INTEGER"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="total_sold" type="BIGINT"/>
+            <column name="weight" type="INTEGER"/>
+            <column name="width" type="INTEGER"/>
+            <column name="origin_price" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DatDZ2k3" id="1752904178109-7">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tag_descriptions"/>
+            </not>
+        </preConditions>
+        <createTable tableName="tag_descriptions">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tag_descriptions_pkey"/>
+            </column>
+            <column name="category_id" type="UUID"/>
+            <column name="deleted" type="BOOLEAN"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="last_modified_by" type="UUID"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,92 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="DatDZ2k3" id="1752895115779-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="notification"/>
+            </not>
+        </preConditions>
+        <createTable tableName="notification">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="notification_pkey"/>
+            </column>
+            <column name="body" type="VARCHAR(255)"/>
+            <column name="data" type="JSONB"/>
+            <column name="image_url" type="VARCHAR(255)"/>
+            <column name="title" type="VARCHAR(255)"/>
+            <column name="topic" type="VARCHAR(255)"/>
+            <column name="user_id" type="UUID"/>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="last_modified_by" type="UUID"/>
+            <column name="status" type="SMALLINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DatDZ2k3" id="1752895115779-2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="device_registrations"/>
+            </not>
+        </preConditions>
+        <createTable tableName="device_registrations">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="device_registrations_pkey"/>
+            </column>
+            <column name="device_id" type="UUID"/>
+            <column name="device_token" type="VARCHAR(255)"/>
+            <column name="enabled" type="BOOLEAN"/>
+            <column name="last_login_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="user_id" type="UUID"/>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="last_modified_by" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DatDZ2k3" id="1752895115779-3">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="uk5w99ytc8231x09rwuboqyaykp"/>
+            </not>
+        </preConditions>
+        <addUniqueConstraint columnNames="device_id, user_id" constraintName="uk5w99ytc8231x09rwuboqyaykp" tableName="device_registrations"/>
+    </changeSet>
+    <changeSet author="DatDZ2k3" id="1752895115779-4">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="notification_deliveries"/>
+            </not>
+        </preConditions>
+        <createTable tableName="notification_deliveries">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="notification_deliveries_pkey"/>
+            </column>
+            <column name="device_registration_id" type="UUID"/>
+            <column name="notification_id" type="UUID"/>
+            <column name="seen_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="send_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="last_modified_by" type="UUID"/>
+            <column name="read" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DatDZ2k3" id="1752895115779-5">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user_topics"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user_topics">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_topics_pkey"/>
+            </column>
+            <column name="enabled" type="BOOLEAN"/>
+            <column name="topic" type="VARCHAR(255)"/>
+            <column name="user_id" type="UUID"/>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="last_modified_by" type="UUID"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

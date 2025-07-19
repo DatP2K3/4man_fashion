@@ -30,6 +30,9 @@
 		<java.version>21</java.version>
 		<spring-cloud.version>2023.0.5</spring-cloud.version>
 		<common.version>0.0.1-SNAPSHOT</common.version>
+		<maven.build.timestamp.format>yyyy_MM_dd_HHmmss</maven.build.timestamp.format>
+		<liquibase-maven-plugin.version>4.24.0</liquibase-maven-plugin.version>
+		<liquibase-hibernate6.version>4.24.0</liquibase-hibernate6.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -115,6 +118,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>${liquibase-maven-plugin.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.liquibase.ext</groupId>
+			<artifactId>liquibase-hibernate6</artifactId>
+			<version>${liquibase-hibernate6.version}</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -192,6 +205,37 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>${liquibase-maven-plugin.version}</version>
+				<configuration>
+					<propertyFile>/liquibase.properties</propertyFile>
+					<diffChangeLogFile>
+						src/main/resources/db/changelog/${maven.build.timestamp}.xml
+					</diffChangeLogFile>
+					<outputChangeLogFile>
+						src/main/resources/db/changelog/${maven.build.timestamp}.xml
+					</outputChangeLogFile>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.liquibase.ext</groupId>
+						<artifactId>liquibase-hibernate6</artifactId>
+						<version>${liquibase-hibernate6.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-starter-data-jpa</artifactId>
+						<version>3.3.7</version>
+					</dependency>
+					<dependency>
+						<groupId>jakarta.validation</groupId>
+						<artifactId>jakarta.validation-api</artifactId>
+						<version>3.1.0</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>

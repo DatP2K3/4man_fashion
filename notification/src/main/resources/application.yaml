@@ -12,10 +12,11 @@ spring:
       minimum-idle: 2
 
   jpa:
-    hibernate:
-      ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog-master.xml
   mail:
     host: smtp.gmail.com
     port: 587

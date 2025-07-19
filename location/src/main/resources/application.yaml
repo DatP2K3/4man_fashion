@@ -9,8 +9,6 @@ spring:
     driver-class-name: org.postgresql.Driver
 
   jpa:
-    hibernate:
-      ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
@@ -31,6 +29,10 @@ spring:
       path: /swagger-doc/location/swagger-ui.html
     api-docs:
       path: /swagger-doc/v3/api-docs/location
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog-master.xml
 
 server:
   port: ${SERVER_PORT:8111}

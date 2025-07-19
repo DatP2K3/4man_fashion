@@ -12,13 +12,15 @@ spring:
       minimum-idle: 2
 
   jpa:
-    hibernate:
-      ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
         format_sql: true
     show-sql: true
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog-master.xml
 
   security:
     oauth2:
