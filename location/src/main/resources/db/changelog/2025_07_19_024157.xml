@@ -1,0 +1,85 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="DatDZ2k3" id="1752892919959-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="shop_address"/>
+            </not>
+        </preConditions>
+        <createTable tableName="shop_address">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="shop_address_pkey"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="last_modified_by" type="UUID"/>
+            <column name="address_line1" type="VARCHAR(255)"/>
+            <column name="address_line2" type="VARCHAR(255)"/>
+            <column name="city" type="VARCHAR(255)"/>
+            <column name="district" type="VARCHAR(255)"/>
+            <column name="district_id" type="VARCHAR(255)"/>
+            <column name="phone_number" type="VARCHAR(255)"/>
+            <column name="shop_name" type="VARCHAR(255)"/>
+            <column name="type" type="VARCHAR(255)"/>
+            <column name="ward" type="VARCHAR(255)"/>
+            <column name="ward_code" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DatDZ2k3" id="1752892919959-2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ghn_districts"/>
+            </not>
+        </preConditions>
+        <createTable tableName="ghn_districts">
+            <column name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="ghn_districts_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="province_id" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="VARCHAR(255)"/>
+            <column name="is_enable" type="BOOLEAN"/>
+            <column name="is_enabled" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DatDZ2k3" id="1752892919959-3">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ghn_provinces"/>
+            </not>
+        </preConditions>
+        <createTable tableName="ghn_provinces">
+            <column name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="ghn_provinces_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="VARCHAR(255)"/>
+            <column name="is_enable" type="BOOLEAN"/>
+            <column name="is_enabled" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DatDZ2k3" id="1752892919959-4">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ghn_wards"/>
+            </not>
+        </preConditions>
+        <createTable tableName="ghn_wards">
+            <column name="ward_code" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="ghn_wards_pkey"/>
+            </column>
+            <column name="ward_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="district_id" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

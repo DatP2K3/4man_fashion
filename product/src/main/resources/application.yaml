@@ -16,11 +16,14 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
         format_sql: true
+
+  liquibase:
+    change-log: classpath:/db/changelog-master.xml
 
   doc:
     swagger-ui:

@@ -1,0 +1,86 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="DatDZ2k3" id="1752903616597-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="orders"/>
+            </not>
+        </preConditions>
+        <createTable tableName="orders">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="orders_pkey"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="last_modified_by" type="UUID"/>
+            <column name="ghn_order_code" type="VARCHAR(255)"/>
+            <column name="from_address_line1" type="VARCHAR(255)"/>
+            <column name="from_address_line2" type="VARCHAR(255)"/>
+            <column name="from_city" type="VARCHAR(255)"/>
+            <column name="from_district" type="VARCHAR(255)"/>
+            <column name="from_district_id" type="VARCHAR(255)"/>
+            <column name="from_name" type="VARCHAR(255)"/>
+            <column name="from_phone_number" type="VARCHAR(255)"/>
+            <column name="from_ward" type="VARCHAR(255)"/>
+            <column name="from_ward_code" type="VARCHAR(255)"/>
+            <column name="note" type="TEXT"/>
+            <column name="order_code" type="VARCHAR(255)"/>
+            <column name="order_status" type="VARCHAR(255)"/>
+            <column name="payment_method" type="VARCHAR(255)"/>
+            <column name="payment_status" type="VARCHAR(255)"/>
+            <column name="payment_url" type="TEXT"/>
+            <column name="printed" type="BOOLEAN"/>
+            <column name="references_id" type="UUID"/>
+            <column name="reject_reason" type="TEXT"/>
+            <column name="return_address_line1" type="VARCHAR(255)"/>
+            <column name="return_address_line2" type="VARCHAR(255)"/>
+            <column name="return_city" type="VARCHAR(255)"/>
+            <column name="return_district" type="VARCHAR(255)"/>
+            <column name="return_district_id" type="VARCHAR(255)"/>
+            <column name="return_name" type="VARCHAR(255)"/>
+            <column name="return_phone_number" type="VARCHAR(255)"/>
+            <column name="return_ward" type="VARCHAR(255)"/>
+            <column name="return_ward_code" type="VARCHAR(255)"/>
+            <column name="shipment_fee" type="INTEGER"/>
+            <column name="to_address_line1" type="VARCHAR(255)"/>
+            <column name="to_address_line2" type="VARCHAR(255)"/>
+            <column name="to_city" type="VARCHAR(255)"/>
+            <column name="to_district" type="VARCHAR(255)"/>
+            <column name="to_district_id" type="VARCHAR(255)"/>
+            <column name="to_name" type="VARCHAR(255)"/>
+            <column name="to_phone_number" type="VARCHAR(255)"/>
+            <column name="to_ward" type="VARCHAR(255)"/>
+            <column name="to_ward_code" type="VARCHAR(255)"/>
+            <column name="total_height" type="INTEGER"/>
+            <column name="total_length" type="INTEGER"/>
+            <column name="total_price" type="BIGINT"/>
+            <column name="total_product_variant" type="INTEGER"/>
+            <column name="total_weight" type="INTEGER"/>
+            <column name="total_width" type="INTEGER"/>
+            <column name="user_id" type="UUID"/>
+            <column name="cashback_used" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DatDZ2k3" id="1752903616597-2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="order_items"/>
+            </not>
+        </preConditions>
+        <createTable tableName="order_items">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="order_items_pkey"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="last_modified_by" type="UUID"/>
+            <column name="deleted" type="BOOLEAN"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="order_id" type="UUID"/>
+            <column name="price" type="BIGINT"/>
+            <column name="product_id" type="UUID"/>
+            <column name="product_variant_id" type="UUID"/>
+            <column name="quantity" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

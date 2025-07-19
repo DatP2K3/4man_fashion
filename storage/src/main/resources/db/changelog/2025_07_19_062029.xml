@@ -1,0 +1,62 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="DatDZ2k3" id="1752906030873-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="files"/>
+            </not>
+        </preConditions>
+        <createTable tableName="files">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="files_pkey"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="deleted" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="file_height" type="INTEGER"/>
+            <column name="file_size" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_width" type="INTEGER"/>
+            <column name="is_public" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="md5_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="origin_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="url" type="VARCHAR(255)"/>
+            <column name="last_modified_by" type="UUID"/>
+            <column name="created_by" type="UUID"/>
+            <column name="usage_status" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DatDZ2k3" id="1752906030873-2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="file_histories"/>
+            </not>
+        </preConditions>
+        <createTable tableName="file_histories">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="file_histories_pkey"/>
+            </column>
+            <column name="action" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="file_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="last_modified_by" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
