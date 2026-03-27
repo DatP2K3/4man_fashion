@@ -4,6 +4,9 @@ import java.util.UUID;
 
 import com.evo.banner.infrastructure.support.enums.BannerType;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,9 +16,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateBannerRequest {
     private UUID id;
+
+    @NotBlank
     private String title;
+
+    @NotNull
     private UUID fileId;
+
+    @Min(0)
     private int position;
+
+    @NotNull
     private BannerType type;
+
     private Boolean deleted;
 }

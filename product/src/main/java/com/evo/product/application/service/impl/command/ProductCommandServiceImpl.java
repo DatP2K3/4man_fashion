@@ -63,6 +63,15 @@ class ProductCommandServiceImpl implements ProductCommandService {
     public ProductDTO updateProduct(CreateOrUpdateProductRequest createOrUpdateProductRequest) {
         CreateOrUpdateProductCmd createOrUpdateProductCmd = commandMapper.from(createOrUpdateProductRequest);
         Product product = productDomainRepository.getById(createOrUpdateProductCmd.getId());
+
+        // Capture old image IDs BEFORE updating the product
+        List<UUID> oldImageFileIds = product.getProductImages() != null
+                ? product.getProductImages().stream()
+                        .filter(img -> !img.getDeleted())
+                        .map(ProductImage::getFileId)
+                        .collect(Collectors.toList())
+                : List.of();
+
         product.update(createOrUpdateProductCmd);
         product = productDomainRepository.save(product);
 
@@ -70,19 +79,13 @@ class ProductCommandServiceImpl implements ProductCommandService {
         ProductEvent productEvent = new ProductEvent(List.of(productSync));
         productEventRabbitMQService.publishProductUpdatedEvent(productEvent);
 
-        Map<UUID, FileUsageStatus> fileStatusMap = new HashMap<>();
-
+        // Get new image IDs AFTER updating
         List<UUID> newImageFileIds = product.getProductImages().stream()
                 .filter(img -> !img.getDeleted())
                 .map(ProductImage::getFileId)
                 .collect(Collectors.toList());
 
-        List<UUID> oldImageFileIds = product.getProductImages() != null
-                ? product.getProductImages().stream()
-                        .filter(img -> !img.getDeleted())
-                        .map(ProductImage::getFileId)
-                        .collect(Collectors.toList())
-                : List.of();
+        Map<UUID, FileUsageStatus> fileStatusMap = new HashMap<>();
 
         // Mark old images that are no longer used as UNUSED
         oldImageFileIds.stream()

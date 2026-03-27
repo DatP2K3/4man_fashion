@@ -1,4 +1,4 @@
-package com.evo.cart.infrastructure.support.exception;
+package com.evo.banner.infrastructure.support.exception;
 
 import com.evo.common.exception.ResponseError;
 
@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 public enum NotFoundError implements ResponseError {
-    CART_NOT_FOUND(1000001, "error.cart.not_found"),
+    BANNER_NOT_FOUND(2023, "error.banner.not_found"),
     ;
 
     private final Integer code;

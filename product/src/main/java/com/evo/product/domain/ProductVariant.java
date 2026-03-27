@@ -12,7 +12,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@Setter
 @Getter
 public class ProductVariant extends Auditor {
     private UUID id;
@@ -33,5 +32,17 @@ public class ProductVariant extends Auditor {
         this.quantity = cmd.getQuantity();
         this.sku = cmd.getSku();
         this.deleted = false;
+    }
+
+    public void markAsDeleted() {
+        this.deleted = true;
+    }
+
+    public void restore() {
+        this.deleted = false;
+    }
+
+    public void adjustQuantity(int delta) {
+        this.quantity += delta;
     }
 }

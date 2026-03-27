@@ -40,7 +40,7 @@ public class CronJobService {
             GHNOrderDetailDTO ghnOrderDetailDTO =
                     ghnClient.getOrderDetail(getGHNFeeRequest).getData();
             List<GHNOrderLogDTO> logs = ghnOrderDetailDTO.getLog();
-            if (logs != null || !logs.isEmpty()) {
+            if (logs != null && !logs.isEmpty()) {
                 String ghnStatus = logs.getFirst().getStatus();
                 OrderStatus orderStatus =
                         switch (ghnStatus) {
@@ -64,7 +64,7 @@ public class CronJobService {
                 ;
 
                 if (orderStatus != null && !order.getOrderStatus().equals(orderStatus)) {
-                    order.setOrderStatus(orderStatus);
+                    order.updateStatusFromTracking(orderStatus);
                     orderDomainRepository.save(order);
                     StringBuilder title = new StringBuilder();
                     StringBuffer body = new StringBuffer();

@@ -34,9 +34,9 @@ public class CronJobService {
         List<Discount> discounts = discountDomainRepository.getAllNotIn(discountStatuses);
         for (Discount discount : discounts) {
             if (discount.getStartDate().isBefore(now) && discount.getEndDate().isAfter(now)) {
-                discount.setStatus(DiscountStatus.ACTIVE);
+                discount.activate();
             } else if (discount.getEndDate().isBefore(now)) {
-                discount.setStatus(DiscountStatus.EXPIRED);
+                discount.expire();
             }
         }
         discountDomainRepository.saveAll(discounts);

@@ -138,11 +138,11 @@ public class ProductDomainRepositoryImpl extends AbstractDomainRepository<Produc
                                 Collectors.mapping(discountEntityMapper::toDomainModel, Collectors.toList())));
 
         products.forEach(product -> {
-            product.setProductVariants(
+            product.enrichProductVariants(
                     new ArrayList<>(productVariantMap.getOrDefault(product.getId(), Collections.emptyList())));
-            product.setProductImages(
+            product.enrichProductImages(
                     new ArrayList<>(productImageMap.getOrDefault(product.getId(), Collections.emptyList())));
-            product.setDiscounts(new ArrayList<>(discountMap.getOrDefault(product.getId(), Collections.emptyList())));
+            product.enrichDiscounts(new ArrayList<>(discountMap.getOrDefault(product.getId(), Collections.emptyList())));
             product.enrichDiscountInfo();
         });
 

@@ -63,23 +63,23 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     public OrderDTO create(CreateOrderRequest request) {
         CreateOrderCmd createOrderCmd = commandMapper.from(request);
         ProfileDTO profileDTO = profileClient.getProfile().getData();
-        OrderFeeDTO orderFeeDTO = orderQueryService.caculateFeeByAddressId(request.getToAddressId());
+        OrderFeeDTO orderFeeDTO = orderQueryService.calculateFeeByAddressId(request.getToAddressId());
         ShippingAddressDTO toAddress = profileDTO.getListShippingAddress().stream()
                 .filter(item -> item.getId().equals(request.getToAddressId()))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new IllegalArgumentException("Shipping address not found: " + request.getToAddressId()));
 
-        ShopAddressDTO fromAddress = null;
-        ShopAddressDTO returnAddress = null;
         List<ShopAddressDTO> shopAddressDTOS = shopInfoClient.getShopAddress().getData();
 
-        for (ShopAddressDTO shopAddressDTO : shopAddressDTOS) {
-            if (shopAddressDTO.getType().equals(ShopAddressType.SEND_ADDRESS)) {
-                fromAddress = shopAddressDTO;
-            } else if (shopAddressDTO.getType().equals(ShopAddressType.RETURN_ADDRESS)) {
-                returnAddress = shopAddressDTO;
-            }
-        }
+        ShopAddressDTO fromAddress = shopAddressDTOS.stream()
+                .filter(addr -> addr.getType().equals(ShopAddressType.SEND_ADDRESS))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Send address not configured"));
+
+        ShopAddressDTO returnAddress = shopAddressDTOS.stream()
+                .filter(addr -> addr.getType().equals(ShopAddressType.RETURN_ADDRESS))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Return address not configured"));
 
         CartDTO cartDTO = cartClient.getCart().getData();
 
@@ -94,7 +94,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         if (order.getPaymentMethod().equals(PaymentMethod.ONLINE)) {
             String paymentUrl =
                     paymentClient.getPaymentUrl(getPaymentUrlRequest).getData();
-            order.setPaymentUrl(paymentUrl);
+            order.assignPaymentUrl(paymentUrl);
         }
 
         order = orderDomainRepository.save(order);
@@ -149,13 +149,8 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         List<ProductVariantSync> productVariantSyncs = new ArrayList<>();
 
         for (Order order : orders) {
-            if (order.getOrderStatus().equals(OrderStatus.PENDING_SHIPMENT)
-                    || order.getOrderStatus().equals(OrderStatus.WAITING_FOR_PICKUP)) {
-                order.setOrderStatus(OrderStatus.CANCELLED);
-                List<OrderItem> orderItems = order.getOrderItems();
-                for (OrderItem orderItem : orderItems) {
-                    orderItem.setDeleted(true);
-                }
+            if (order.isCancellable()) {
+                order.cancel();
 
                 PushNotificationEvent pushNotificationEvent = PushNotificationEvent.builder()
                         .title("Đơn hàng" + order.getOrderCode())
@@ -187,7 +182,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
 
     @Override
     public List<OrderDTO> createGHNOrder(CreatShippingOrderRequest request) {
-        if (request.getOrderIds().isEmpty() || request.getOrderIds() == null) {
+        if (request.getOrderIds() == null || request.getOrderIds().isEmpty()) {
             return List.of();
         }
         List<Order> orders = orderDomainRepository.getByIds(request.getOrderIds());
@@ -230,8 +225,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
 
             GHNOrderDTO ghnOrderDTO =
                     ghnClient.createShippingOrder(createGHNOrderRequest).getData();
-            order.setGHNOrderCode(ghnOrderDTO.getOrderCode());
-            order.setOrderStatus(OrderStatus.WAITING_FOR_PICKUP);
+            order.assignShipping(ghnOrderDTO.getOrderCode());
 
             PushNotificationEvent pushNotificationEvent = PushNotificationEvent.builder()
                     .title("Đơn hàng" + order.getOrderCode())
@@ -249,19 +243,18 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     public void updateStatus(UpdateOrderStatusCmd updateOrderStatusCmd) {
         Order order = orderDomainRepository.getByOrderCode(updateOrderStatusCmd.getOrderCode());
         if (updateOrderStatusCmd.getStatus() == TransactionStatus.SUCCESS) {
-            order.setPaymentStatus(PaymentStatus.PAID);
-            order.setOrderStatus(OrderStatus.PENDING_SHIPMENT);
+            order.markPaymentSuccess();
         } else {
-            order.setPaymentStatus(PaymentStatus.FAILED);
+            order.markPaymentFailed();
         }
         orderDomainRepository.save(order);
     }
 
     @Override
-    public void printGHNOrder(List<String> GHNorderCodes) {
-        List<Order> orders = orderDomainRepository.getByGHNOrderCodeIn(GHNorderCodes);
+    public void printGHNOrder(List<String> ghnOrderCodes) {
+        List<Order> orders = orderDomainRepository.getByGHNOrderCodeIn(ghnOrderCodes);
         for (Order order : orders) {
-            order.setPrinted(true);
+            order.markAsPrinted();
         }
         orderDomainRepository.saveAll(orders);
     }

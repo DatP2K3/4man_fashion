@@ -6,36 +6,31 @@ import lombok.Getter;
 
 @Getter
 public enum BadRequestError implements ResponseError {
-    ORDER_NOT_FOUND(1000050, "Order not found"),
-    ORDER_ITEM_NOT_FOUND(1000051, "Order item not found"),
-    CANT_DELETE_ORDER(1000052, "Can't delete order"),
+    ORDER_NOT_FOUND(1000050, "error.order.not_found"),
+    ORDER_ITEM_NOT_FOUND(1000051, "error.order.not_found"),
+    CANT_DELETE_ORDER(1000052, "error.order.cannot_cancel"),
     ;
 
     private final Integer code;
-    private final String message;
+    private final String messageKey;
 
-    BadRequestError(int code, String message) {
+    BadRequestError(int code, String messageKey) {
         this.code = code;
-        this.message = message;
+        this.messageKey = messageKey;
     }
 
     @Override
-    public String getName() {
-        return name();
-    }
+    public String getName() { return name(); }
 
     @Override
-    public String getMessage() {
-        return message;
-    }
+    public String getMessage() { return messageKey; }
 
     @Override
-    public int getStatus() {
-        return 400;
-    }
+    public int getStatus() { return 400; }
 
     @Override
-    public Integer getCode() {
-        return code;
-    }
+    public Integer getCode() { return code; }
+
+    @Override
+    public String getMessageKey() { return messageKey; }
 }

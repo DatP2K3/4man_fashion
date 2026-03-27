@@ -17,7 +17,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@Setter
 @Getter
 public class Cart extends Auditor {
     private UUID id;
@@ -46,15 +45,14 @@ public class Cart extends Auditor {
             return;
         }
         Map<UUID, CartItem> existingCartItemMap = this.cartItems.stream()
-                .peek(ci -> ci.setDeleted(true))
+                .peek(CartItem::markAsDeleted)
                 .collect(Collectors.toMap(CartItem::getProductVariantId, ci -> ci));
         List<CreateCartItemCmd> createCartItemCmds = updateCartCmd.getCartItems();
         for (CreateCartItemCmd createCartItemCmd : createCartItemCmds) {
             UUID productVariantId = createCartItemCmd.getProductVariantId();
             if (existingCartItemMap.containsKey(productVariantId)) {
-                // Nếu đã tồn tại, cập nhật deleted = false
-                existingCartItemMap.get(productVariantId).setDeleted(false);
-                existingCartItemMap.get(productVariantId).setQuantity(createCartItemCmd.getQuantity());
+                existingCartItemMap.get(productVariantId)
+                        .restoreWithQuantity(createCartItemCmd.getQuantity());
             } else {
                 createCartItemCmd.setCartId(this.id);
                 CartItem newcartItem = new CartItem(createCartItemCmd);
@@ -63,7 +61,14 @@ public class Cart extends Auditor {
         }
     }
 
+    /**
+     * Used by infrastructure layer to enrich cart with its items after loading from DB.
+     */
+    public void enrichCartItems(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
+    }
+
     public void emptyCart() {
-        this.getCartItems().forEach(item -> item.setDeleted(true));
+        this.getCartItems().forEach(CartItem::markAsDeleted);
     }
 }

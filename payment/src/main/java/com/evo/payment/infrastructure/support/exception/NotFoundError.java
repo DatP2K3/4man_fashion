@@ -6,34 +6,29 @@ import lombok.Getter;
 
 @Getter
 public enum NotFoundError implements ResponseError {
-    PAYMENT_TRANSACTION_NOT_FOUND(1000070, "Payment transaction not found"),
+    PAYMENT_TRANSACTION_NOT_FOUND(1000070, "error.payment.not_found"),
     ;
 
     private final int code;
-    private final String message;
+    private final String messageKey;
 
-    NotFoundError(int code, String message) {
+    NotFoundError(int code, String messageKey) {
         this.code = code;
-        this.message = message;
+        this.messageKey = messageKey;
     }
 
     @Override
-    public String getName() {
-        return name();
-    }
+    public String getName() { return name(); }
 
     @Override
-    public String getMessage() {
-        return message;
-    }
+    public String getMessage() { return messageKey; }
 
     @Override
-    public int getStatus() {
-        return 404;
-    }
+    public int getStatus() { return 404; }
 
     @Override
-    public Integer getCode() {
-        return code;
-    }
+    public Integer getCode() { return code; }
+
+    @Override
+    public String getMessageKey() { return messageKey; }
 }

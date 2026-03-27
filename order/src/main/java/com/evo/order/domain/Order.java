@@ -19,7 +19,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@Setter
 @Getter
 public class Order extends Auditor {
     private UUID id;
@@ -86,8 +85,8 @@ public class Order extends Auditor {
         // From address
         this.fromName = createOrderCmd.getFromName();
         this.fromPhoneNumber = createOrderCmd.getFromPhoneNumber();
-        this.fromAddressLine1 = createOrderCmd.getFromAddressLine1(); // Sửa lỗi ở đây
-        this.fromAddressLine2 = createOrderCmd.getFromAddressLine2(); // Sửa lỗi ở đây
+        this.fromAddressLine1 = createOrderCmd.getFromAddressLine1();
+        this.fromAddressLine2 = createOrderCmd.getFromAddressLine2();
         this.fromWard = createOrderCmd.getFromWard();
         this.fromWardCode = createOrderCmd.getFromWardCode();
         this.fromDistrict = createOrderCmd.getFromDistrict();
@@ -126,15 +125,94 @@ public class Order extends Auditor {
         this.totalWidth = createOrderCmd.getTotalWidth();
         this.totalLength = createOrderCmd.getTotalLength();
         this.printed = false;
-        this.orderItems = new ArrayList<>();
         this.referencesId = createOrderCmd.getReferencesId();
-        if (this.orderItems == null) {
-            this.orderItems = new ArrayList<>();
-        }
+        this.orderItems = new ArrayList<>();
         createOrderCmd.getOrderItems().forEach(createOrderItemCmd -> {
             createOrderItemCmd.setOrderId(this.id);
             OrderItem newOrderItem = new OrderItem(createOrderItemCmd);
             this.orderItems.add(newOrderItem);
         });
+    }
+
+    // === Domain Methods ===
+
+    /**
+     * Assign payment URL for online payment orders.
+     */
+    public void assignPaymentUrl(String paymentUrl) {
+        this.paymentUrl = paymentUrl;
+    }
+
+    /**
+     * Cancel this order. Validates that only PENDING_SHIPMENT or WAITING_FOR_PICKUP orders can be cancelled.
+     * Also soft-deletes all order items.
+     */
+    public void cancel() {
+        if (this.orderStatus != OrderStatus.PENDING_SHIPMENT
+                && this.orderStatus != OrderStatus.WAITING_FOR_PICKUP) {
+            throw new IllegalStateException(
+                    "Cannot cancel order with status: " + this.orderStatus);
+        }
+        this.orderStatus = OrderStatus.CANCELLED;
+        if (this.orderItems != null) {
+            this.orderItems.forEach(OrderItem::markAsDeleted);
+        }
+    }
+
+    /**
+     * Check if this order is cancellable.
+     */
+    public boolean isCancellable() {
+        return this.orderStatus == OrderStatus.PENDING_SHIPMENT
+                || this.orderStatus == OrderStatus.WAITING_FOR_PICKUP;
+    }
+
+    /**
+     * Mark payment as successful — transitions to PENDING_SHIPMENT.
+     */
+    public void markPaymentSuccess() {
+        this.paymentStatus = PaymentStatus.PAID;
+        this.orderStatus = OrderStatus.PENDING_SHIPMENT;
+    }
+
+    /**
+     * Mark payment as failed.
+     */
+    public void markPaymentFailed() {
+        this.paymentStatus = PaymentStatus.FAILED;
+    }
+
+    /**
+     * Assign GHN shipping order and transition status to WAITING_FOR_PICKUP.
+     */
+    public void assignShipping(String ghnOrderCode) {
+        this.GHNOrderCode = ghnOrderCode;
+        this.orderStatus = OrderStatus.WAITING_FOR_PICKUP;
+    }
+
+    /**
+     * Mark this order as printed.
+     */
+    public void markAsPrinted() {
+        this.printed = true;
+    }
+
+    /**
+     * Update order status from external tracking (CronJob sync).
+     * Returns true if status actually changed.
+     */
+    public boolean updateStatusFromTracking(OrderStatus newStatus) {
+        if (newStatus == null || this.orderStatus.equals(newStatus)) {
+            return false;
+        }
+        this.orderStatus = newStatus;
+        return true;
+    }
+
+    /**
+     * Used by infrastructure layer to enrich order with its items after loading from DB.
+     */
+    public void enrichOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 }

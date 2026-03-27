@@ -33,7 +33,7 @@ public class BannerCommandServiceImpl implements BannerCommandService {
     @Override
     public void deleteBanner(UUID id) {
         Banner banner = bannerDomainRepository.getById(id);
-        banner.setDeleted(true);
+        banner.markAsDeleted();
         bannerDomainRepository.save(banner);
     }
 }

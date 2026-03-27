@@ -12,7 +12,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@Setter
 @Getter
 public class Banner {
     private UUID id;
@@ -28,5 +27,9 @@ public class Banner {
         this.position = createBannerCmd.getPosition();
         this.type = createBannerCmd.getType();
         this.deleted = false;
+    }
+
+    public void markAsDeleted() {
+        this.deleted = true;
     }
 }

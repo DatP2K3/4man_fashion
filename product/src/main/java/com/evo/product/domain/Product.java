@@ -1,7 +1,6 @@
 package com.evo.product.domain;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +28,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@Setter
 @Getter
 public class Product extends Auditor {
     private UUID id;
@@ -82,9 +80,9 @@ public class Product extends Auditor {
                     throw new ResponseException(BadRequestError.OPERATION_TYPE_IS_REQUIRED);
                 }
                 if (cmd.getOperationType().equals(OperationType.INCREASE)) {
-                    productVariant.setQuantity(productVariant.getQuantity() + cmd.getTotalQuantity());
+                    productVariant.adjustQuantity(cmd.getTotalQuantity());
                 } else if (cmd.getOperationType().equals(OperationType.DECREASE)) {
-                    productVariant.setQuantity(productVariant.getQuantity() - cmd.getTotalQuantity());
+                    productVariant.adjustQuantity(-cmd.getTotalQuantity());
                 } else {
                     throw new ResponseException(BadRequestError.INVALID_OPERATION_TYPE);
                 }
@@ -134,13 +132,13 @@ public class Product extends Auditor {
             this.productVariants = new ArrayList<>();
         }
         Map<UUID, ProductVariant> existingProductVariantMap = this.productVariants.stream()
-                .peek(rp -> rp.setDeleted(true))
+                .peek(ProductVariant::markAsDeleted)
                 .collect(Collectors.toMap(ProductVariant::getId, rp -> rp));
 
         for (CreateOrUpdateProductVariantCmd productVariantCmd : productVariantCmds) {
             UUID productVariantId = productVariantCmd.getId();
             if (existingProductVariantMap.containsKey(productVariantId)) {
-                existingProductVariantMap.get(productVariantId).setDeleted(false);
+                existingProductVariantMap.get(productVariantId).restore();
             } else {
                 productVariantCmd.setProductId(this.id);
                 ProductVariant newProductVariant = new ProductVariant(productVariantCmd);
@@ -153,18 +151,15 @@ public class Product extends Auditor {
         if (this.productImages == null) {
             this.productImages = new ArrayList<>();
         }
-        // Tạo map chứa rolePermission hiện tại và tạm thời xoá mềm
         Map<UUID, ProductImage> existingProductImageMap = this.productImages.stream()
-                .peek(rp -> rp.setDeleted(true))
+                .peek(ProductImage::markAsDeleted)
                 .collect(Collectors.toMap(ProductImage::getId, rp -> rp));
 
         for (CreateOrUpdateProductImageCmd productImageCmd : productImageCmds) {
             UUID productImageId = productImageCmd.getId();
             if (existingProductImageMap.containsKey(productImageId)) {
-                // Nếu đã tồn tại, cập nhật deleted = false
-                existingProductImageMap.get(productImageId).setDeleted(false);
+                existingProductImageMap.get(productImageId).restore();
             } else {
-                // Nếu chưa tồn tại, tạo mới RolePermission
                 productImageCmd.setProductId(this.id);
                 ProductImage newProductImage = new ProductImage(productImageCmd);
                 this.productImages.add(newProductImage);
@@ -189,41 +184,7 @@ public class Product extends Auditor {
     public void updateDiscount(CreateOrUpdateDiscountCmd createOrUpdateDiscountCmd) {
         for (Discount discount : this.discounts) {
             if (discount.getId().equals(createOrUpdateDiscountCmd.getId())) {
-
-                if (createOrUpdateDiscountCmd.getName() != null) {
-                    discount.setName(createOrUpdateDiscountCmd.getName());
-                }
-
-                if (createOrUpdateDiscountCmd.getDiscountPrice() != null) {
-                    discount.setDiscountPrice(createOrUpdateDiscountCmd.getDiscountPrice());
-                }
-
-                if (createOrUpdateDiscountCmd.getDiscountPercentage() != null) {
-                    discount.setDiscountPercentage(createOrUpdateDiscountCmd.getDiscountPercentage());
-                }
-
-                if (createOrUpdateDiscountCmd.getDiscountPrice() != null) {
-                    discount.setDiscountPrice(createOrUpdateDiscountCmd.getDiscountPrice());
-                }
-
-                if (createOrUpdateDiscountCmd.getStartDate() != null) {
-                    discount.setStartDate(createOrUpdateDiscountCmd.getStartDate());
-                }
-
-                if (createOrUpdateDiscountCmd.getEndDate() != null) {
-                    discount.setEndDate(createOrUpdateDiscountCmd.getEndDate());
-                }
-
-                Instant startDate = createOrUpdateDiscountCmd.getStartDate();
-                Instant endDate = createOrUpdateDiscountCmd.getEndDate();
-
-                if (endDate.isBefore(Instant.now())) {
-                    discount.setStatus(DiscountStatus.EXPIRED);
-                } else if (startDate.isAfter(Instant.now())) {
-                    discount.setStatus(DiscountStatus.SCHEDULED);
-                } else {
-                    discount.setStatus(DiscountStatus.ACTIVE);
-                }
+                discount.updateFrom(createOrUpdateDiscountCmd);
             }
         }
     }
@@ -233,9 +194,9 @@ public class Product extends Auditor {
             for (Discount discount : this.discounts) {
                 if (discount.getStatus() == DiscountStatus.ACTIVE) {
                     if (discount.getDiscountPrice() != null && discount.getDiscountPrice() > 0) {
-                        this.caculateByDiscountPrice(discount.getDiscountPrice());
+                        this.calculateByDiscountPrice(discount.getDiscountPrice());
                     } else if (discount.getDiscountPercentage() != null && discount.getDiscountPercentage() > 0) {
-                        this.caculateByDiscountPercent(discount.getDiscountPercentage());
+                        this.calculateByDiscountPercent(discount.getDiscountPercentage());
                     } else {
                         throw new ResponseException(BadRequestError.DISCOUNT_PRICE_OR_PERCENT_IS_REQUIRED);
                     }
@@ -254,12 +215,12 @@ public class Product extends Auditor {
         }
     }
 
-    private void caculateByDiscountPrice(Long discountPrice) {
+    private void calculateByDiscountPrice(Long discountPrice) {
         this.discountPrice = discountPrice;
         this.discountPercent = (int) (discountPrice / this.originPrice * 100);
     }
 
-    private void caculateByDiscountPercent(Integer discountPercent) {
+    private void calculateByDiscountPercent(Integer discountPercent) {
         this.discountPrice = (long) (this.originPrice * (100 - discountPercent) / 100);
         this.discountPercent = discountPercent;
     }
@@ -269,5 +230,26 @@ public class Product extends Auditor {
             this.hidden = false;
         }
         this.hidden = !this.hidden;
+    }
+
+    /**
+     * Used by infrastructure layer to enrich product with its variants after loading from DB.
+     */
+    public void enrichProductVariants(List<ProductVariant> productVariants) {
+        this.productVariants = productVariants;
+    }
+
+    /**
+     * Used by infrastructure layer to enrich product with its images after loading from DB.
+     */
+    public void enrichProductImages(List<ProductImage> productImages) {
+        this.productImages = productImages;
+    }
+
+    /**
+     * Used by infrastructure layer to enrich product with its discounts after loading from DB.
+     */
+    public void enrichDiscounts(List<Discount> discounts) {
+        this.discounts = discounts;
     }
 }

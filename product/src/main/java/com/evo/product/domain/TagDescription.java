@@ -12,7 +12,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@Setter
 @Getter
 public class TagDescription extends Auditor {
     private UUID id;
@@ -23,6 +22,14 @@ public class TagDescription extends Auditor {
     public TagDescription(CreateTagDescriptionCmd cmd) {
         this.name = cmd.getName();
         this.categoryId = cmd.getCategoryId();
+        this.deleted = false;
+    }
+
+    public void markAsDeleted() {
+        this.deleted = true;
+    }
+
+    public void restore() {
         this.deleted = false;
     }
 }

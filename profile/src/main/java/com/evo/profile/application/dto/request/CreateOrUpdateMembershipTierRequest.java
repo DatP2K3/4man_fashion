@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import com.evo.common.enums.MembershipTierType;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,8 +15,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateOrUpdateMembershipTierRequest {
     private UUID id;
+
+    @NotNull
     private MembershipTierType name;
+
+    @NotNull
+    @Min(0)
     private Double cashbackPercentage;
+
+    @NotNull
+    @Min(0)
     private Integer minPoints;
+
     private boolean defaultTier;
 }

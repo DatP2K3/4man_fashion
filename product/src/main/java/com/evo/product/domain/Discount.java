@@ -15,7 +15,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@Setter
 @Getter
 public class Discount extends Auditor {
     private UUID id;
@@ -44,5 +43,55 @@ public class Discount extends Auditor {
         this.discountType = createOrUpdateDiscountCmd.getDiscountType();
         this.discountPercentage = createOrUpdateDiscountCmd.getDiscountPercentage();
         this.discountPrice = createOrUpdateDiscountCmd.getDiscountPrice();
+    }
+
+    /**
+     * Update discount details from command, recalculating status based on dates.
+     */
+    public void updateFrom(CreateOrUpdateDiscountCmd cmd) {
+        if (cmd.getName() != null) {
+            this.name = cmd.getName();
+        }
+        if (cmd.getDiscountPrice() != null) {
+            this.discountPrice = cmd.getDiscountPrice();
+        }
+        if (cmd.getDiscountPercentage() != null) {
+            this.discountPercentage = cmd.getDiscountPercentage();
+        }
+        if (cmd.getStartDate() != null) {
+            this.startDate = cmd.getStartDate();
+        }
+        if (cmd.getEndDate() != null) {
+            this.endDate = cmd.getEndDate();
+        }
+        recalculateStatus();
+    }
+
+    /**
+     * Recalculate discount status based on current time and date range.
+     */
+    private void recalculateStatus() {
+        Instant now = Instant.now();
+        if (this.endDate.isBefore(now)) {
+            this.status = DiscountStatus.EXPIRED;
+        } else if (this.startDate.isAfter(now)) {
+            this.status = DiscountStatus.SCHEDULED;
+        } else {
+            this.status = DiscountStatus.ACTIVE;
+        }
+    }
+
+    /**
+     * Activate this discount.
+     */
+    public void activate() {
+        this.status = DiscountStatus.ACTIVE;
+    }
+
+    /**
+     * Mark this discount as expired.
+     */
+    public void expire() {
+        this.status = DiscountStatus.EXPIRED;
     }
 }

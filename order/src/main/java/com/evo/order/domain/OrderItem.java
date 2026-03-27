@@ -12,7 +12,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@Setter
 @Getter
 public class OrderItem extends Auditor {
     private UUID id;
@@ -38,5 +37,9 @@ public class OrderItem extends Auditor {
         this.width = createOrderItemCmd.getWidth();
         this.length = createOrderItemCmd.getLength();
         this.deleted = false;
+    }
+
+    public void markAsDeleted() {
+        this.deleted = true;
     }
 }

@@ -76,7 +76,7 @@ public class OrderDomainRepositoryImpl extends AbstractDomainRepository<Order, O
         for (Order order : orders) {
             List<OrderItem> orderItems = orderItemMap.get(order.getId());
             if (orderItems != null) {
-                order.setOrderItems(orderItems);
+                order.enrichOrderItems(orderItems);
             }
         }
 

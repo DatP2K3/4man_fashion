@@ -80,4 +80,4 @@ eureka:
 idp:
   url: ${KEYCLOAK_URL:http://localhost:8180}
   client-id: ${KEYCLOAK_CLIENT_ID:iam_service}
-  client-secret: ${KEYCLOAK_CLIENT_SECRET:nYW29NN8ATLJ7UpQ9kfrAl35SlsTUWS8}
+  client-secret: ${KEYCLOAK_CLIENT_SECRET}

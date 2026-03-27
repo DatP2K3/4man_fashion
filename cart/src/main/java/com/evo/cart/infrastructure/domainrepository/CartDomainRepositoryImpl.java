@@ -88,7 +88,7 @@ public class CartDomainRepositoryImpl extends AbstractDomainRepository<Cart, Car
                         Collectors.mapping(this.cartItemEntityMapper::toDomainModel, Collectors.toList())));
 
         carts.forEach(cart -> {
-            cart.setCartItems(cartItemMap.get(cart.getId()));
+            cart.enrichCartItems(cartItemMap.get(cart.getId()));
         });
 
         return this.enrichListCartItemInfo(carts);
@@ -99,25 +99,24 @@ public class CartDomainRepositoryImpl extends AbstractDomainRepository<Cart, Car
         for (Cart cart : carts) {
             if (cart.getCartItems() == null || cart.getCartItems().isEmpty()) continue;
             for (CartItem cartItem : cart.getCartItems()) {
-                Object o = productClient.getProduct(cartItem.getProductId());
                 ProductDTO productDTO =
                         productClient.getProduct(cartItem.getProductId()).getData();
-                cartItem.setName(productDTO.getName());
-                cartItem.setAvatarId(productDTO.getAvatarId());
-                cartItem.setDiscountPercent(productDTO.getDiscountPercent());
-                cartItem.setDiscountPrice(productDTO.getDiscountPrice());
-                cartItem.setDiscountType(productDTO.getDiscountType());
-                cartItem.setOriginPrice(productDTO.getOriginPrice());
-                cartItem.setHeight(productDTO.getHeight());
-                cartItem.setWidth(productDTO.getWidth());
-                cartItem.setLength(productDTO.getLength());
-                cartItem.setWeight(productDTO.getWeight());
+                cartItem.enrichFromProduct(
+                        productDTO.getName(),
+                        productDTO.getAvatarId(),
+                        productDTO.getDiscountPercent(),
+                        productDTO.getDiscountPrice(),
+                        productDTO.getDiscountType(),
+                        productDTO.getOriginPrice(),
+                        productDTO.getHeight(),
+                        productDTO.getWidth(),
+                        productDTO.getLength(),
+                        productDTO.getWeight());
 
                 List<ProductVariantDTO> productVariantDTOs = productDTO.getProductVariants();
                 for (ProductVariantDTO productVariantDTO : productVariantDTOs) {
                     if (productVariantDTO.getId().equals(cartItem.getProductVariantId())) {
-                        cartItem.setSize(productVariantDTO.getSize());
-                        cartItem.setColor(productVariantDTO.getColor());
+                        cartItem.enrichVariantInfo(productVariantDTO.getSize(), productVariantDTO.getColor());
                     }
                 }
             }

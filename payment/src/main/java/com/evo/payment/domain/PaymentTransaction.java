@@ -6,10 +6,10 @@ import com.evo.common.enums.TransactionStatus;
 import com.evo.payment.domain.command.CreatePaymentTransactionCmd;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentTransaction {

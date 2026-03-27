@@ -6,35 +6,30 @@ import lombok.Getter;
 
 @Getter
 public enum NotFoundError implements ResponseError {
-    PROFILE_NOT_FOUND(1000110, "Profile not found"),
-    MEMBERSHIP_TIER_NOT_FOUND(1000111, "Membership tier not found"),
-    CASHBACK_TRANSACTION_NOT_FOUND(1000112, "Cashback transaction not found");
+    PROFILE_NOT_FOUND(1000110, "error.profile.not_found"),
+    MEMBERSHIP_TIER_NOT_FOUND(1000111, "error.membership_tier.not_found"),
+    CASHBACK_TRANSACTION_NOT_FOUND(1000112, "error.cashback.not_found");
 
     private final Integer code;
-    private final String message;
+    private final String messageKey;
 
-    NotFoundError(int code, String message) {
+    NotFoundError(int code, String messageKey) {
         this.code = code;
-        this.message = message;
+        this.messageKey = messageKey;
     }
 
     @Override
-    public String getName() {
-        return name();
-    }
+    public String getName() { return name(); }
 
     @Override
-    public String getMessage() {
-        return message;
-    }
+    public String getMessage() { return messageKey; }
 
     @Override
-    public int getStatus() {
-        return 404;
-    }
+    public int getStatus() { return 404; }
 
     @Override
-    public Integer getCode() {
-        return code;
-    }
+    public Integer getCode() { return code; }
+
+    @Override
+    public String getMessageKey() { return messageKey; }
 }

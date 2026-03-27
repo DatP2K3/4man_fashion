@@ -23,10 +23,12 @@ import com.evo.payment.domain.repository.PaymentTransactionDomainRepository;
 import com.evo.payment.infrastructure.adapter.rabbitmq.OrderEventRabbitMQService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-public class PaymentCommanđServiceImpl implements PaymentCommandService {
+public class PaymentCommandServiceImpl implements PaymentCommandService {
     private final PaymentTransactionDomainRepository paymentTransactionDomainRepository;
     private final OrderEventRabbitMQService orderEventRabbitMQService;
 
@@ -41,13 +43,8 @@ public class PaymentCommanđServiceImpl implements PaymentCommandService {
         String transactionCode = request.getParameter("vnp_TransactionNo");
         String transactionDate = request.getParameter("vnp_PayDate");
         String transactionInfo = request.getParameter("vnp_OrderInfo");
-        TransactionStatus status = null;
 
-        if (transactionStatus.equals("00")) {
-            status = TransactionStatus.SUCCESS;
-        } else {
-            status = TransactionStatus.FAIL;
-        }
+        TransactionStatus status = "00".equals(transactionStatus) ? TransactionStatus.SUCCESS : TransactionStatus.FAIL;
 
         Instant formattedPayDate = formatPayDate(transactionDate);
 
@@ -99,6 +96,7 @@ public class PaymentCommanđServiceImpl implements PaymentCommandService {
             ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
             return localDateTime.atZone(zoneId).toInstant();
         } catch (Exception e) {
+            log.warn("Failed to parse VNPay date '{}', falling back to current time", vnpayDate, e);
             return Instant.now();
         }
     }

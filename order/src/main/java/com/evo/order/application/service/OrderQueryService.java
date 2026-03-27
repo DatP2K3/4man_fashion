@@ -15,13 +15,13 @@ public interface OrderQueryService {
 
     Long count(SearchOrderQuery query);
 
-    OrderFeeDTO caculateFeeByAddressId(UUID toAddressId);
+    OrderFeeDTO calculateFeeByAddressId(UUID toAddressId);
 
     OrderDTO findByOrderCode(String orderCode);
 
     String printGHNOrder(PrintOrCancelGHNOrderRequest getPrintTokenRequest);
 
-    String getGHYNPrintToken(PrintOrCancelGHNOrderRequest getPrintTokenRequest);
+    String getGHNPrintToken(PrintOrCancelGHNOrderRequest getPrintTokenRequest);
 
     List<OrderDTO> getOrdersOfUser();
 }

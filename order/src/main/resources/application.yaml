@@ -100,5 +100,5 @@ app:
 
   ghn:
     url: ${GHN_URL:https://online-gateway.ghn.vn}
-    token: ${GHN_TOKEN:b9f6edbb-2b60-11f0-a0cd-12f647571c0a}
-    id: ${GHN_ID:5766264}
+    token: ${GHN_TOKEN}
+    id: ${GHN_ID}

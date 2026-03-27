@@ -24,8 +24,8 @@ public interface OrderController {
 
     @Operation(summary = "Calculate fee by address")
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("caculate-fee/{toAddressId}")
-    Response<OrderFeeDTO> caculateFeeByAddressId(@PathVariable UUID toAddressId);
+    @GetMapping("calculate-fee/{toAddressId}")
+    Response<OrderFeeDTO> calculateFeeByAddressId(@PathVariable UUID toAddressId);
 
     @Operation(summary = "Delete order")
     @PreAuthorize("hasRole('USER')")

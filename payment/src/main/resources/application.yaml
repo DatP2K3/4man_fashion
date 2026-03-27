@@ -39,10 +39,10 @@ spring:
           jwk-set-uri: ${JWK_URI:http://localhost:8180/realms/IamService}
 
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: admin
-    password: admin
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    username: ${SPRING_RABBITMQ_USERNAME:admin}
+    password: ${SPRING_RABBITMQ_PASSWORD:admin}
 
 rabbitmq:
   exchange:
@@ -75,8 +75,8 @@ app:
 payment:
   vnPay:
     url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
-    tmnCode: ${VNPAY_TMNCODE:S8N2XOX9}
-    secretKey: ${VNPAY_SECRET_KEY:K2DKGJ2B55MPJAK3CJB0DNYI58TS22BY}
+    tmnCode: ${VNPAY_TMNCODE}
+    secretKey: ${VNPAY_SECRET_KEY}
     returnUrl: ${VNPAY_RETURN_URL:http://localhost:8008/api/vn-pay-callback}
     version: 2.1.0
     command: pay

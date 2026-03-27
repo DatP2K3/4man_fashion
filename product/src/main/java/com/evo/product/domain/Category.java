@@ -18,7 +18,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@Setter
 @Getter
 public class Category extends Auditor {
     private UUID id;
@@ -44,13 +43,13 @@ public class Category extends Auditor {
         }
 
         Map<String, TagDescription> tagDescriptionMap = this.tagDescriptions.stream()
-                .peek(rp -> rp.setDeleted(true))
+                .peek(TagDescription::markAsDeleted)
                 .collect(Collectors.toMap(TagDescription::getName, t -> t));
 
         for (CreateTagDescriptionCmd tagDescriptionCmd : tagDescriptionCmds) {
             String name = tagDescriptionCmd.getName();
             if (tagDescriptionMap.containsKey(name)) {
-                tagDescriptionMap.get(name).setDeleted(false);
+                tagDescriptionMap.get(name).restore();
             } else {
                 tagDescriptionCmd.setCategoryId(this.id);
                 TagDescription tagDescription = new TagDescription(tagDescriptionCmd);
@@ -76,10 +75,17 @@ public class Category extends Auditor {
         }
         if (this.tagDescriptions != null) {
             if (this.deleted) {
-                this.tagDescriptions.forEach(tag -> tag.setDeleted(true));
+                this.tagDescriptions.forEach(TagDescription::markAsDeleted);
             } else {
-                this.tagDescriptions.forEach(tag -> tag.setDeleted(false));
+                this.tagDescriptions.forEach(TagDescription::restore);
             }
         }
+    }
+
+    /**
+     * Used by infrastructure layer to enrich category with its tag descriptions after loading from DB.
+     */
+    public void enrichTagDescriptions(List<TagDescription> tagDescriptions) {
+        this.tagDescriptions = tagDescriptions;
     }
 }

@@ -6,40 +6,35 @@ import lombok.Getter;
 
 @Getter
 public enum BadRequestError implements ResponseError {
-    CANT_CREATE_DIR(1000140, "Can't create directory"),
-    INVALID_FILENAME(1000141, "Invalid filename"),
-    CANT_STORE_FILE(1000142, "Can't store file"),
-    CANT_HASH_FILE_NAME(1000143, "Can't hash file name"),
-    FILE_EXTENSION_NOT_ALLOWED(1000144, "File extension not allowed"),
-    FILE_TYPE_NOT_ALLOWED(1000145, "File type not allowed"),
-    CANT_DELETE_FILE(1000146, "Can't delete file"),
+    CANT_CREATE_DIR(1000140, "error.file.upload_failed"),
+    INVALID_FILENAME(1000141, "error.file.invalid_type"),
+    CANT_STORE_FILE(1000142, "error.file.upload_failed"),
+    CANT_HASH_FILE_NAME(1000143, "error.file.upload_failed"),
+    FILE_EXTENSION_NOT_ALLOWED(1000144, "error.file.invalid_type"),
+    FILE_TYPE_NOT_ALLOWED(1000145, "error.file.invalid_type"),
+    CANT_DELETE_FILE(1000146, "error.file.upload_failed"),
     ;
 
     private final Integer code;
-    private final String message;
+    private final String messageKey;
 
-    BadRequestError(int code, String message) {
+    BadRequestError(int code, String messageKey) {
         this.code = code;
-        this.message = message;
+        this.messageKey = messageKey;
     }
 
     @Override
-    public String getName() {
-        return name();
-    }
+    public String getName() { return name(); }
 
     @Override
-    public String getMessage() {
-        return message;
-    }
+    public String getMessage() { return messageKey; }
 
     @Override
-    public int getStatus() {
-        return 400;
-    }
+    public int getStatus() { return 400; }
 
     @Override
-    public Integer getCode() {
-        return code;
-    }
+    public Integer getCode() { return code; }
+
+    @Override
+    public String getMessageKey() { return messageKey; }
 }

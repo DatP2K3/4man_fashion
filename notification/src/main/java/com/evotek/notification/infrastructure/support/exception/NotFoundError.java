@@ -6,36 +6,31 @@ import lombok.Getter;
 
 @Getter
 public enum NotFoundError implements ResponseError {
-    DEVICE_REGISTRATION_NOT_FOUND(1000040, "Device registration not found"),
-    NOTIFICATION_NOT_FOUND(1000041, "Notification not found"),
-    USER_TOPIC_NOT_FOUND(1000042, "User topic not found"),
+    DEVICE_REGISTRATION_NOT_FOUND(1000040, "error.device_registration.not_found"),
+    NOTIFICATION_NOT_FOUND(1000041, "error.notification.not_found"),
+    USER_TOPIC_NOT_FOUND(1000042, "error.user_topic.not_found"),
     ;
 
     private final Integer code;
-    private final String message;
+    private final String messageKey;
 
-    NotFoundError(int code, String message) {
+    NotFoundError(int code, String messageKey) {
         this.code = code;
-        this.message = message;
+        this.messageKey = messageKey;
     }
 
     @Override
-    public String getName() {
-        return name();
-    }
+    public String getName() { return name(); }
 
     @Override
-    public String getMessage() {
-        return message;
-    }
+    public String getMessage() { return messageKey; }
 
     @Override
-    public int getStatus() {
-        return 404;
-    }
+    public int getStatus() { return 404; }
 
     @Override
-    public Integer getCode() {
-        return code;
-    }
+    public Integer getCode() { return code; }
+
+    @Override
+    public String getMessageKey() { return messageKey; }
 }

@@ -10,8 +10,8 @@ import com.evo.banner.domain.repository.BannerDomainRepository;
 import com.evo.banner.infrastructure.persistence.entity.BannerEntity;
 import com.evo.banner.infrastructure.persistence.mapper.BannerEntityMapper;
 import com.evo.banner.infrastructure.persistence.repository.BannerEntityRepository;
-import com.evo.banner.infrastructure.support.exception.AppErrorCode;
-import com.evo.banner.infrastructure.support.exception.AppException;
+import com.evo.banner.infrastructure.support.exception.NotFoundError;
+import com.evo.common.exception.ResponseException;
 import com.evo.common.repository.AbstractDomainRepository;
 
 @Repository
@@ -31,7 +31,7 @@ public class BannerDomainRepositoryImpl extends AbstractDomainRepository<Banner,
     public Banner getById(UUID uuid) {
         BannerEntity bannerEntity = bannerEntityRepository
                 .findById(uuid)
-                .orElseThrow(() -> new AppException(AppErrorCode.BANNER_NOT_FOUND));
+                .orElseThrow(() -> new ResponseException(NotFoundError.BANNER_NOT_FOUND));
         return bannerEntityMapper.toDomainModel(bannerEntity);
     }
 

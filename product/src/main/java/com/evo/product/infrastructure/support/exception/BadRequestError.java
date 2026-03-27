@@ -6,18 +6,18 @@ import lombok.Getter;
 
 @Getter
 public enum BadRequestError implements ResponseError {
-    PROMOTION_TYPE_IS_EXIST(1000080, "Promotion of this product is exist"),
-    DISCOUNT_PRICE_OR_PERCENT_IS_REQUIRED(1000081, "Discount price or percent is required"),
-    OPERATION_TYPE_IS_REQUIRED(1000082, "Operation type is required"),
-    INVALID_OPERATION_TYPE(1000083, "Invalid operation type"),
+    PROMOTION_TYPE_IS_EXIST(1000080, "error.promotion_type_exists"),
+    DISCOUNT_PRICE_OR_PERCENT_IS_REQUIRED(1000081, "error.discount_price_or_percent_required"),
+    OPERATION_TYPE_IS_REQUIRED(1000082, "error.operation_type_required"),
+    INVALID_OPERATION_TYPE(1000083, "error.invalid_operation_type"),
     ;
 
     private final Integer code;
-    private final String message;
+    private final String messageKey;
 
-    BadRequestError(int code, String message) {
+    BadRequestError(int code, String messageKey) {
         this.code = code;
-        this.message = message;
+        this.messageKey = messageKey;
     }
 
     @Override
@@ -27,7 +27,7 @@ public enum BadRequestError implements ResponseError {
 
     @Override
     public String getMessage() {
-        return message;
+        return messageKey;
     }
 
     @Override
@@ -38,5 +38,10 @@ public enum BadRequestError implements ResponseError {
     @Override
     public Integer getCode() {
         return code;
+    }
+
+    @Override
+    public String getMessageKey() {
+        return messageKey;
     }
 }

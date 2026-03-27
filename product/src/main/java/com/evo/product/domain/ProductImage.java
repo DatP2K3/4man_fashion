@@ -12,7 +12,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@Setter
 @Getter
 public class ProductImage extends Auditor {
     private UUID id;
@@ -28,6 +27,14 @@ public class ProductImage extends Auditor {
         this.productId = cmd.getProductId();
         this.fileId = cmd.getFileId();
         this.avatar = cmd.getAvatar();
+        this.deleted = false;
+    }
+
+    public void markAsDeleted() {
+        this.deleted = true;
+    }
+
+    public void restore() {
         this.deleted = false;
     }
 }

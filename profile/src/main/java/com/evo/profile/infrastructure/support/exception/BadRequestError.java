@@ -6,39 +6,34 @@ import lombok.Getter;
 
 @Getter
 public enum BadRequestError implements ResponseError {
-    UNCATEGORIZED_EXCEPTION(1000100, "Uncategorized error"),
-    MAIL_EXISTED(1000101, "Email existed, please choose another one"),
-    USER_EXISTED(1000102, "Username existed, please choose another one"),
-    USERNAME_IS_MISSING(1000103, "Please enter username"),
-    INVALID_CASHBACK_AMOUNT(1000104, "Invalid cashback amount"),
-    CANT_DELETE_DEFAULT_MEMBERSHIP_TIER(1000105, "Can't delete default membership tier"),
-    CANT_TOGGLE_VISIBILITY_DEFAULT_MEMBERSHIP_TIER(1000106, "Can't toggle visibility of default membership tier");
+    UNCATEGORIZED_EXCEPTION(1000100, "error.internal_server"),
+    MAIL_EXISTED(1000101, "error.profile.mail_existed"),
+    USER_EXISTED(1000102, "error.profile.user_existed"),
+    USERNAME_IS_MISSING(1000103, "error.profile.username_missing"),
+    INVALID_CASHBACK_AMOUNT(1000104, "error.profile.invalid_cashback"),
+    CANT_DELETE_DEFAULT_MEMBERSHIP_TIER(1000105, "error.profile.cant_delete_default_tier"),
+    CANT_TOGGLE_VISIBILITY_DEFAULT_MEMBERSHIP_TIER(1000106, "error.profile.cant_toggle_default_tier");
 
     private final Integer code;
-    private final String message;
+    private final String messageKey;
 
-    BadRequestError(int code, String message) {
+    BadRequestError(int code, String messageKey) {
         this.code = code;
-        this.message = message;
+        this.messageKey = messageKey;
     }
 
     @Override
-    public String getName() {
-        return name();
-    }
+    public String getName() { return name(); }
 
     @Override
-    public String getMessage() {
-        return message;
-    }
+    public String getMessage() { return messageKey; }
 
     @Override
-    public int getStatus() {
-        return 400;
-    }
+    public int getStatus() { return 400; }
 
     @Override
-    public Integer getCode() {
-        return code;
-    }
+    public Integer getCode() { return code; }
+
+    @Override
+    public String getMessageKey() { return messageKey; }
 }

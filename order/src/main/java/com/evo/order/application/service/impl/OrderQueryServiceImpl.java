@@ -57,7 +57,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
     }
 
     @Override
-    public OrderFeeDTO caculateFeeByAddressId(UUID toAddressId) {
+    public OrderFeeDTO calculateFeeByAddressId(UUID toAddressId) {
         CartDTO cartDTO = cartClient.getCart().getData();
         List<CartItemDTO> cartItems = cartDTO.getCartItems();
         Long cashbackUsed = 0L;
@@ -132,12 +132,12 @@ public class OrderQueryServiceImpl implements OrderQueryService {
 
     @Override
     public String printGHNOrder(PrintOrCancelGHNOrderRequest printOrCancelGHNOrderRequest) {
-        String token = getGHYNPrintToken(printOrCancelGHNOrderRequest);
+        String token = getGHNPrintToken(printOrCancelGHNOrderRequest);
         return ghnClient.print(token).getData();
     }
 
     @Override
-    public String getGHYNPrintToken(PrintOrCancelGHNOrderRequest printOrCancelGHNOrderRequest) {
+    public String getGHNPrintToken(PrintOrCancelGHNOrderRequest printOrCancelGHNOrderRequest) {
         GHNPrintTokenDTO ghnPrintTokenDTO =
                 ghnClient.getPrintToken(printOrCancelGHNOrderRequest).getData();
         return ghnPrintTokenDTO.getToken();

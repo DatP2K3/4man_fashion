@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.evo.common.enums.PaymentMethod;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,8 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateOrderRequest {
+    @NotNull
     private UUID toAddressId;
+
+    @NotNull
     private PaymentMethod paymentMethod;
+
     private String note;
     private UUID referencesId;
 }

@@ -24,8 +24,8 @@ public class OrderControllerImpl implements OrderController {
     private final OrderCommandService orderCommandService;
 
     @Override
-    public Response<OrderFeeDTO> caculateFeeByAddressId(@PathVariable UUID toAddressId) {
-        return Response.of(this.orderQueryService.caculateFeeByAddressId(toAddressId));
+    public Response<OrderFeeDTO> calculateFeeByAddressId(@PathVariable UUID toAddressId) {
+        return Response.of(this.orderQueryService.calculateFeeByAddressId(toAddressId));
     }
 
     @Override

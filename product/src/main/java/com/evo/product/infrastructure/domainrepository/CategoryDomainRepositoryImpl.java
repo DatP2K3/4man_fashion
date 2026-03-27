@@ -66,7 +66,7 @@ public class CategoryDomainRepositoryImpl extends AbstractDomainRepository<Categ
                                 TagDescriptionEntity::getCategoryId,
                                 Collectors.mapping(tagDescriptionEntityMapper::toDomainModel, Collectors.toList())));
 
-        categories.forEach(category -> category.setTagDescriptions(
+        categories.forEach(category -> category.enrichTagDescriptions(
                 new ArrayList<>(tagDescriptionMap.getOrDefault(category.getId(), Collections.emptyList()))));
         return categories;
     }

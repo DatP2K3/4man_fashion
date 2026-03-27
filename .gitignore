@@ -1,3 +1,26 @@
 logs/
 uploads/
 exports/
+
+# Environment variables (contains secrets)
+.env
+
+# Firebase service account (contains private key)
+**/firebase-service-account.json
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Build
+**/target/
+**/build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Agent directories
+.agents/
+.gemini/
