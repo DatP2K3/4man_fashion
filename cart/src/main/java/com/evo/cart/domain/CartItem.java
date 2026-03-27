@@ -54,9 +54,17 @@ public class CartItem extends Auditor {
     /**
      * Enrich cart item with product information from product service.
      */
-    public void enrichFromProduct(String name, UUID avatarId, Integer discountPercent,
-            Long discountPrice, DiscountType discountType, Long originPrice,
-            int height, int width, int length, int weight) {
+    public void enrichFromProduct(
+            String name,
+            UUID avatarId,
+            Integer discountPercent,
+            Long discountPrice,
+            DiscountType discountType,
+            Long originPrice,
+            int height,
+            int width,
+            int length,
+            int weight) {
         this.name = name;
         this.avatarId = avatarId;
         this.discountPercent = discountPercent;

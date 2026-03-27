@@ -2,9 +2,10 @@ package com.evo.order.application.dto.request;
 
 import java.util.UUID;
 
+import jakarta.validation.constraints.NotNull;
+
 import com.evo.common.enums.PaymentMethod;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

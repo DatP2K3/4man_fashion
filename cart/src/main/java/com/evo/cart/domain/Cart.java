@@ -51,8 +51,7 @@ public class Cart extends Auditor {
         for (CreateCartItemCmd createCartItemCmd : createCartItemCmds) {
             UUID productVariantId = createCartItemCmd.getProductVariantId();
             if (existingCartItemMap.containsKey(productVariantId)) {
-                existingCartItemMap.get(productVariantId)
-                        .restoreWithQuantity(createCartItemCmd.getQuantity());
+                existingCartItemMap.get(productVariantId).restoreWithQuantity(createCartItemCmd.getQuantity());
             } else {
                 createCartItemCmd.setCartId(this.id);
                 CartItem newcartItem = new CartItem(createCartItemCmd);

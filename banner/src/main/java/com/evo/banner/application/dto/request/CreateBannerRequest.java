@@ -2,11 +2,12 @@ package com.evo.banner.application.dto.request;
 
 import java.util.UUID;
 
-import com.evo.banner.infrastructure.support.enums.BannerType;
-
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Min;
+
+import com.evo.banner.infrastructure.support.enums.BannerType;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.evo.product.domain.Discount;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import com.evo.product.domain.Discount;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

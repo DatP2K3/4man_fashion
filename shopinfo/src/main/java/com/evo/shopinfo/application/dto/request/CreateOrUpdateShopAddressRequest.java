@@ -2,11 +2,12 @@ package com.evo.shopinfo.application.dto.request;
 
 import java.util.UUID;
 
-import com.evo.common.enums.ShopAddressType;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+
+import com.evo.common.enums.ShopAddressType;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

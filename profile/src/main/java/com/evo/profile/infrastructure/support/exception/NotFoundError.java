@@ -19,17 +19,27 @@ public enum NotFoundError implements ResponseError {
     }
 
     @Override
-    public String getName() { return name(); }
+    public String getName() {
+        return name();
+    }
 
     @Override
-    public String getMessage() { return messageKey; }
+    public String getMessage() {
+        return messageKey;
+    }
 
     @Override
-    public int getStatus() { return 404; }
+    public int getStatus() {
+        return 404;
+    }
 
     @Override
-    public Integer getCode() { return code; }
+    public Integer getCode() {
+        return code;
+    }
 
     @Override
-    public String getMessageKey() { return messageKey; }
+    public String getMessageKey() {
+        return messageKey;
+    }
 }

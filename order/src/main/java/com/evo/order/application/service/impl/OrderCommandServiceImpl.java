@@ -67,7 +67,8 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         ShippingAddressDTO toAddress = profileDTO.getListShippingAddress().stream()
                 .filter(item -> item.getId().equals(request.getToAddressId()))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Shipping address not found: " + request.getToAddressId()));
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Shipping address not found: " + request.getToAddressId()));
 
         List<ShopAddressDTO> shopAddressDTOS = shopInfoClient.getShopAddress().getData();
 

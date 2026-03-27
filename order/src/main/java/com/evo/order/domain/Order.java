@@ -148,10 +148,8 @@ public class Order extends Auditor {
      * Also soft-deletes all order items.
      */
     public void cancel() {
-        if (this.orderStatus != OrderStatus.PENDING_SHIPMENT
-                && this.orderStatus != OrderStatus.WAITING_FOR_PICKUP) {
-            throw new IllegalStateException(
-                    "Cannot cancel order with status: " + this.orderStatus);
+        if (this.orderStatus != OrderStatus.PENDING_SHIPMENT && this.orderStatus != OrderStatus.WAITING_FOR_PICKUP) {
+            throw new IllegalStateException("Cannot cancel order with status: " + this.orderStatus);
         }
         this.orderStatus = OrderStatus.CANCELLED;
         if (this.orderItems != null) {
@@ -163,8 +161,7 @@ public class Order extends Auditor {
      * Check if this order is cancellable.
      */
     public boolean isCancellable() {
-        return this.orderStatus == OrderStatus.PENDING_SHIPMENT
-                || this.orderStatus == OrderStatus.WAITING_FOR_PICKUP;
+        return this.orderStatus == OrderStatus.PENDING_SHIPMENT || this.orderStatus == OrderStatus.WAITING_FOR_PICKUP;
     }
 
     /**

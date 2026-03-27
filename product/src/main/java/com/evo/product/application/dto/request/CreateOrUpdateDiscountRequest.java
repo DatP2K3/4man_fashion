@@ -3,10 +3,11 @@ package com.evo.product.application.dto.request;
 import java.time.Instant;
 import java.util.UUID;
 
-import com.evo.common.enums.DiscountType;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import com.evo.common.enums.DiscountType;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

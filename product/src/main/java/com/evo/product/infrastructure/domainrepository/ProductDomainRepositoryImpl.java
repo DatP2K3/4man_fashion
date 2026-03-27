@@ -142,7 +142,8 @@ public class ProductDomainRepositoryImpl extends AbstractDomainRepository<Produc
                     new ArrayList<>(productVariantMap.getOrDefault(product.getId(), Collections.emptyList())));
             product.enrichProductImages(
                     new ArrayList<>(productImageMap.getOrDefault(product.getId(), Collections.emptyList())));
-            product.enrichDiscounts(new ArrayList<>(discountMap.getOrDefault(product.getId(), Collections.emptyList())));
+            product.enrichDiscounts(
+                    new ArrayList<>(discountMap.getOrDefault(product.getId(), Collections.emptyList())));
             product.enrichDiscountInfo();
         });
 

@@ -34,8 +34,7 @@ public class CommonGlobalExceptionHandler {
      */
     @ExceptionHandler(ResponseException.class)
     public ResponseEntity<Map<String, Object>> handleResponseException(ResponseException ex) {
-        String localizedMessage = messageHelper.getMessage(
-                ex.getError().getMessageKey(), ex.getParams());
+        String localizedMessage = messageHelper.getMessage(ex.getError().getMessageKey(), ex.getParams());
 
         Map<String, Object> body = new HashMap<>();
         body.put("success", false);
