@@ -69,61 +69,79 @@ public class CreateOrderCmd {
             ShopAddressDTO returnAddress,
             CartDTO cartDTO) {
         this.userId = profileDTO.getId();
+        enrichFromAddress(fromAddress);
+        enrichToAddress(profileDTO, toAddress);
+        enrichReturnAddress(returnAddress);
+        enrichFeeInfo(orderFeeDTO);
+        enrichOrderItems(cartDTO);
+    }
 
-        this.fromName = fromAddress.getShopName();
-        this.fromPhoneNumber = fromAddress.getPhoneNumber();
-        this.fromAddressLine1 = fromAddress.getAddressLine1();
-        this.fromAddressLine2 = fromAddress.getAddressLine2();
-        this.fromWard = fromAddress.getWard();
-        this.fromWardCode = fromAddress.getWardCode();
-        this.fromDistrict = fromAddress.getDistrict();
-        this.fromDistrictId = fromAddress.getDistrictId();
-        this.fromCity = fromAddress.getCity();
+    private void enrichFromAddress(ShopAddressDTO address) {
+        this.fromName = address.getShopName();
+        this.fromPhoneNumber = address.getPhoneNumber();
+        this.fromAddressLine1 = address.getAddressLine1();
+        this.fromAddressLine2 = address.getAddressLine2();
+        this.fromWard = address.getWard();
+        this.fromWardCode = address.getWardCode();
+        this.fromDistrict = address.getDistrict();
+        this.fromDistrictId = address.getDistrictId();
+        this.fromCity = address.getCity();
+    }
 
-        this.toName = profileDTO.getFirstName() + profileDTO.getLastName();
-        this.toPhoneNumber = toAddress.getPhoneNumber();
-        this.toAddressLine1 = toAddress.getAddressLine1();
-        this.toAddressLine2 = toAddress.getAddressLine2();
-        this.toWard = toAddress.getWard();
-        this.toWardCode = toAddress.getWardCode();
-        this.toDistrict = toAddress.getDistrict();
-        this.toDistrictId = toAddress.getDistrictId();
-        this.toCity = toAddress.getCity();
+    private void enrichToAddress(ProfileDTO profile, ShippingAddressDTO address) {
+        this.toName = profile.getFirstName() + profile.getLastName();
+        this.toPhoneNumber = address.getPhoneNumber();
+        this.toAddressLine1 = address.getAddressLine1();
+        this.toAddressLine2 = address.getAddressLine2();
+        this.toWard = address.getWard();
+        this.toWardCode = address.getWardCode();
+        this.toDistrict = address.getDistrict();
+        this.toDistrictId = address.getDistrictId();
+        this.toCity = address.getCity();
+    }
 
-        this.returnName = returnAddress.getShopName();
-        this.returnPhoneNumber = returnAddress.getPhoneNumber();
-        this.returnAddressLine1 = returnAddress.getAddressLine1();
-        this.returnAddressLine2 = returnAddress.getAddressLine2();
-        this.returnWard = returnAddress.getWard();
-        this.returnWardCode = returnAddress.getWardCode();
-        this.returnDistrict = returnAddress.getDistrict();
-        this.returnDistrictId = returnAddress.getDistrictId();
-        this.returnCity = returnAddress.getCity();
+    private void enrichReturnAddress(ShopAddressDTO address) {
+        this.returnName = address.getShopName();
+        this.returnPhoneNumber = address.getPhoneNumber();
+        this.returnAddressLine1 = address.getAddressLine1();
+        this.returnAddressLine2 = address.getAddressLine2();
+        this.returnWard = address.getWard();
+        this.returnWardCode = address.getWardCode();
+        this.returnDistrict = address.getDistrict();
+        this.returnDistrictId = address.getDistrictId();
+        this.returnCity = address.getCity();
+    }
 
-        this.shipmentFee = orderFeeDTO.getShippingFee();
-        this.totalPrice = orderFeeDTO.getTotalPrice();
-        this.cashbackUsed = orderFeeDTO.getCashbackUsed();
-        this.totalWeight = orderFeeDTO.getTotalWeight();
-        this.totalHeight = orderFeeDTO.getTotalHeight();
-        this.totalWidth = orderFeeDTO.getTotalWidth();
-        this.totalLength = orderFeeDTO.getTotalLength();
+    private void enrichFeeInfo(OrderFeeDTO fee) {
+        this.shipmentFee = fee.getShippingFee();
+        this.totalPrice = fee.getTotalPrice();
+        this.cashbackUsed = fee.getCashbackUsed();
+        this.totalWeight = fee.getTotalWeight();
+        this.totalHeight = fee.getTotalHeight();
+        this.totalWidth = fee.getTotalWidth();
+        this.totalLength = fee.getTotalLength();
+    }
 
-        List<CartItemDTO> cartItemDTOS = cartDTO.getCartItems();
+    private void enrichOrderItems(CartDTO cartDTO) {
+        List<CartItemDTO> cartItems = cartDTO.getCartItems();
         if (this.orderItems == null) {
             this.orderItems = new ArrayList<>();
         }
-        this.totalProductVariant = cartItemDTOS.size();
-        for (CartItemDTO cartItemDTO : cartItemDTOS) {
-            if (cartItemDTO.getDeleted() == true) continue;
+        this.totalProductVariant = cartItems.size();
+        for (CartItemDTO item : cartItems) {
+            if (Boolean.TRUE.equals(item.getDeleted())) continue;
             CreateOrderItemCmd orderItem = new CreateOrderItemCmd();
-            orderItem.setProductId(cartItemDTO.getProductId());
-            orderItem.setProductVariantId(cartItemDTO.getProductVariantId());
-            orderItem.setQuantity(cartItemDTO.getQuantity());
-            orderItem.setPrice(
-                    cartItemDTO.getDiscountPrice() != null && cartItemDTO.getDiscountPrice() != 0
-                            ? cartItemDTO.getDiscountPrice()
-                            : cartItemDTO.getOriginPrice());
+            orderItem.setProductId(item.getProductId());
+            orderItem.setProductVariantId(item.getProductVariantId());
+            orderItem.setQuantity(item.getQuantity());
+            orderItem.setPrice(resolvePrice(item));
             this.orderItems.add(orderItem);
         }
+    }
+
+    private Long resolvePrice(CartItemDTO item) {
+        return (item.getDiscountPrice() != null && item.getDiscountPrice() != 0)
+                ? item.getDiscountPrice()
+                : item.getOriginPrice();
     }
 }
