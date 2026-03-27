@@ -21,27 +21,28 @@ public class RequestTraceFilter implements GlobalFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         HttpHeaders requestHeaders = exchange.getRequest().getHeaders();
-        if (isCorrelationIdPresent(requestHeaders)) {
-            log.debug(
-                    "eazyBank-correlation-id found in RequestTraceFilter : {}",
-                    filterUtility.getCorrelationId(requestHeaders));
-        } else {
-            String correlationID = generateCorrelationId();
-            exchange = filterUtility.setCorrelationId(exchange, correlationID);
-            log.debug("eazyBank-correlation-id generated in RequestTraceFilter : {}", correlationID);
+        String correlationId = filterUtility.getCorrelationId(requestHeaders);
+
+        if (correlationId == null) {
+            correlationId = java.util.UUID.randomUUID().toString();
+            exchange = filterUtility.setCorrelationId(exchange, correlationId);
         }
+
+        String method = exchange.getRequest().getMethod().name();
+        String path = exchange.getRequest().getURI().getPath();
+
+        log.info("[{}] {} {} | IP: {}",
+                correlationId, method, path, getClientIp(exchange));
+
         return chain.filter(exchange);
     }
 
-    private boolean isCorrelationIdPresent(HttpHeaders requestHeaders) {
-        if (filterUtility.getCorrelationId(requestHeaders) != null) {
-            return true;
-        } else {
-            return false;
+    private String getClientIp(ServerWebExchange exchange) {
+        String xForwardedFor = exchange.getRequest().getHeaders().getFirst("X-Forwarded-For");
+        if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
+            return xForwardedFor.split(",")[0].trim();
         }
-    }
-
-    private String generateCorrelationId() {
-        return java.util.UUID.randomUUID().toString();
+        var remoteAddress = exchange.getRequest().getRemoteAddress();
+        return remoteAddress != null ? remoteAddress.getAddress().getHostAddress() : "unknown";
     }
 }

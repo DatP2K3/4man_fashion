@@ -4,6 +4,7 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +22,19 @@ public class ResponseTraceFilter {
             return chain.filter(exchange).then(Mono.fromRunnable(() -> {
                 HttpHeaders requestHeaders = exchange.getRequest().getHeaders();
                 String correlationId = filterUtility.getCorrelationId(requestHeaders);
+                HttpStatusCode statusCode = exchange.getResponse().getStatusCode();
 
-                if (!(exchange.getResponse().getHeaders().containsKey(filterUtility.CORRELATION_ID))) {
-                    log.debug("Updated the correlation id to the outbound headers: {}", correlationId);
-                    exchange.getResponse().getHeaders().add(filterUtility.CORRELATION_ID, correlationId);
+                // Gắn correlation ID vào response
+                if (!exchange.getResponse().getHeaders().containsKey(FilterUtility.CORRELATION_ID)) {
+                    exchange.getResponse().getHeaders().add(FilterUtility.CORRELATION_ID, correlationId);
+                }
+
+                // Log error responses
+                if (statusCode != null && statusCode.isError()) {
+                    String method = exchange.getRequest().getMethod().name();
+                    String path = exchange.getRequest().getURI().getPath();
+                    log.warn("[{}] {} {} → {} ERROR",
+                            correlationId, method, path, statusCode.value());
                 }
             }));
         };

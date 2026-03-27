@@ -4,12 +4,13 @@ import java.time.Duration;
 
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 /**
@@ -17,8 +18,10 @@ import reactor.core.publisher.Mono;
  * Each IP gets a Redis key "rate_limit:{ip}" with TTL = WINDOW_DURATION.
  * Supports multiple gateway instances sharing the same Redis.
  */
+@Order(-1)
 @Component
-public class RateLimitFilter implements GlobalFilter, Ordered {
+@Slf4j
+public class RateLimitFilter implements GlobalFilter {
     private static final int MAX_REQUESTS = 100;
     private static final Duration WINDOW_DURATION = Duration.ofMinutes(1);
     private static final String KEY_PREFIX = "rate_limit:";
@@ -35,8 +38,9 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
         String redisKey = KEY_PREFIX + clientIp;
 
         return redisTemplate.opsForValue().increment(redisKey).flatMap(count -> {
-            // Set TTL only on first request (count == 1)
-            Mono<Boolean> expireMono = (count == 1) ? redisTemplate.expire(redisKey, WINDOW_DURATION) : Mono.just(true);
+            Mono<Boolean> expireMono = (count == 1)
+                    ? redisTemplate.expire(redisKey, WINDOW_DURATION)
+                    : Mono.just(true);
 
             return expireMono.flatMap(result -> {
                 long remaining = Math.max(0, MAX_REQUESTS - count);
@@ -45,6 +49,7 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
                 exchange.getResponse().getHeaders().add("X-RateLimit-Remaining", String.valueOf(remaining));
 
                 if (count > MAX_REQUESTS) {
+                    log.warn("Rate limit exceeded for IP: {} ({} requests/min)", clientIp, count);
                     exchange.getResponse().setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
                     exchange.getResponse().getHeaders().add("Retry-After", "60");
                     return exchange.getResponse().setComplete();
@@ -52,12 +57,11 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
 
                 return chain.filter(exchange);
             });
+        }).onErrorResume(ex -> {
+            // Redis down → cho qua, không chặn user
+            log.error("Rate limiter Redis error, allowing request through: {}", ex.getMessage());
+            return chain.filter(exchange);
         });
-    }
-
-    @Override
-    public int getOrder() {
-        return -1;
     }
 
     private String getClientIp(ServerWebExchange exchange) {
