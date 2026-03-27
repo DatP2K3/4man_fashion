@@ -3,6 +3,7 @@ package com.fourman.product.application.service.impl.query;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.fourman.common.exception.ResponseException;
@@ -25,18 +26,21 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
     private final CategoryEntityRepository categoryEntityRepository;
 
     @Override
+    @Cacheable(value = "categories")
     public List<CategoryDTO> getCategories() {
         List<Category> categories = categoryDomainRepository.getAll();
         return categoryDTOMapper.domainModelsToDTOs(categories);
     }
 
     @Override
+    @Cacheable(value = "categories", key = "#productType")
     public List<CategoryDTO> getCategoriesByProductType(String productType) {
         List<CategoryEntity> categories = categoryEntityRepository.findByProductType(productType);
         return categoryDTOMapper.entitiesToDTOs(categories);
     }
 
     @Override
+    @Cacheable(value = "categories", key = "#id")
     public CategoryDTO getCategoryById(UUID id) {
         CategoryEntity categoryEntity = categoryEntityRepository
                 .findById(id)

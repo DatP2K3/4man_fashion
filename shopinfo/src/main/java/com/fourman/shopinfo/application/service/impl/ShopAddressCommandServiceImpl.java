@@ -1,5 +1,6 @@
 package com.fourman.shopinfo.application.service.impl;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import com.fourman.common.dto.response.ShopAddressDTO;
@@ -21,6 +22,7 @@ public class ShopAddressCommandServiceImpl implements ShopAddressCommandService 
     private final ShopAddressDTOMapper shopAddressDTOMapper;
 
     @Override
+    @CacheEvict(value = "shopAddresses", allEntries = true)
     public ShopAddressDTO create(CreateOrUpdateShopAddressRequest request) {
         CreateUpdateShopAddressCmd cmd = commandMapper.from(request);
         ShopAddress shopAddress = new ShopAddress(cmd);
@@ -29,6 +31,7 @@ public class ShopAddressCommandServiceImpl implements ShopAddressCommandService 
     }
 
     @Override
+    @CacheEvict(value = "shopAddresses", allEntries = true)
     public ShopAddressDTO update(CreateOrUpdateShopAddressRequest request) {
         CreateUpdateShopAddressCmd cmd = commandMapper.from(request);
         ShopAddress shopAddress = shopAddressDomainRepository.getById(cmd.getId());

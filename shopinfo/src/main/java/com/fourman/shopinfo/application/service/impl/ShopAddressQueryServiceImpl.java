@@ -2,6 +2,7 @@ package com.fourman.shopinfo.application.service.impl;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.fourman.common.dto.response.ShopAddressDTO;
@@ -19,6 +20,7 @@ public class ShopAddressQueryServiceImpl implements ShopAddressQueryService {
     private final ShopAddressDTOMapper shopAddressDTOMapper;
 
     @Override
+    @Cacheable(value = "shopAddresses")
     public List<ShopAddressDTO> getAllShopAddresses() {
         List<ShopAddressEntity> shopAddressEntities = shopAddressEntityRepository.findAll();
         return shopAddressDTOMapper.entitiesToDTOs(shopAddressEntities);

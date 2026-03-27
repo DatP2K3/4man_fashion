@@ -2,6 +2,7 @@ package com.fourman.banner.application.service.impl.command;
 
 import java.util.UUID;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import com.fourman.banner.application.dto.mapper.BannerDTOMapper;
@@ -23,6 +24,7 @@ public class BannerCommandServiceImpl implements BannerCommandService {
     private final BannerDomainRepository bannerDomainRepository;
 
     @Override
+    @CacheEvict(value = "banners", allEntries = true)
     public BannerDTO createBanner(CreateBannerRequest request) {
         CreateBannerCmd createBannerCmd = commandMapper.from(request);
         Banner banner = new Banner(createBannerCmd);
@@ -31,6 +33,7 @@ public class BannerCommandServiceImpl implements BannerCommandService {
     }
 
     @Override
+    @CacheEvict(value = "banners", allEntries = true)
     public void deleteBanner(UUID id) {
         Banner banner = bannerDomainRepository.getById(id);
         banner.markAsDeleted();

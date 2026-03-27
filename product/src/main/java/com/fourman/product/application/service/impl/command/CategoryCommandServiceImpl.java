@@ -2,6 +2,7 @@ package com.fourman.product.application.service.impl.command;
 
 import java.util.UUID;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import com.fourman.product.application.dto.mapper.CategoryDTOMapper;
@@ -23,6 +24,7 @@ public class CategoryCommandServiceImpl implements CategoryCommandService {
     private final CategoryDTOMapper categoryDTOMapper;
 
     @Override
+    @CacheEvict(value = "categories", allEntries = true)
     public CategoryDTO createCategory(CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest) {
         CreateOrUpdateCategoryCmd createOrUpdateCategoryCmd = commandMapper.from(createOrUpdateCategoryRequest);
         Category category = new Category(createOrUpdateCategoryCmd);
@@ -30,6 +32,7 @@ public class CategoryCommandServiceImpl implements CategoryCommandService {
     }
 
     @Override
+    @CacheEvict(value = "categories", allEntries = true)
     public CategoryDTO updateCategory(CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest) {
         CreateOrUpdateCategoryCmd createOrUpdateCategoryCmd = commandMapper.from(createOrUpdateCategoryRequest);
         Category category = categoryDomainRepository.getById(createOrUpdateCategoryRequest.getId());
@@ -38,6 +41,7 @@ public class CategoryCommandServiceImpl implements CategoryCommandService {
     }
 
     @Override
+    @CacheEvict(value = "categories", allEntries = true)
     public void visibilityCategory(UUID id) {
         Category category = categoryDomainRepository.getById(id);
         category.toggleVisibility();

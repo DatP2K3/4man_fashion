@@ -2,6 +2,7 @@ package com.fourman.banner.application.service.impl.query;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.fourman.banner.application.dto.mapper.BannerDTOMapper;
@@ -19,6 +20,7 @@ public class BannerQueryServiceImpl implements BannerQueryService {
     private final BannerDomainRepository bannerDomainRepository;
 
     @Override
+    @Cacheable(value = "banners")
     public List<BannerDTO> getAllBanners() {
         List<Banner> banners = bannerDomainRepository.getAll();
         return bannerDTOMapper.domainModelsToDTOs(banners);
