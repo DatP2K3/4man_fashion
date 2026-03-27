@@ -6,6 +6,7 @@ import java.time.temporal.WeekFields;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -22,211 +23,154 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class DashboardServiceImpl implements DashboardService {
+    private static final ZoneId VIETNAM_ZONE = ZoneId.of("Asia/Ho_Chi_Minh");
+
     private final OrderClient orderClient;
     private final ProfileClient profileClient;
 
     @Override
     public DashboardDTO getDashboardData(DashboardTime dashboardTime) {
-        if (dashboardTime == DashboardTime.DAY) {
-            return getTodayDashboardData();
-        } else if (dashboardTime == DashboardTime.WEEK) {
-            return getWeekDashboardData();
-        } else if (dashboardTime == DashboardTime.MONTH) {
-            return getMonthDashboardData();
-        }
-        return null;
+        return switch (dashboardTime) {
+            case DAY -> getTodayDashboardData();
+            case WEEK -> getWeekDashboardData();
+            case MONTH -> getMonthDashboardData();
+        };
     }
 
-    private DashboardDTO getMonthDashboardData() {
-        ZoneId vietnamZone = ZoneId.of("Asia/Ho_Chi_Minh");
-        int currentYear = LocalDate.now(vietnamZone).getYear();
+    // ===== Time period methods =====
 
-        // Tạo danh sách các YearMonth cho năm trước và năm hiện tại
+    private DashboardDTO getMonthDashboardData() {
+        int currentYear = LocalDate.now(VIETNAM_ZONE).getYear();
+
         List<YearMonth> yearMonths = IntStream.rangeClosed(currentYear - 1, currentYear)
                 .boxed()
                 .flatMap(year -> IntStream.rangeClosed(1, 12).mapToObj(month -> YearMonth.of(year, month)))
                 .collect(Collectors.toList());
 
-        Instant startDate = yearMonths.get(0).atDay(1).atStartOfDay(vietnamZone).toInstant();
-        LocalDate today = LocalDate.now(vietnamZone);
-        LocalDateTime endOfDay = today.atTime(LocalTime.MAX);
-        ZonedDateTime zonedEndOfDay = endOfDay.atZone(vietnamZone);
-        Instant endDate = zonedEndOfDay.toInstant();
+        Instant startDate = yearMonths.get(0).atDay(1).atStartOfDay(VIETNAM_ZONE).toInstant();
+        Instant endDate = endOfToday();
 
-        List<OrderDTO> orderDTOs = orderClient
-                .searchOrders("", null, null, startDate, endDate, null, 1, 10000, null)
-                .getData();
+        List<OrderDTO> allOrders = fetchOrders(startDate, endDate);
 
-        Map<String, List<OrderDTO>> ordersByMonthLabel = orderDTOs.stream().collect(Collectors.groupingBy(order -> {
-            LocalDate date = order.getCreatedAt().atZone(vietnamZone).toLocalDate();
+        // Group by month label
+        Function<OrderDTO, String> monthGrouper = order -> {
+            LocalDate date = toLocalDate(order);
             return "Tháng " + date.getMonthValue() + " - " + date.getYear();
-        }));
+        };
 
-        List<RevenueAndOrdersDTO> revenueAndOrdersDTOS = ordersByMonthLabel.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey())
-                .map(entry -> {
-                    List<OrderDTO> orders = entry.getValue();
-                    long totalRevenue =
-                            orders.stream().mapToLong(OrderDTO::getTotalPrice).sum();
-                    long totalOrders = orders.size();
-                    return new RevenueAndOrdersDTO(entry.getKey(), totalRevenue, totalOrders);
-                })
-                .collect(Collectors.toList());
-
-        List<OrderDTO> todayOrders = orderDTOs.stream()
-                .filter(order ->
-                        order.getCreatedAt().atZone(vietnamZone).toLocalDate().equals(today))
-                .toList();
-
-        long totalNewUsers =
-                profileClient.searchProfiles("", startDate, endDate).getPage().getTotal();
-
-        long totalRevenue =
-                todayOrders.stream().mapToLong(OrderDTO::getTotalPrice).sum();
-
-        long totalOrders = todayOrders.size();
-
-        SummaryTodayDTO todaySummary = new SummaryTodayDTO(totalRevenue, totalOrders, totalNewUsers);
-
-        List<OrderStatisticByCityDTO> orderStatisticByCityDTOS =
-                orderDTOs.stream()
-                        .collect(Collectors.groupingBy(OrderDTO::getToCity, Collectors.counting()))
-                        .entrySet()
-                        .stream()
-                        .map(entry -> new OrderStatisticByCityDTO(entry.getKey().toString(), entry.getValue()))
-                        .collect(Collectors.toList());
-
-        return DashboardDTO.builder()
-                .orderByCity(orderStatisticByCityDTOS)
-                .revenueAndOrders(revenueAndOrdersDTOS)
-                .todaySummary(todaySummary)
-                .build();
+        return buildDashboard(allOrders, startDate, endDate, monthGrouper);
     }
 
     private DashboardDTO getWeekDashboardData() {
-        ZoneId vietnamZone = ZoneId.of("Asia/Ho_Chi_Minh");
-        LocalDate today = LocalDate.now(vietnamZone);
+        LocalDate today = LocalDate.now(VIETNAM_ZONE);
 
-        List<YearMonth> recentMonths = List.of(
-                YearMonth.from(today.minusMonths(2)), YearMonth.from(today.minusMonths(1)), YearMonth.from(today));
+        Instant startDate = YearMonth.from(today.minusMonths(2))
+                .atDay(1).atStartOfDay(VIETNAM_ZONE).toInstant();
+        Instant endDate = YearMonth.from(today)
+                .atEndOfMonth().atTime(LocalTime.MAX).atZone(VIETNAM_ZONE).toInstant();
 
-        Instant startDate =
-                recentMonths.get(0).atDay(1).atStartOfDay(vietnamZone).toInstant();
-        Instant endDate = recentMonths
-                .get(2)
-                .atEndOfMonth()
-                .atTime(LocalTime.MAX)
-                .atZone(vietnamZone)
-                .toInstant();
+        List<OrderDTO> allOrders = fetchOrders(startDate, endDate);
 
-        List<OrderDTO> orderDTOs = orderClient
-                .searchOrders("", null, null, startDate, endDate, null, 1, 10000, null)
-                .getData();
-
-        Map<String, List<OrderDTO>> ordersByWeekLabel = orderDTOs.stream().collect(Collectors.groupingBy(order -> {
-            LocalDate date = order.getCreatedAt().atZone(vietnamZone).toLocalDate();
+        // Group by week label
+        Function<OrderDTO, String> weekGrouper = order -> {
+            LocalDate date = toLocalDate(order);
             int weekOfMonth = date.get(WeekFields.of(Locale.getDefault()).weekOfMonth());
             YearMonth ym = YearMonth.from(date);
             return "Tuần " + weekOfMonth + " - " + ym.getMonthValue() + "/" + ym.getYear();
-        }));
+        };
 
-        List<RevenueAndOrdersDTO> revenueAndOrdersDTOS = ordersByWeekLabel.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey())
-                .map(entry -> {
-                    List<OrderDTO> orders = entry.getValue();
-                    long totalRevenue =
-                            orders.stream().mapToLong(OrderDTO::getTotalPrice).sum();
-                    long totalOrders = orders.size();
-                    return new RevenueAndOrdersDTO(entry.getKey(), totalRevenue, totalOrders);
-                })
-                .collect(Collectors.toList());
+        return buildDashboard(allOrders, startDate, endDate, weekGrouper);
+    }
 
-        List<OrderDTO> todayOrders = orderDTOs.stream()
-                .filter(order ->
-                        order.getCreatedAt().atZone(vietnamZone).toLocalDate().equals(today))
-                .toList();
+    private DashboardDTO getTodayDashboardData() {
+        Instant startDate = LocalDate.now(VIETNAM_ZONE).withDayOfMonth(1)
+                .atStartOfDay(VIETNAM_ZONE).toInstant();
+        Instant endDate = endOfToday();
 
-        long totalRevenue =
-                todayOrders.stream().mapToLong(OrderDTO::getTotalPrice).sum();
-        long totalOrders = todayOrders.size();
+        List<OrderDTO> allOrders = fetchOrders(startDate, endDate);
 
-        long totalNewUsers =
-                profileClient.searchProfiles("", startDate, endDate).getPage().getTotal();
+        // Group by day label (dd/MM)
+        Function<OrderDTO, String> dayGrouper = order ->
+                toLocalDate(order).format(DateTimeFormatter.ofPattern("dd/MM"));
 
-        SummaryTodayDTO todaySummary = new SummaryTodayDTO(totalRevenue, totalOrders, totalNewUsers);
+        return buildDashboard(allOrders, startDate, endDate, dayGrouper);
+    }
 
-        List<OrderStatisticByCityDTO> orderStatisticByCityDTOS =
-                orderDTOs.stream()
-                        .collect(Collectors.groupingBy(OrderDTO::getToCity, Collectors.counting()))
-                        .entrySet()
-                        .stream()
-                        .map(entry -> new OrderStatisticByCityDTO(entry.getKey().toString(), entry.getValue()))
-                        .collect(Collectors.toList());
+    // ===== Common extracted methods =====
+
+    /**
+     * Build a complete DashboardDTO from orders, using the provided grouping function
+     * for revenue/orders chart labels.
+     */
+    private DashboardDTO buildDashboard(List<OrderDTO> allOrders, Instant startDate, Instant endDate,
+                                         Function<OrderDTO, String> labelGrouper) {
+        List<RevenueAndOrdersDTO> revenueAndOrders = buildRevenueAndOrders(allOrders, labelGrouper);
+        List<OrderStatisticByCityDTO> orderByCity = buildOrderByCity(allOrders);
+        SummaryTodayDTO todaySummary = buildTodaySummary(allOrders, startDate, endDate);
 
         return DashboardDTO.builder()
-                .orderByCity(orderStatisticByCityDTOS)
-                .revenueAndOrders(revenueAndOrdersDTOS)
+                .revenueAndOrders(revenueAndOrders)
+                .orderByCity(orderByCity)
                 .todaySummary(todaySummary)
                 .build();
     }
 
-    private DashboardDTO getTodayDashboardData() {
-        ZoneId vietnamZone = ZoneId.of("Asia/Ho_Chi_Minh");
-        Instant startDate =
-                LocalDate.now().withDayOfMonth(1).atStartOfDay(vietnamZone).toInstant();
-        LocalDate today = LocalDate.now(vietnamZone);
-        LocalDateTime endOfDay = today.atTime(LocalTime.MAX);
-        ZonedDateTime zonedEndOfDay = endOfDay.atZone(vietnamZone);
-        Instant endDate = zonedEndOfDay.toInstant();
-
-        List<OrderDTO> orderDTOs = orderClient
-                .searchOrders("", null, null, startDate, endDate, null, 1, 1000, null)
-                .getData();
-        Map<LocalDate, DailyOrderStatisDTO> statsPerDay = orderDTOs.stream()
-                .collect(Collectors.groupingBy(
-                        order -> order.getCreatedAt().atZone(vietnamZone).toLocalDate(),
-                        Collectors.collectingAndThen(Collectors.toList(), ordersInDay -> {
-                            long totalRevenue = ordersInDay.stream()
-                                    .mapToLong(OrderDTO::getTotalPrice)
-                                    .sum();
-                            long totalOrders = ordersInDay.size();
-                            return new DailyOrderStatisDTO(totalRevenue, totalOrders);
-                        })));
-        List<RevenueAndOrdersDTO> revenueAndOrdersDTOS = statsPerDay.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey()) // Sắp xếp theo ngày tăng dần
-                .map(entry -> {
-                    LocalDate date = entry.getKey();
-                    DailyOrderStatisDTO stats = entry.getValue();
-                    String dateLabel = date.format(DateTimeFormatter.ofPattern("dd/MM"));
-                    return new RevenueAndOrdersDTO(dateLabel, stats.getTotalRevenue(), stats.getTotalOrders());
-                })
+    /**
+     * Group orders by label and calculate revenue + count per group.
+     */
+    private List<RevenueAndOrdersDTO> buildRevenueAndOrders(List<OrderDTO> orders,
+                                                             Function<OrderDTO, String> labelGrouper) {
+        return orders.stream()
+                .collect(Collectors.groupingBy(labelGrouper))
+                .entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(entry -> new RevenueAndOrdersDTO(
+                        entry.getKey(),
+                        entry.getValue().stream().mapToLong(OrderDTO::getTotalPrice).sum(),
+                        entry.getValue().size()))
                 .collect(Collectors.toList());
+    }
 
-        List<OrderStatisticByCityDTO> orderStatisticByCityDTOS =
-                orderDTOs.stream()
-                        .collect(Collectors.groupingBy(OrderDTO::getToCity, Collectors.counting()))
-                        .entrySet()
-                        .stream()
-                        .map(entry -> new OrderStatisticByCityDTO(entry.getKey().toString(), entry.getValue()))
-                        .collect(Collectors.toList());
+    /**
+     * Group orders by city.
+     */
+    private List<OrderStatisticByCityDTO> buildOrderByCity(List<OrderDTO> orders) {
+        return orders.stream()
+                .collect(Collectors.groupingBy(OrderDTO::getToCity, Collectors.counting()))
+                .entrySet().stream()
+                .map(entry -> new OrderStatisticByCityDTO(entry.getKey().toString(), entry.getValue()))
+                .collect(Collectors.toList());
+    }
 
-        List<OrderDTO> todayOrders = orderDTOs.stream()
-                .filter(order ->
-                        order.getCreatedAt().atZone(vietnamZone).toLocalDate().equals(today))
+    /**
+     * Build today's summary: revenue, order count, new users.
+     */
+    private SummaryTodayDTO buildTodaySummary(List<OrderDTO> allOrders, Instant startDate, Instant endDate) {
+        LocalDate today = LocalDate.now(VIETNAM_ZONE);
+
+        List<OrderDTO> todayOrders = allOrders.stream()
+                .filter(order -> toLocalDate(order).equals(today))
                 .toList();
 
-        long totalRevenue =
-                todayOrders.stream().mapToLong(OrderDTO::getTotalPrice).sum();
+        long totalRevenue = todayOrders.stream().mapToLong(OrderDTO::getTotalPrice).sum();
         long totalOrders = todayOrders.size();
+        long totalNewUsers = profileClient.searchProfiles("", startDate, endDate).getPage().getTotal();
 
-        long totalNewUsers =
-                profileClient.searchProfiles("", startDate, endDate).getPage().getTotal();
+        return new SummaryTodayDTO(totalRevenue, totalOrders, totalNewUsers);
+    }
 
-        SummaryTodayDTO todaySummary = new SummaryTodayDTO(totalRevenue, totalOrders, totalNewUsers);
-        return DashboardDTO.builder()
-                .orderByCity(orderStatisticByCityDTOS)
-                .revenueAndOrders(revenueAndOrdersDTOS)
-                .todaySummary(todaySummary)
-                .build();
+    // ===== Utility methods =====
+
+    private List<OrderDTO> fetchOrders(Instant startDate, Instant endDate) {
+        return orderClient.searchOrders("", null, null, startDate, endDate, null, 1, 10000, null)
+                .getData();
+    }
+
+    private LocalDate toLocalDate(OrderDTO order) {
+        return order.getCreatedAt().atZone(VIETNAM_ZONE).toLocalDate();
+    }
+
+    private Instant endOfToday() {
+        return LocalDate.now(VIETNAM_ZONE).atTime(LocalTime.MAX).atZone(VIETNAM_ZONE).toInstant();
     }
 }
