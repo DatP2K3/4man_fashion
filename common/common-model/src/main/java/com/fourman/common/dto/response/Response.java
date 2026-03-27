@@ -8,9 +8,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fourman.common.exception.ResponseException;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 /**
  * Unified API response wrapper.
@@ -20,24 +20,15 @@ import lombok.NoArgsConstructor;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Response<T> implements Serializable {
-    private T data;
-
-    @Builder.Default
+    protected T data;
     private boolean success = true;
-
-    @Builder.Default
     private int code = 200;
-
     private String message;
-
-    @Builder.Default
     private long timestamp = Instant.now().toEpochMilli();
-
-    @Builder.Default
     private String status = "SUCCESS";
 
     @JsonIgnore
@@ -45,9 +36,6 @@ public class Response<T> implements Serializable {
 
     // ===== Factory methods =====
 
-    /**
-     * Success response with data.
-     */
     public static <T> Response<T> of(T data) {
         Response<T> response = new Response<>();
         response.data = data;
@@ -58,9 +46,6 @@ public class Response<T> implements Serializable {
         return response;
     }
 
-    /**
-     * Success response without data.
-     */
     public static <T> Response<T> ok() {
         Response<T> response = new Response<>();
         response.success = true;
@@ -70,10 +55,6 @@ public class Response<T> implements Serializable {
         return response;
     }
 
-    /**
-     * Fail response — used in Feign fallbacks only.
-     * Controller errors are handled by CommonGlobalExceptionHandler.
-     */
     public static <T> Response<T> fail(RuntimeException exception) {
         Response<T> response = new Response<>();
         response.success = false;
@@ -91,8 +72,15 @@ public class Response<T> implements Serializable {
     }
 
     /**
-     * Get data — throws stored exception if this is a failed response (from Feign).
+     * Mark this response as success.
      */
+    public Response<T> success() {
+        this.success = true;
+        this.code = 200;
+        this.status = "SUCCESS";
+        return this;
+    }
+
     public T getData() {
         if (this.exception != null) {
             throw this.exception;
