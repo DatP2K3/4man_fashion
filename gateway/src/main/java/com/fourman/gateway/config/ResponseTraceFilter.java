@@ -33,8 +33,7 @@ public class ResponseTraceFilter {
                 if (statusCode != null && statusCode.isError()) {
                     String method = exchange.getRequest().getMethod().name();
                     String path = exchange.getRequest().getURI().getPath();
-                    log.warn("[{}] {} {} → {} ERROR",
-                            correlationId, method, path, statusCode.value());
+                    log.warn("[{}] {} {} → {} ERROR", correlationId, method, path, statusCode.value());
                 }
             }));
         };

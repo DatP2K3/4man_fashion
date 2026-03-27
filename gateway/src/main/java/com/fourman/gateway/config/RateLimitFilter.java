@@ -37,31 +37,34 @@ public class RateLimitFilter implements GlobalFilter {
         String clientIp = getClientIp(exchange);
         String redisKey = KEY_PREFIX + clientIp;
 
-        return redisTemplate.opsForValue().increment(redisKey).flatMap(count -> {
-            Mono<Boolean> expireMono = (count == 1)
-                    ? redisTemplate.expire(redisKey, WINDOW_DURATION)
-                    : Mono.just(true);
+        return redisTemplate
+                .opsForValue()
+                .increment(redisKey)
+                .flatMap(count -> {
+                    Mono<Boolean> expireMono =
+                            (count == 1) ? redisTemplate.expire(redisKey, WINDOW_DURATION) : Mono.just(true);
 
-            return expireMono.flatMap(result -> {
-                long remaining = Math.max(0, MAX_REQUESTS - count);
+                    return expireMono.flatMap(result -> {
+                        long remaining = Math.max(0, MAX_REQUESTS - count);
 
-                exchange.getResponse().getHeaders().add("X-RateLimit-Limit", String.valueOf(MAX_REQUESTS));
-                exchange.getResponse().getHeaders().add("X-RateLimit-Remaining", String.valueOf(remaining));
+                        exchange.getResponse().getHeaders().add("X-RateLimit-Limit", String.valueOf(MAX_REQUESTS));
+                        exchange.getResponse().getHeaders().add("X-RateLimit-Remaining", String.valueOf(remaining));
 
-                if (count > MAX_REQUESTS) {
-                    log.warn("Rate limit exceeded for IP: {} ({} requests/min)", clientIp, count);
-                    exchange.getResponse().setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
-                    exchange.getResponse().getHeaders().add("Retry-After", "60");
-                    return exchange.getResponse().setComplete();
-                }
+                        if (count > MAX_REQUESTS) {
+                            log.warn("Rate limit exceeded for IP: {} ({} requests/min)", clientIp, count);
+                            exchange.getResponse().setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
+                            exchange.getResponse().getHeaders().add("Retry-After", "60");
+                            return exchange.getResponse().setComplete();
+                        }
 
-                return chain.filter(exchange);
-            });
-        }).onErrorResume(ex -> {
-            // Redis down → cho qua, không chặn user
-            log.error("Rate limiter Redis error, allowing request through: {}", ex.getMessage());
-            return chain.filter(exchange);
-        });
+                        return chain.filter(exchange);
+                    });
+                })
+                .onErrorResume(ex -> {
+                    // Redis down → cho qua, không chặn user
+                    log.error("Rate limiter Redis error, allowing request through: {}", ex.getMessage());
+                    return chain.filter(exchange);
+                });
     }
 
     private String getClientIp(ServerWebExchange exchange) {

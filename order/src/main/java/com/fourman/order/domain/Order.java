@@ -10,7 +10,7 @@ import com.fourman.common.enums.PaymentMethod;
 import com.fourman.common.enums.PaymentStatus;
 import com.fourman.common.support.IdUtils;
 import com.fourman.order.domain.command.CreateOrderCmd;
-import com.fourman.order.infrastructure.support.exception.OrderCodeUtils;
+import com.fourman.order.infrastructure.support.OrderCodeUtils;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;

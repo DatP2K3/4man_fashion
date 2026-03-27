@@ -31,8 +31,7 @@ public class RequestTraceFilter implements GlobalFilter {
         String method = exchange.getRequest().getMethod().name();
         String path = exchange.getRequest().getURI().getPath();
 
-        log.info("[{}] {} {} | IP: {}",
-                correlationId, method, path, getClientIp(exchange));
+        log.info("[{}] {} {} | IP: {}", correlationId, method, path, getClientIp(exchange));
 
         return chain.filter(exchange);
     }

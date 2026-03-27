@@ -1,4 +1,4 @@
-package com.fourman.order.infrastructure.support.exception;
+package com.fourman.order.infrastructure.support;
 
 import java.util.Random;
 

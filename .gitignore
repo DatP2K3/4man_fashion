@@ -24,3 +24,4 @@ Thumbs.db
 # Agent directories
 .agents/
 .gemini/
+.gitnexus
