@@ -92,7 +92,7 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.evo.common</groupId>
+			<groupId>com.fourman.common</groupId>
 			<artifactId>common-model</artifactId>
 			<version>${common.version}</version>
 		</dependency>

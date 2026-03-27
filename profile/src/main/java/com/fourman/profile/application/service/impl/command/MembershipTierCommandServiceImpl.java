@@ -1,0 +1,102 @@
+package com.fourman.profile.application.service.impl.command;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
+import com.fourman.common.dto.response.MembershipTierDTO;
+import com.fourman.common.exception.ResponseException;
+import com.fourman.profile.application.dto.mapper.MembershipTierDTOMapper;
+import com.fourman.profile.application.dto.request.CreateOrUpdateMembershipTierRequest;
+import com.fourman.profile.application.mapper.CommandMapper;
+import com.fourman.profile.application.service.MembershipTierCommandService;
+import com.fourman.profile.domain.MembershipTier;
+import com.fourman.profile.domain.command.CreateOrUpdateMembershipTierCmd;
+import com.fourman.profile.domain.repository.MembershipTierDomainRepository;
+import com.fourman.profile.infrastructure.persistence.entity.MembershipTierEntity;
+import com.fourman.profile.infrastructure.persistence.repository.MembershipTierEntityRepository;
+import com.fourman.profile.infrastructure.support.exception.BadRequestError;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class MembershipTierCommandServiceImpl implements MembershipTierCommandService {
+    private final MembershipTierDomainRepository membershipTierDomainRepository;
+    private final MembershipTierEntityRepository membershipTierEntityRepository;
+    private final CommandMapper commandMapper;
+    private final MembershipTierDTOMapper membershipTierDTOMapper;
+
+    @Override
+    public MembershipTierDTO create(CreateOrUpdateMembershipTierRequest createMemberShipTierRequest) {
+        CreateOrUpdateMembershipTierCmd createMembershipTierCmd =
+                commandMapper.fromCreateOrUpdateProfileRequest(createMemberShipTierRequest);
+        if (createMembershipTierCmd.getDefaultTier()) {
+            MembershipTier defaultMembershipTier = membershipTierDomainRepository.getDefaultMembershipTier();
+            if (defaultMembershipTier != null) {
+                defaultMembershipTier.setDefaultTier(false);
+                membershipTierDomainRepository.save(defaultMembershipTier);
+            }
+        }
+        MembershipTier membershipTier = new MembershipTier(createMembershipTierCmd);
+        membershipTier = membershipTierDomainRepository.save(membershipTier);
+        return membershipTierDTOMapper.domainModelToDTO(membershipTier);
+    }
+
+    @Override
+    public MembershipTierDTO update(CreateOrUpdateMembershipTierRequest updateMemberShipTierRequest) {
+        CreateOrUpdateMembershipTierCmd updateMembershipTierCmd =
+                commandMapper.fromCreateOrUpdateProfileRequest(updateMemberShipTierRequest);
+        if (updateMembershipTierCmd.getDefaultTier()) {
+            MembershipTier defaultMembershipTier = membershipTierDomainRepository.getDefaultMembershipTier();
+            if (defaultMembershipTier != null) {
+                defaultMembershipTier.setDefaultTier(false);
+                membershipTierDomainRepository.save(defaultMembershipTier);
+            }
+        }
+        MembershipTier membershipTier = membershipTierDomainRepository.getById(updateMembershipTierCmd.getId());
+        membershipTier.update(updateMembershipTierCmd);
+        membershipTier = membershipTierDomainRepository.save(membershipTier);
+        return membershipTierDTOMapper.domainModelToDTO(membershipTier);
+    }
+
+    @Override
+    public UUID getDefaultMembershipTierId() {
+        return membershipTierDomainRepository.getDefaultMembershipTier().getId();
+    }
+
+    @Override
+    public void delete(UUID id, boolean deleted) {
+        MembershipTier membershipTier = membershipTierDomainRepository.getById(id);
+        if (membershipTier.isDefaultTier()) {
+            throw new ResponseException(BadRequestError.CANT_DELETE_DEFAULT_MEMBERSHIP_TIER);
+        }
+        membershipTier.setDeleted(deleted);
+        membershipTierDomainRepository.save(membershipTier);
+    }
+
+    @Override
+    public UUID handleMembershipTierChange(Long amount) {
+        List<MembershipTierEntity> membershipTiers = membershipTierEntityRepository.findAll();
+        membershipTiers.sort(
+                Comparator.comparing(MembershipTierEntity::getMinPoints).reversed());
+        for (MembershipTierEntity tier : membershipTiers) {
+            if (amount >= tier.getMinPoints()) {
+                return tier.getId();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void toggleVisibility(String id) {
+        MembershipTier membershipTier = membershipTierDomainRepository.getById(UUID.fromString(id));
+        if (membershipTier.isDefaultTier()) {
+            throw new ResponseException(BadRequestError.CANT_TOGGLE_VISIBILITY_DEFAULT_MEMBERSHIP_TIER);
+        }
+        membershipTier.toggleVisibility();
+        membershipTierDomainRepository.save(membershipTier);
+    }
+}

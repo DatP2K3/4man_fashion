@@ -8,7 +8,7 @@
 		<version>3.3.7</version>
 		<relativePath/>
 	</parent>
-	<groupId>com.evo.common</groupId>
+	<groupId>com.fourman.common</groupId>
 	<artifactId>common</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>common</name>

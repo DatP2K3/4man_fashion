@@ -1,0 +1,126 @@
+package com.fourman.profile.infrastructure.domainrepository;
+
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Repository;
+
+import com.fourman.common.exception.ResponseException;
+import com.fourman.common.repository.AbstractDomainRepository;
+import com.fourman.profile.domain.Profile;
+import com.fourman.profile.domain.ShippingAddress;
+import com.fourman.profile.domain.UserWallet;
+import com.fourman.profile.domain.query.SearchProfileQuery;
+import com.fourman.profile.domain.repository.ProfileDomainRepository;
+import com.fourman.profile.infrastructure.persistence.entity.ProfileEntity;
+import com.fourman.profile.infrastructure.persistence.entity.ShippingAddressEntity;
+import com.fourman.profile.infrastructure.persistence.entity.UserWalletEntity;
+import com.fourman.profile.infrastructure.persistence.mapper.ProfileEntityMapper;
+import com.fourman.profile.infrastructure.persistence.mapper.ShippingAdressEntityMapper;
+import com.fourman.profile.infrastructure.persistence.mapper.UserWalletEntityMapper;
+import com.fourman.profile.infrastructure.persistence.repository.ProfileEntityRepository;
+import com.fourman.profile.infrastructure.persistence.repository.ShippingAddressEntityRepository;
+import com.fourman.profile.infrastructure.persistence.repository.UserWalletEntityRepository;
+import com.fourman.profile.infrastructure.support.exception.NotFoundError;
+
+@Repository
+public class ProfileDomainRepositoryImpl extends AbstractDomainRepository<Profile, ProfileEntity, UUID>
+        implements ProfileDomainRepository {
+    private final ProfileEntityMapper profileEntityMapper;
+    private final ProfileEntityRepository profileEntityRepository;
+    private final UserWalletEntityMapper userWalletEntityMapper;
+    private final UserWalletEntityRepository userWalletEntityRepository;
+    private final ShippingAdressEntityMapper shippingAdressEntityMapper;
+    private final ShippingAddressEntityRepository shippingAddressEntityRepository;
+
+    public ProfileDomainRepositoryImpl(
+            ProfileEntityRepository profileEntityRepository,
+            ProfileEntityMapper profileEntityMapper,
+            UserWalletEntityMapper userWalletEntityMapper,
+            UserWalletEntityRepository userWalletEntityRepository,
+            ShippingAdressEntityMapper shippingAdressEntityMapper,
+            ShippingAddressEntityRepository shippingAddressEntityRepository) {
+        super(profileEntityRepository, profileEntityMapper);
+        this.profileEntityRepository = profileEntityRepository;
+        this.profileEntityMapper = profileEntityMapper;
+        this.userWalletEntityMapper = userWalletEntityMapper;
+        this.userWalletEntityRepository = userWalletEntityRepository;
+        this.shippingAddressEntityRepository = shippingAddressEntityRepository;
+        this.shippingAdressEntityMapper = shippingAdressEntityMapper;
+    }
+
+    @Override
+    protected List<Profile> enrichList(List<Profile> profiles) {
+        if (profiles.isEmpty()) return profiles;
+
+        List<UUID> profileIds = profiles.stream().map(Profile::getId).toList(); // userId === profileId
+
+        Map<UUID, List<ShippingAddress>> shippingAddressMap =
+                shippingAddressEntityRepository.findByProfileIdIn(profileIds).stream()
+                        .collect(Collectors.groupingBy(
+                                ShippingAddressEntity::getProfileId,
+                                Collectors.mapping(shippingAdressEntityMapper::toDomainModel, Collectors.toList())));
+
+        Map<UUID, UserWallet> userWalletMap = userWalletEntityRepository.findByProfileIdIn(profileIds).stream()
+                .collect(Collectors.toMap(UserWalletEntity::getProfileId, userWalletEntityMapper::toDomainModel));
+
+        profiles.forEach(profile -> {
+            profile.setListShippingAddress(shippingAddressMap.get(profile.getId()));
+            profile.setUserWallet(userWalletMap.get(profile.getId()));
+        });
+
+        return profiles;
+    }
+
+    @Override
+    public Profile save(Profile profile) {
+        UserWallet userWallet = profile.getUserWallet();
+        userWalletEntityRepository.save(userWalletEntityMapper.toEntity(userWallet));
+
+        List<ShippingAddress> listShippingAddress = profile.getListShippingAddress();
+        if (listShippingAddress != null) {
+            shippingAddressEntityRepository.saveAll(shippingAdressEntityMapper.toEntityList(listShippingAddress));
+        }
+
+        return this.enrich(
+                profileEntityMapper.toDomainModel(profileEntityRepository.save(profileEntityMapper.toEntity(profile))));
+    }
+
+    @Override
+    public Profile getById(UUID profileId) {
+        return this.enrich(profileEntityMapper.toDomainModel(profileEntityRepository
+                .findById(profileId)
+                .orElseThrow(() -> new ResponseException(NotFoundError.PROFILE_NOT_FOUND))));
+    }
+
+    @Override
+    public Profile getByIdOrNull(UUID profileId) {
+        return this.enrich(profileEntityMapper.toDomainModel(
+                profileEntityRepository.findById(profileId).orElse(null)));
+    }
+
+    @Override
+    public ShippingAddress getDefaultShippingAddress() {
+        return shippingAdressEntityMapper.toDomainModel(
+                shippingAddressEntityRepository.findByDefaultAddressTrue().orElse(null));
+    }
+
+    @Override
+    public List<Profile> search(SearchProfileQuery searchUserQuery) {
+        List<ProfileEntity> profileEntities = profileEntityRepository.search(searchUserQuery);
+        return this.enrichList(profileEntityMapper.toDomainModelList(profileEntities));
+    }
+
+    @Override
+    public Long count(SearchProfileQuery searchUserQuery) {
+        return profileEntityRepository.count(searchUserQuery);
+    }
+
+    @Override
+    public List<Profile> getAll() {
+        List<ProfileEntity> profileEntities = profileEntityRepository.findAll();
+        return this.enrichList(profileEntityMapper.toDomainModelList(profileEntities));
+    }
+}

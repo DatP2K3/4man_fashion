@@ -1,0 +1,47 @@
+package com.fourman.order.infrastructure.adapter.cart.client;
+
+import java.util.UUID;
+
+import org.springframework.cloud.openfeign.FallbackFactory;
+import org.springframework.stereotype.Component;
+
+import com.fourman.common.dto.response.CartDTO;
+import com.fourman.common.dto.response.Response;
+import com.fourman.common.enums.ServiceUnavailableError;
+import com.fourman.common.exception.ForwardInnerAlertException;
+import com.fourman.common.exception.ResponseException;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Component
+public class CartClientFallback implements FallbackFactory<CartClient> {
+    @Override
+    public CartClient create(Throwable cause) {
+        return new FallbackWithFactory(cause);
+    }
+
+    @Slf4j
+    static class FallbackWithFactory implements CartClient {
+        private final Throwable cause;
+
+        FallbackWithFactory(Throwable cause) {
+            this.cause = cause;
+        }
+
+        @Override
+        public Response<CartDTO> getCart() {
+            if (cause instanceof ForwardInnerAlertException) {
+                return Response.fail((RuntimeException) cause);
+            }
+            return Response.fail(new ResponseException(ServiceUnavailableError.CART_SERVICE_UNAVAILABLE_ERROR));
+        }
+
+        @Override
+        public Response<Void> emptyCart(UUID cartId) {
+            if (cause instanceof ForwardInnerAlertException) {
+                return Response.fail((RuntimeException) cause);
+            }
+            return Response.fail(new ResponseException(ServiceUnavailableError.CART_SERVICE_UNAVAILABLE_ERROR));
+        }
+    }
+}

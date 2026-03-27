@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>common</artifactId>
-		<groupId>com.evo.common</groupId>
+		<groupId>com.fourman.common</groupId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
@@ -22,7 +22,7 @@
 			<version>4.1.2</version>
 		</dependency>
 		<dependency>
-			<groupId>com.evo.common</groupId>
+			<groupId>com.fourman.common</groupId>
 			<artifactId>common-model</artifactId>
 			<version>${common.version}</version>
 		</dependency>

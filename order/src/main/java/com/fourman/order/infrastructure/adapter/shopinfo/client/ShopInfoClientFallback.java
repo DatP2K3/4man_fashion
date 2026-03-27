@@ -1,0 +1,39 @@
+package com.fourman.order.infrastructure.adapter.shopinfo.client;
+
+import java.util.List;
+
+import org.springframework.cloud.openfeign.FallbackFactory;
+import org.springframework.stereotype.Component;
+
+import com.fourman.common.dto.response.Response;
+import com.fourman.common.dto.response.ShopAddressDTO;
+import com.fourman.common.enums.ServiceUnavailableError;
+import com.fourman.common.exception.ForwardInnerAlertException;
+import com.fourman.common.exception.ResponseException;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Component
+public class ShopInfoClientFallback implements FallbackFactory<ShopInfoClient> {
+    @Override
+    public ShopInfoClient create(Throwable cause) {
+        return new FallbackWithFactory(cause);
+    }
+
+    @Slf4j
+    static class FallbackWithFactory implements ShopInfoClient {
+        private final Throwable cause;
+
+        FallbackWithFactory(Throwable cause) {
+            this.cause = cause;
+        }
+
+        @Override
+        public Response<List<ShopAddressDTO>> getShopAddress() {
+            if (cause instanceof ForwardInnerAlertException) {
+                return Response.fail((RuntimeException) cause);
+            }
+            return Response.fail(new ResponseException(ServiceUnavailableError.SHOPINFO_SERVICE_UNAVAILABLE_ERROR));
+        }
+    }
+}

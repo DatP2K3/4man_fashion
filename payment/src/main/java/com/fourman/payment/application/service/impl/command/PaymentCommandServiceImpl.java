@@ -1,0 +1,103 @@
+package com.fourman.payment.application.service.impl.command;
+
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.fourman.common.dto.event.OrderEvent;
+import com.fourman.common.enums.TransactionStatus;
+import com.fourman.payment.application.service.PaymentCommandService;
+import com.fourman.payment.domain.PaymentTransaction;
+import com.fourman.payment.domain.command.CreatePaymentTransactionCmd;
+import com.fourman.payment.domain.repository.PaymentTransactionDomainRepository;
+import com.fourman.payment.infrastructure.adapter.rabbitmq.OrderEventRabbitMQService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class PaymentCommandServiceImpl implements PaymentCommandService {
+    private final PaymentTransactionDomainRepository paymentTransactionDomainRepository;
+    private final OrderEventRabbitMQService orderEventRabbitMQService;
+
+    @Value("${payment.redirectUrl}")
+    private String redirectUrl;
+
+    @Override
+    public void handlePaymentCallback(HttpServletRequest request, HttpServletResponse response) {
+        Long amount = Long.parseLong(request.getParameter("vnp_Amount"));
+        String orderCode = request.getParameter("vnp_TxnRef");
+        String transactionStatus = request.getParameter("vnp_ResponseCode");
+        String transactionCode = request.getParameter("vnp_TransactionNo");
+        String transactionDate = request.getParameter("vnp_PayDate");
+        String transactionInfo = request.getParameter("vnp_OrderInfo");
+
+        TransactionStatus status = "00".equals(transactionStatus) ? TransactionStatus.SUCCESS : TransactionStatus.FAIL;
+
+        Instant formattedPayDate = formatPayDate(transactionDate);
+
+        CreatePaymentTransactionCmd cmd = CreatePaymentTransactionCmd.builder()
+                .amount(amount)
+                .transactionCode(transactionCode)
+                .orderCode(orderCode)
+                .status(status)
+                .payDate(formattedPayDate)
+                .transactionInfo(transactionInfo)
+                .build();
+
+        PaymentTransaction paymentTransaction = new PaymentTransaction(cmd);
+        paymentTransactionDomainRepository.save(paymentTransaction);
+        OrderEvent orderEvent =
+                OrderEvent.builder().orderCode(orderCode).status(status).build();
+
+        orderEventRabbitMQService.publishOrderUpdateEvent(orderEvent);
+
+        String queryParams = String.format(
+                "?status=%s&orderCode=%s&amount=%d&transactionCode=%s&payDate=%s&transactionInfo=%s",
+                encode(status.name()),
+                encode(orderCode),
+                amount,
+                encode(transactionCode),
+                encode(transactionDate),
+                encode(transactionInfo));
+
+        try {
+            response.sendRedirect(redirectUrl + queryParams);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to redirect to payment result page", e);
+        }
+    }
+
+    private String encode(String value) {
+        try {
+            return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
+        } catch (Exception e) {
+            return value;
+        }
+    }
+
+    private Instant formatPayDate(String vnpayDate) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+            LocalDateTime localDateTime = LocalDateTime.parse(vnpayDate, formatter);
+
+            ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
+            return localDateTime.atZone(zoneId).toInstant();
+        } catch (Exception e) {
+            log.warn("Failed to parse VNPay date '{}', falling back to current time", vnpayDate, e);
+            return Instant.now();
+        }
+    }
+}

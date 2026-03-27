@@ -1,0 +1,22 @@
+package com.fourman.storage.application.service;
+
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fourman.common.dto.event.FileEvent;
+import com.fourman.common.dto.response.FileResponse;
+import com.fourman.storage.application.dto.request.UpdateFileRequest;
+
+public interface FileCommandService {
+    List<FileResponse> storeFile(List<MultipartFile> files, boolean isPublic, String description);
+
+    FileResponse updateFile(UpdateFileRequest updateFileRequest);
+
+    void deleteFile(UUID fileId);
+
+    FileResponse storeOneFile(MultipartFile file, boolean isPublic, String description);
+
+    void updateFileStatus(FileEvent event);
+}

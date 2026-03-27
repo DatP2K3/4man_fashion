@@ -78,12 +78,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.evo.common</groupId>
+			<groupId>com.fourman.common</groupId>
 			<artifactId>common-web</artifactId>
 			<version>${common.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.evo.common</groupId>
+			<groupId>com.fourman.common</groupId>
 			<artifactId>common-client</artifactId>
 			<version>${common.version}</version>
 		</dependency>
