@@ -26,21 +26,21 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
     private final CategoryEntityRepository categoryEntityRepository;
 
     @Override
-    @Cacheable(value = "categories")
+    @Cacheable(value = "categories", unless = "#result == null || #result.isEmpty()")
     public List<CategoryDTO> getCategories() {
         List<Category> categories = categoryDomainRepository.getAll();
         return categoryDTOMapper.domainModelsToDTOs(categories);
     }
 
     @Override
-    @Cacheable(value = "categories", key = "#productType")
+    @Cacheable(value = "categories", key = "#productType", unless = "#result == null || #result.isEmpty()")
     public List<CategoryDTO> getCategoriesByProductType(String productType) {
         List<CategoryEntity> categories = categoryEntityRepository.findByProductType(productType);
         return categoryDTOMapper.entitiesToDTOs(categories);
     }
 
     @Override
-    @Cacheable(value = "categories", key = "#id")
+    @Cacheable(value = "categories", key = "#id", unless = "#result == null")
     public CategoryDTO getCategoryById(UUID id) {
         CategoryEntity categoryEntity = categoryEntityRepository
                 .findById(id)

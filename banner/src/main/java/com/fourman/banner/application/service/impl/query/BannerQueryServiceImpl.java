@@ -20,7 +20,7 @@ public class BannerQueryServiceImpl implements BannerQueryService {
     private final BannerDomainRepository bannerDomainRepository;
 
     @Override
-    @Cacheable(value = "banners")
+    @Cacheable(value = "banners", unless = "#result == null || #result.isEmpty()")
     public List<BannerDTO> getAllBanners() {
         List<Banner> banners = bannerDomainRepository.getAll();
         return bannerDTOMapper.domainModelsToDTOs(banners);

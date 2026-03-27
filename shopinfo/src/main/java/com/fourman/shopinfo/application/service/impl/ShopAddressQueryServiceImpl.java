@@ -20,7 +20,7 @@ public class ShopAddressQueryServiceImpl implements ShopAddressQueryService {
     private final ShopAddressDTOMapper shopAddressDTOMapper;
 
     @Override
-    @Cacheable(value = "shopAddresses")
+    @Cacheable(value = "shopAddresses", unless = "#result == null || #result.isEmpty()")
     public List<ShopAddressDTO> getAllShopAddresses() {
         List<ShopAddressEntity> shopAddressEntities = shopAddressEntityRepository.findAll();
         return shopAddressDTOMapper.entitiesToDTOs(shopAddressEntities);
