@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fourman.common.exception.ResponseException;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -25,10 +26,19 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class Response<T> implements Serializable {
     protected T data;
+
+    @Builder.Default
     private boolean success = true;
+
+    @Builder.Default
     private int code = 200;
+
     private String message;
+
+    @Builder.Default
     private long timestamp = Instant.now().toEpochMilli();
+
+    @Builder.Default
     private String status = "SUCCESS";
 
     @JsonIgnore
