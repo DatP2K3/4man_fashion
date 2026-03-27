@@ -1,14 +1,11 @@
 package com.fourman.gateway.config;
 
 import java.time.Duration;
-import java.time.Instant;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
+import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -16,46 +13,51 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
- * Simple in-memory rate limiter.
- * Limits each IP to MAX_REQUESTS per WINDOW_DURATION.
- * For production with multiple gateway instances, replace with Redis-based rate limiter.
+ * Redis-based rate limiter using sliding window counter.
+ * Each IP gets a Redis key "rate_limit:{ip}" with TTL = WINDOW_DURATION.
+ * Supports multiple gateway instances sharing the same Redis.
  */
 @Component
 public class RateLimitFilter implements GlobalFilter, Ordered {
     private static final int MAX_REQUESTS = 100;
     private static final Duration WINDOW_DURATION = Duration.ofMinutes(1);
+    private static final String KEY_PREFIX = "rate_limit:";
 
-    private final Map<String, RateInfo> rateLimitMap = new ConcurrentHashMap<>();
+    private final ReactiveStringRedisTemplate redisTemplate;
+
+    public RateLimitFilter(ReactiveStringRedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String clientIp = getClientIp(exchange);
+        String redisKey = KEY_PREFIX + clientIp;
 
-        RateInfo rateInfo = rateLimitMap.compute(clientIp, (key, existing) -> {
-            if (existing == null || existing.isExpired()) {
-                return new RateInfo();
-            }
-            return existing;
+        return redisTemplate.opsForValue().increment(redisKey).flatMap(count -> {
+            // Set TTL only on first request (count == 1)
+            Mono<Boolean> expireMono = (count == 1) ? redisTemplate.expire(redisKey, WINDOW_DURATION) : Mono.just(true);
+
+            return expireMono.flatMap(result -> {
+                long remaining = Math.max(0, MAX_REQUESTS - count);
+
+                exchange.getResponse().getHeaders().add("X-RateLimit-Limit", String.valueOf(MAX_REQUESTS));
+                exchange.getResponse().getHeaders().add("X-RateLimit-Remaining", String.valueOf(remaining));
+
+                if (count > MAX_REQUESTS) {
+                    exchange.getResponse().setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
+                    exchange.getResponse().getHeaders().add("Retry-After", "60");
+                    return exchange.getResponse().setComplete();
+                }
+
+                return chain.filter(exchange);
+            });
         });
-
-        if (rateInfo.incrementAndCheck() > MAX_REQUESTS) {
-            exchange.getResponse().setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
-            exchange.getResponse().getHeaders().add("X-RateLimit-Limit", String.valueOf(MAX_REQUESTS));
-            exchange.getResponse().getHeaders().add("X-RateLimit-Remaining", "0");
-            exchange.getResponse().getHeaders().add("Retry-After", "60");
-            return exchange.getResponse().setComplete();
-        }
-
-        int remaining = MAX_REQUESTS - rateInfo.getCount();
-        exchange.getResponse().getHeaders().add("X-RateLimit-Limit", String.valueOf(MAX_REQUESTS));
-        exchange.getResponse().getHeaders().add("X-RateLimit-Remaining", String.valueOf(Math.max(0, remaining)));
-
-        return chain.filter(exchange);
     }
 
     @Override
     public int getOrder() {
-        return -1; // Run before other filters
+        return -1;
     }
 
     private String getClientIp(ServerWebExchange exchange) {
@@ -65,22 +67,5 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
         }
         var remoteAddress = exchange.getRequest().getRemoteAddress();
         return remoteAddress != null ? remoteAddress.getAddress().getHostAddress() : "unknown";
-    }
-
-    private static class RateInfo {
-        private final Instant windowStart = Instant.now();
-        private final AtomicInteger counter = new AtomicInteger(0);
-
-        int incrementAndCheck() {
-            return counter.incrementAndGet();
-        }
-
-        int getCount() {
-            return counter.get();
-        }
-
-        boolean isExpired() {
-            return Instant.now().isAfter(windowStart.plus(WINDOW_DURATION));
-        }
     }
 }
