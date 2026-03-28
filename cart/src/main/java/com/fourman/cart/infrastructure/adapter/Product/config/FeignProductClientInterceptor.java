@@ -1,4 +1,4 @@
-package com.fourman.cart.infrastructure.adapter.Product.config;
+package com.fourman.cart.infrastructure.adapter.product.config;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

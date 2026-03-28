@@ -1,4 +1,4 @@
-package com.fourman.cart.infrastructure.adapter.Product.client;
+package com.fourman.cart.infrastructure.adapter.product.client;
 
 import java.util.UUID;
 

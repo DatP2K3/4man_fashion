@@ -1,11 +1,11 @@
-package com.fourman.cart.infrastructure.adapter.Product.client;
+package com.fourman.cart.infrastructure.adapter.product.client;
 
 import java.util.UUID;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-import com.fourman.cart.infrastructure.adapter.Product.config.FeignProductClientConfiguration;
+import com.fourman.cart.infrastructure.adapter.product.config.FeignProductClientConfiguration;
 import com.fourman.common.dto.response.ProductDTO;
 import com.fourman.common.dto.response.Response;
 

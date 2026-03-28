@@ -9,7 +9,7 @@ import com.fourman.cart.domain.Cart;
 import com.fourman.cart.domain.CartItem;
 import com.fourman.cart.domain.exception.NotFoundError;
 import com.fourman.cart.domain.repository.CartDomainRepository;
-import com.fourman.cart.infrastructure.adapter.Product.client.ProductClient;
+import com.fourman.cart.infrastructure.adapter.product.client.ProductClient;
 import com.fourman.cart.infrastructure.persistence.entity.CartEntity;
 import com.fourman.cart.infrastructure.persistence.entity.CartItemEntity;
 import com.fourman.cart.infrastructure.persistence.mapper.CartEntityMapper;

@@ -1,4 +1,4 @@
-package com.fourman.cart.infrastructure.adapter.Product.config;
+package com.fourman.cart.infrastructure.adapter.product.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
