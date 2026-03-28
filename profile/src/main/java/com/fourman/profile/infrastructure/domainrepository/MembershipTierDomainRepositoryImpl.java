@@ -7,11 +7,11 @@ import org.springframework.stereotype.Repository;
 import com.fourman.common.exception.ResponseException;
 import com.fourman.common.repository.AbstractDomainRepository;
 import com.fourman.profile.domain.MembershipTier;
+import com.fourman.profile.domain.exception.NotFoundError;
 import com.fourman.profile.domain.repository.MembershipTierDomainRepository;
 import com.fourman.profile.infrastructure.persistence.entity.MembershipTierEntity;
 import com.fourman.profile.infrastructure.persistence.mapper.MembershipTierEntityMapper;
 import com.fourman.profile.infrastructure.persistence.repository.MembershipTierEntityRepository;
-import com.fourman.profile.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class MembershipTierDomainRepositoryImpl

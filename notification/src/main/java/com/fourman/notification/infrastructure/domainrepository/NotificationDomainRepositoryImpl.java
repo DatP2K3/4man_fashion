@@ -7,11 +7,11 @@ import org.springframework.stereotype.Repository;
 import com.fourman.common.exception.ResponseException;
 import com.fourman.common.repository.AbstractDomainRepository;
 import com.fourman.notification.domain.Notification;
+import com.fourman.notification.domain.exception.NotFoundError;
 import com.fourman.notification.domain.repository.NotificationDomainRepository;
 import com.fourman.notification.infrastructure.persistence.entity.NotificationEntity;
 import com.fourman.notification.infrastructure.persistence.mapper.NotificationEntityMapper;
 import com.fourman.notification.infrastructure.persistence.repository.NotificationEntityRepository;
-import com.fourman.notification.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class NotificationDomainRepositoryImpl extends AbstractDomainRepository<Notification, NotificationEntity, UUID>

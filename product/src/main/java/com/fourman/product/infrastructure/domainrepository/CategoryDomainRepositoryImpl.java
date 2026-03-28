@@ -9,6 +9,7 @@ import com.fourman.common.exception.ResponseException;
 import com.fourman.common.repository.AbstractDomainRepository;
 import com.fourman.product.domain.Category;
 import com.fourman.product.domain.TagDescription;
+import com.fourman.product.domain.exception.NotFoundError;
 import com.fourman.product.domain.repository.CategoryDomainRepository;
 import com.fourman.product.infrastructure.persistence.entity.CategoryEntity;
 import com.fourman.product.infrastructure.persistence.entity.TagDescriptionEntity;
@@ -16,7 +17,6 @@ import com.fourman.product.infrastructure.persistence.mapper.CategoryEntityMappe
 import com.fourman.product.infrastructure.persistence.mapper.TagDescriptionEntityMapper;
 import com.fourman.product.infrastructure.persistence.repository.CategoryEntityRepository;
 import com.fourman.product.infrastructure.persistence.repository.TagDescriptionEntityRepository;
-import com.fourman.product.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class CategoryDomainRepositoryImpl extends AbstractDomainRepository<Category, CategoryEntity, UUID>

@@ -10,6 +10,7 @@ import com.fourman.common.exception.ResponseException;
 import com.fourman.common.repository.AbstractDomainRepository;
 import com.fourman.storage.domain.File;
 import com.fourman.storage.domain.FileHistory;
+import com.fourman.storage.domain.exception.NotFoundError;
 import com.fourman.storage.domain.query.SearchFileQuery;
 import com.fourman.storage.domain.repository.FileDomainRepository;
 import com.fourman.storage.infrastructure.persistence.entity.FileEntity;
@@ -18,7 +19,6 @@ import com.fourman.storage.infrastructure.persistence.mapper.FileEntityMapper;
 import com.fourman.storage.infrastructure.persistence.mapper.FileHistoryEntityMapper;
 import com.fourman.storage.infrastructure.persistence.repository.FileEntityRepository;
 import com.fourman.storage.infrastructure.persistence.repository.FileHistoryEntityRepository;
-import com.fourman.storage.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class FileDomainRepositoryImpl extends AbstractDomainRepository<File, FileEntity, UUID>

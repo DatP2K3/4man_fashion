@@ -7,9 +7,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.fourman.common.Auditor;
+import com.fourman.common.support.IdUtils;
 import com.fourman.product.domain.command.CreateOrUpdateCategoryCmd;
 import com.fourman.product.domain.command.CreateTagDescriptionCmd;
-import com.fourman.product.infrastructure.support.IdUtils;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;

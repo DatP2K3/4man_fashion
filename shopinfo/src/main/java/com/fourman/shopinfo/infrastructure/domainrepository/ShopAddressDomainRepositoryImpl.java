@@ -7,11 +7,11 @@ import org.springframework.stereotype.Repository;
 import com.fourman.common.exception.ResponseException;
 import com.fourman.common.repository.AbstractDomainRepository;
 import com.fourman.shopinfo.domain.ShopAddress;
+import com.fourman.shopinfo.domain.exception.NotFoundError;
 import com.fourman.shopinfo.domain.repository.ShopAddressDomainRepository;
 import com.fourman.shopinfo.infrastructure.persistence.entity.ShopAddressEntity;
 import com.fourman.shopinfo.infrastructure.persistence.mapper.ShopAddressEntityMapper;
 import com.fourman.shopinfo.infrastructure.persistence.repository.ShopAddressEntityRepository;
-import com.fourman.shopinfo.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class ShopAddressDomainRepositoryImpl extends AbstractDomainRepository<ShopAddress, ShopAddressEntity, UUID>

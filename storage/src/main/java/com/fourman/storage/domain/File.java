@@ -8,10 +8,10 @@ import java.util.UUID;
 import com.fourman.common.Auditor;
 import com.fourman.common.enums.FileUsageStatus;
 import com.fourman.common.exception.ResponseException;
+import com.fourman.common.support.IdUtils;
 import com.fourman.storage.domain.command.StoreFileCmd;
 import com.fourman.storage.domain.command.UpdateFileCmd;
-import com.fourman.storage.infrastructure.support.IdUtils;
-import com.fourman.storage.infrastructure.support.exception.BadRequestError;
+import com.fourman.storage.domain.exception.BadRequestError;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;

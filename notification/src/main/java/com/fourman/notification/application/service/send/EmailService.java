@@ -11,7 +11,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.fourman.common.exception.ResponseException;
-import com.fourman.notification.infrastructure.support.exception.BadRequestError;
+import com.fourman.notification.domain.exception.BadRequestError;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

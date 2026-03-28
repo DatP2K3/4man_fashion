@@ -9,11 +9,11 @@ import com.fourman.common.enums.CashbackTransactionType;
 import com.fourman.common.exception.ResponseException;
 import com.fourman.common.repository.AbstractDomainRepository;
 import com.fourman.profile.domain.CashbackTransaction;
+import com.fourman.profile.domain.exception.NotFoundError;
 import com.fourman.profile.domain.repository.CashbackTransactionDomainRepository;
 import com.fourman.profile.infrastructure.persistence.entity.CashbackTransactionEntity;
 import com.fourman.profile.infrastructure.persistence.mapper.CashbackTransactionEntityMapper;
 import com.fourman.profile.infrastructure.persistence.repository.CashbackTransactionEntityRepository;
-import com.fourman.profile.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class CashbackTransactionDomainRepositoryImpl

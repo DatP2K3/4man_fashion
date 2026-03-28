@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 import com.fourman.common.exception.ResponseException;
 import com.fourman.common.repository.AbstractDomainRepository;
 import com.fourman.notification.domain.UserTopic;
+import com.fourman.notification.domain.exception.NotFoundError;
 import com.fourman.notification.domain.repository.UserTopicDomainRepository;
 import com.fourman.notification.infrastructure.persistence.entity.UserTopicEntity;
 import com.fourman.notification.infrastructure.persistence.mapper.UserTopicEntityMapper;
 import com.fourman.notification.infrastructure.persistence.repository.UserTopicEntityRepository;
-import com.fourman.notification.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class UserTopicDomainRepositoryImpl extends AbstractDomainRepository<UserTopic, UserTopicEntity, UUID>

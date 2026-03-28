@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import com.fourman.banner.infrastructure.support.enums.BannerType;
+import com.fourman.banner.domain.enums.BannerType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

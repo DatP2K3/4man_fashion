@@ -9,9 +9,9 @@ import com.fourman.common.dto.response.TokenDTO;
 import com.fourman.profile.application.dto.request.GetTokenRequest;
 import com.fourman.profile.application.dto.request.LockUserRequest;
 import com.fourman.profile.application.dto.request.ResetKeycloakPasswordRequest;
+import com.fourman.profile.domain.exception.ErrorNormalizer;
 import com.fourman.profile.infrastructure.adapter.keycloak.KeycloakIdentityClient;
 import com.fourman.profile.infrastructure.adapter.keycloak.KeycloakService;
-import com.fourman.profile.infrastructure.support.exception.ErrorNormalizer;
 
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;

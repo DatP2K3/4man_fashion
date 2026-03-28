@@ -6,11 +6,11 @@ import java.util.UUID;
 import org.springframework.stereotype.Repository;
 
 import com.fourman.banner.domain.Banner;
+import com.fourman.banner.domain.exception.NotFoundError;
 import com.fourman.banner.domain.repository.BannerDomainRepository;
 import com.fourman.banner.infrastructure.persistence.entity.BannerEntity;
 import com.fourman.banner.infrastructure.persistence.mapper.BannerEntityMapper;
 import com.fourman.banner.infrastructure.persistence.repository.BannerEntityRepository;
-import com.fourman.banner.infrastructure.support.exception.NotFoundError;
 import com.fourman.common.exception.ResponseException;
 import com.fourman.common.repository.AbstractDomainRepository;
 

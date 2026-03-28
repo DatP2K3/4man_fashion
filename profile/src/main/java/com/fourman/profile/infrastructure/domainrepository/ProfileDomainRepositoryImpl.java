@@ -12,6 +12,7 @@ import com.fourman.common.repository.AbstractDomainRepository;
 import com.fourman.profile.domain.Profile;
 import com.fourman.profile.domain.ShippingAddress;
 import com.fourman.profile.domain.UserWallet;
+import com.fourman.profile.domain.exception.NotFoundError;
 import com.fourman.profile.domain.query.SearchProfileQuery;
 import com.fourman.profile.domain.repository.ProfileDomainRepository;
 import com.fourman.profile.infrastructure.persistence.entity.ProfileEntity;
@@ -23,7 +24,6 @@ import com.fourman.profile.infrastructure.persistence.mapper.UserWalletEntityMap
 import com.fourman.profile.infrastructure.persistence.repository.ProfileEntityRepository;
 import com.fourman.profile.infrastructure.persistence.repository.ShippingAddressEntityRepository;
 import com.fourman.profile.infrastructure.persistence.repository.UserWalletEntityRepository;
-import com.fourman.profile.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class ProfileDomainRepositoryImpl extends AbstractDomainRepository<Profile, ProfileEntity, UUID>

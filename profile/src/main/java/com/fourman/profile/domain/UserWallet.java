@@ -3,7 +3,7 @@ package com.fourman.profile.domain;
 import java.util.UUID;
 
 import com.fourman.common.exception.ResponseException;
-import com.fourman.profile.infrastructure.support.exception.BadRequestError;
+import com.fourman.profile.domain.exception.BadRequestError;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;

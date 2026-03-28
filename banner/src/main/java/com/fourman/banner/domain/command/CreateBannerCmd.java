@@ -2,7 +2,7 @@ package com.fourman.banner.domain.command;
 
 import java.util.UUID;
 
-import com.fourman.banner.infrastructure.support.enums.BannerType;
+import com.fourman.banner.domain.enums.BannerType;
 
 import lombok.Getter;
 import lombok.Setter;

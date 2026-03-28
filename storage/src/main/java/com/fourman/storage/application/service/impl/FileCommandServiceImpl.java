@@ -28,9 +28,9 @@ import com.fourman.storage.domain.FileHistory;
 import com.fourman.storage.domain.command.StoreFileCmd;
 import com.fourman.storage.domain.command.UpdateFileCmd;
 import com.fourman.storage.domain.command.WriteHistoryCmd;
+import com.fourman.storage.domain.exception.BadRequestError;
+import com.fourman.storage.domain.exception.NotFoundError;
 import com.fourman.storage.domain.repository.FileDomainRepository;
-import com.fourman.storage.infrastructure.support.exception.BadRequestError;
-import com.fourman.storage.infrastructure.support.exception.NotFoundError;
 
 import lombok.RequiredArgsConstructor;
 

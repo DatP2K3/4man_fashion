@@ -12,6 +12,7 @@ import com.fourman.common.exception.ResponseException;
 import com.fourman.common.repository.AbstractDomainRepository;
 import com.fourman.order.domain.Order;
 import com.fourman.order.domain.OrderItem;
+import com.fourman.order.domain.exception.NotFoundError;
 import com.fourman.order.domain.repository.OrderDomainRepository;
 import com.fourman.order.infrastructure.persistence.entity.OrderEntity;
 import com.fourman.order.infrastructure.persistence.entity.OrderItemEntity;
@@ -19,7 +20,6 @@ import com.fourman.order.infrastructure.persistence.mapper.OrderEntityMapper;
 import com.fourman.order.infrastructure.persistence.mapper.OrderItemEntityMapper;
 import com.fourman.order.infrastructure.persistence.repository.OrderEntityRepository;
 import com.fourman.order.infrastructure.persistence.repository.OrderItemEntityRepository;
-import com.fourman.order.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class OrderDomainRepositoryImpl extends AbstractDomainRepository<Order, OrderEntity, UUID>

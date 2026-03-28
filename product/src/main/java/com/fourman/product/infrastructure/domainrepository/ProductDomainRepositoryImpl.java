@@ -9,11 +9,11 @@ import com.fourman.common.enums.DiscountStatus;
 import com.fourman.common.exception.ResponseException;
 import com.fourman.common.repository.AbstractDomainRepository;
 import com.fourman.product.domain.*;
+import com.fourman.product.domain.exception.NotFoundError;
 import com.fourman.product.domain.repository.ProductDomainRepository;
 import com.fourman.product.infrastructure.persistence.entity.*;
 import com.fourman.product.infrastructure.persistence.mapper.*;
 import com.fourman.product.infrastructure.persistence.repository.*;
-import com.fourman.product.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class ProductDomainRepositoryImpl extends AbstractDomainRepository<Product, ProductEntity, UUID>

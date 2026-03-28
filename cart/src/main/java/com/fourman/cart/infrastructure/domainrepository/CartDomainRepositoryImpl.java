@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.fourman.cart.domain.Cart;
 import com.fourman.cart.domain.CartItem;
+import com.fourman.cart.domain.exception.NotFoundError;
 import com.fourman.cart.domain.repository.CartDomainRepository;
 import com.fourman.cart.infrastructure.adapter.Product.client.ProductClient;
 import com.fourman.cart.infrastructure.persistence.entity.CartEntity;
@@ -15,7 +16,6 @@ import com.fourman.cart.infrastructure.persistence.mapper.CartEntityMapper;
 import com.fourman.cart.infrastructure.persistence.mapper.CartItemEntityMapper;
 import com.fourman.cart.infrastructure.persistence.repository.CartEntityRepository;
 import com.fourman.cart.infrastructure.persistence.repository.CartItemEntityRepository;
-import com.fourman.cart.infrastructure.support.exception.NotFoundError;
 import com.fourman.common.dto.response.ProductDTO;
 import com.fourman.common.dto.response.ProductVariantDTO;
 import com.fourman.common.exception.ResponseException;

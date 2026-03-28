@@ -3,8 +3,8 @@ package com.fourman.notification.domain;
 import java.util.Map;
 import java.util.UUID;
 
+import com.fourman.common.support.IdUtils;
 import com.fourman.notification.domain.command.StoreNotificationCmd;
-import com.fourman.notification.infrastructure.support.IdUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -12,6 +12,7 @@ import com.fourman.common.exception.ResponseException;
 import com.fourman.common.repository.AbstractDomainRepository;
 import com.fourman.notification.domain.DeviceRegistration;
 import com.fourman.notification.domain.NotificationDelivery;
+import com.fourman.notification.domain.exception.NotFoundError;
 import com.fourman.notification.domain.repository.DeviceRegistrationDomainRepository;
 import com.fourman.notification.infrastructure.persistence.entity.DeviceRegistrationEntity;
 import com.fourman.notification.infrastructure.persistence.entity.NotificationDeliveryEntity;
@@ -19,7 +20,6 @@ import com.fourman.notification.infrastructure.persistence.mapper.DeviceRegistra
 import com.fourman.notification.infrastructure.persistence.mapper.NotificationDeliveryEntityMapper;
 import com.fourman.notification.infrastructure.persistence.repository.DeviceRegistrationEntityRepository;
 import com.fourman.notification.infrastructure.persistence.repository.NotificationDeliveryEntityRepository;
-import com.fourman.notification.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class DeviceRegistrationDomainRepositoryImpl

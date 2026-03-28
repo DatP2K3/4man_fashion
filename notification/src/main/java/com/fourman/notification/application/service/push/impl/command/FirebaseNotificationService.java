@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.fourman.common.dto.event.PushNotificationEvent;
 import com.fourman.common.exception.ResponseException;
-import com.fourman.notification.infrastructure.support.exception.BadRequestError;
+import com.fourman.notification.domain.exception.BadRequestError;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;

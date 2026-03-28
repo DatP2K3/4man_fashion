@@ -7,11 +7,11 @@ import org.springframework.stereotype.Repository;
 import com.fourman.common.exception.ResponseException;
 import com.fourman.common.repository.AbstractDomainRepository;
 import com.fourman.payment.domain.PaymentTransaction;
+import com.fourman.payment.domain.exception.NotFoundError;
 import com.fourman.payment.domain.repository.PaymentTransactionDomainRepository;
 import com.fourman.payment.infrastructure.persistence.entity.PaymentTransactionEntity;
 import com.fourman.payment.infrastructure.persistence.mapper.PaymentTransactionEntityMapper;
 import com.fourman.payment.infrastructure.persistence.repository.PaymentTransactionEntityRepository;
-import com.fourman.payment.infrastructure.support.exception.NotFoundError;
 
 @Repository
 public class PaymentTransactionDomainRepositoryImpl

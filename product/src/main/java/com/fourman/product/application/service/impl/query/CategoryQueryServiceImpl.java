@@ -11,10 +11,10 @@ import com.fourman.product.application.dto.mapper.CategoryDTOMapper;
 import com.fourman.product.application.dto.response.CategoryDTO;
 import com.fourman.product.application.service.CategoryQueryService;
 import com.fourman.product.domain.Category;
+import com.fourman.product.domain.exception.NotFoundError;
 import com.fourman.product.domain.repository.CategoryDomainRepository;
 import com.fourman.product.infrastructure.persistence.entity.CategoryEntity;
 import com.fourman.product.infrastructure.persistence.repository.CategoryEntityRepository;
-import com.fourman.product.infrastructure.support.exception.NotFoundError;
 
 import lombok.RequiredArgsConstructor;
 

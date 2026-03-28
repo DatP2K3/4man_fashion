@@ -12,14 +12,14 @@ import com.fourman.common.enums.DiscountStatus;
 import com.fourman.common.enums.DiscountType;
 import com.fourman.common.enums.OperationType;
 import com.fourman.common.exception.ResponseException;
+import com.fourman.common.support.IdUtils;
 import com.fourman.product.domain.command.CreateOrUpdateDiscountCmd;
 import com.fourman.product.domain.command.CreateOrUpdateProductCmd;
 import com.fourman.product.domain.command.CreateOrUpdateProductImageCmd;
 import com.fourman.product.domain.command.CreateOrUpdateProductVariantCmd;
 import com.fourman.product.domain.command.UpdateProductVariantQuantityCmd;
-import com.fourman.product.infrastructure.support.IdUtils;
-import com.fourman.product.infrastructure.support.exception.BadRequestError;
-import com.fourman.product.infrastructure.support.exception.NotFoundError;
+import com.fourman.product.domain.exception.BadRequestError;
+import com.fourman.product.domain.exception.NotFoundError;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;

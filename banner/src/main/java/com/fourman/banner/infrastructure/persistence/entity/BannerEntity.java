@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.fourman.banner.infrastructure.support.enums.BannerType;
+import com.fourman.banner.domain.enums.BannerType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

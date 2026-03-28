@@ -14,10 +14,10 @@ import com.fourman.profile.application.mapper.CommandMapper;
 import com.fourman.profile.application.service.MembershipTierCommandService;
 import com.fourman.profile.domain.MembershipTier;
 import com.fourman.profile.domain.command.CreateOrUpdateMembershipTierCmd;
+import com.fourman.profile.domain.exception.BadRequestError;
 import com.fourman.profile.domain.repository.MembershipTierDomainRepository;
 import com.fourman.profile.infrastructure.persistence.entity.MembershipTierEntity;
 import com.fourman.profile.infrastructure.persistence.repository.MembershipTierEntityRepository;
-import com.fourman.profile.infrastructure.support.exception.BadRequestError;
 
 import lombok.RequiredArgsConstructor;
 
