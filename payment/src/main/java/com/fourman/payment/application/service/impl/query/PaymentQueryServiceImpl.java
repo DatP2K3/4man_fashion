@@ -16,11 +16,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class PaymentQueryServiceImpl implements PaymentQueryService {
+    private static final long VNPAY_AMOUNT_MULTIPLIER = 100L;
     private final VNPAYConfig vnPayConfig;
 
     @Override
     public String getPaymentUrl(GetPaymentUrlRequest getPaymentUrlRequest, HttpServletRequest request) {
-        long amount = getPaymentUrlRequest.getTotalPrice() * 100L;
+        long amount = getPaymentUrlRequest.getTotalPrice() * VNPAY_AMOUNT_MULTIPLIER;
         Map<String, String> vnpParamsMap = vnPayConfig.getVNPayConfig();
         vnpParamsMap.put("vnp_Amount", String.valueOf(amount));
         vnpParamsMap.put("vnp_IpAddr", VNPayUtil.getIpAddress(request));

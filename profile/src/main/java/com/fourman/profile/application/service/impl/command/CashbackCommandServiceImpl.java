@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CashbackCommandServiceImpl implements CashbackCommandService {
+    private static final double PERCENTAGE_DIVISOR = 100.0;
     private final CashbackTransactionDomainRepository cashbackTransactionDomainRepository;
     private final ProfileDomainRepository profileDomainRepository;
     private final MembershipTierDomainRepository membershipTierDomainRepository;
@@ -41,7 +42,7 @@ public class CashbackCommandServiceImpl implements CashbackCommandService {
         }
 
         Long cashbackAmount =
-                Math.round(processCashbackCmd.getOrderAmount() * membershipTier.getCashbackPercentage() / 100);
+                Math.round(processCashbackCmd.getOrderAmount() * membershipTier.getCashbackPercentage() / PERCENTAGE_DIVISOR);
         processCashbackCmd.setCashbackAmount(cashbackAmount);
         processCashbackCmd.setDescription("Hoàn tiền từ đơn hàng: " + processCashbackCmd.getOrderId());
 
