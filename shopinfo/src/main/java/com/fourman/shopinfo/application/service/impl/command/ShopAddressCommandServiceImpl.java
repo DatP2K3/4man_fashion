@@ -1,4 +1,4 @@
-package com.fourman.shopinfo.application.service.impl;
+package com.fourman.shopinfo.application.service.impl.command;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;

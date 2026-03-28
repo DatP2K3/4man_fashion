@@ -1,4 +1,4 @@
-package com.fourman.order.application.service.impl;
+package com.fourman.order.application.service.impl.query;
 
 import java.util.List;
 import java.util.UUID;

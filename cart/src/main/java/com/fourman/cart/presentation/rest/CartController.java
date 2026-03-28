@@ -1,4 +1,4 @@
-package com.fourman.cart.rest;
+package com.fourman.cart.presentation.rest;
 
 import java.util.List;
 import java.util.UUID;

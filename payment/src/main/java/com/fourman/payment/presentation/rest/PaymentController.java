@@ -1,4 +1,4 @@
-package com.fourman.payment.rest;
+package com.fourman.payment.presentation.rest;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

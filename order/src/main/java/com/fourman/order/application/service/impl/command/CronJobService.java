@@ -1,4 +1,4 @@
-package com.fourman.order.application.service.impl;
+package com.fourman.order.application.service.impl.command;
 
 import java.util.Arrays;
 import java.util.List;

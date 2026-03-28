@@ -1,4 +1,4 @@
-package com.fourman.shopinfo.rest;
+package com.fourman.shopinfo.presentation.rest;
 
 import java.util.List;
 

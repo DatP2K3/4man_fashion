@@ -1,4 +1,4 @@
-package com.fourman.order.rest;
+package com.fourman.order.presentation.rest;
 
 import java.util.List;
 import java.util.UUID;

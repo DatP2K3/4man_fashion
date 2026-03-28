@@ -1,4 +1,4 @@
-package com.fourman.shopinfo.application.service.impl;
+package com.fourman.shopinfo.application.service.impl.query;
 
 import java.util.List;
 
