@@ -1,5 +1,6 @@
 package com.fourman.order.application.service.impl.command;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,8 @@ public class CronJobService {
         List<OrderStatus> orderStatuses =
                 Arrays.asList(OrderStatus.PENDING_SHIPMENT, OrderStatus.WAITING_FOR_PICKUP, OrderStatus.IN_TRANSIT);
         List<Order> orders = orderDomainRepository.getAllOrderWithStatusIn(orderStatuses);
+        List<Order> updatedOrders = new ArrayList<>();
+
         orders.stream().filter(order -> order.getGhnOrderCode() != null).forEach(order -> {
             GetGHNOrderDetailRequest getGHNFeeRequest = new GetGHNOrderDetailRequest(order.getGhnOrderCode());
             GHNOrderDetailDTO ghnOrderDetailDTO =
@@ -42,53 +45,30 @@ public class CronJobService {
             List<GHNOrderLogDTO> logs = ghnOrderDetailDTO.getLog();
             if (logs != null && !logs.isEmpty()) {
                 String ghnStatus = logs.getFirst().getStatus();
-                OrderStatus orderStatus =
-                        switch (ghnStatus) {
-                            case "ready_to_pick" -> OrderStatus.PENDING_SHIPMENT;
-                            case "picking", "money_collect_picking" -> OrderStatus.WAITING_FOR_PICKUP;
-                            case "picked",
-                                    "storing",
-                                    "transporting",
-                                    "sorting",
-                                    "delivering",
-                                    "money_collect_delivering",
-                                    "return_transporting",
-                                    "return_sorting",
-                                    "returning" -> OrderStatus.IN_TRANSIT;
-                            case "delivered" -> OrderStatus.DELIVERED;
-                            case "delivery_fail", "return_fail" -> OrderStatus.DELIVERY_FAIL;
-                            case "waiting_to_return", "return" -> OrderStatus.UNPAID;
-                            case "cancel", "returned", "exception", "damage", "lost" -> OrderStatus.CANCELLED;
-                            default -> null;
-                        };
-                ;
+                OrderStatus orderStatus = mapGhnStatus(ghnStatus);
 
                 if (orderStatus != null && !order.getOrderStatus().equals(orderStatus)) {
                     order.updateStatusFromTracking(orderStatus);
-                    orderDomainRepository.save(order);
-                    StringBuilder title = new StringBuilder();
-                    StringBuffer body = new StringBuffer();
-                    if (orderStatus == OrderStatus.DELIVERED) {
-                        title.append("Đơn hàng ").append(order.getOrderCode());
-                        body.append("Đơn hàng đã được giao thành công");
-                    } else if (orderStatus == OrderStatus.CANCELLED) {
-                        title.append("Đơn hàng ").append(order.getOrderCode());
-                        body.append("Đơn hàng đã bị hủy");
-                    } else if (orderStatus == OrderStatus.DELIVERY_FAIL) {
-                        title.append("Đơn hàng ").append(order.getOrderCode());
-                        body.append("Đơn hàng  đã giao không thành công");
-                    } else if (orderStatus == OrderStatus.WAITING_FOR_PICKUP) {
-                        title.append("Đơn hàng ").append(order.getOrderCode());
-                        body.append("Đơn hàng ").append(order.getOrderCode()).append(" đang chuẩn bị được lấy hàng");
-                    }
+                    updatedOrders.add(order);
 
-                    PushNotificationEvent pushNotificationEvent = PushNotificationEvent.builder()
-                            .title(title.toString())
-                            .body(body.toString())
-                            .userId(order.getUserId())
-                            .data(Map.of("orderCode", order.getOrderCode()))
-                            .build();
-                    notiEventRabbitMQService.publishNotiPushEvent(pushNotificationEvent);
+                    String title = "Đơn hàng " + order.getOrderCode();
+                    String body = switch (orderStatus) {
+                        case DELIVERED -> "Đơn hàng đã được giao thành công";
+                        case CANCELLED -> "Đơn hàng đã bị hủy";
+                        case DELIVERY_FAIL -> "Đơn hàng đã giao không thành công";
+                        case WAITING_FOR_PICKUP -> "Đơn hàng " + order.getOrderCode() + " đang chuẩn bị được lấy hàng";
+                        default -> null;
+                    };
+
+                    if (body != null) {
+                        PushNotificationEvent pushNotificationEvent = PushNotificationEvent.builder()
+                                .title(title)
+                                .body(body)
+                                .userId(order.getUserId())
+                                .data(Map.of("orderCode", order.getOrderCode()))
+                                .build();
+                        notiEventRabbitMQService.publishNotiPushEvent(pushNotificationEvent);
+                    }
 
                     if (orderStatus == OrderStatus.DELIVERED) {
                         ProcessCashbackEvent processCashbackEvent = ProcessCashbackEvent.builder()
@@ -97,11 +77,29 @@ public class CronJobService {
                                 .orderAmount(order.getTotalPrice())
                                 .type(CashbackTransactionType.EARNED)
                                 .build();
-
                         cashbackEventRabbitMQService.publishProcessCashbackEvent(processCashbackEvent);
                     }
                 }
             }
         });
+
+        if (!updatedOrders.isEmpty()) {
+            orderDomainRepository.saveAll(updatedOrders);
+        }
+    }
+
+    private OrderStatus mapGhnStatus(String ghnStatus) {
+        return switch (ghnStatus) {
+            case "ready_to_pick" -> OrderStatus.PENDING_SHIPMENT;
+            case "picking", "money_collect_picking" -> OrderStatus.WAITING_FOR_PICKUP;
+            case "picked", "storing", "transporting", "sorting", "delivering",
+                    "money_collect_delivering", "return_transporting", "return_sorting",
+                    "returning" -> OrderStatus.IN_TRANSIT;
+            case "delivered" -> OrderStatus.DELIVERED;
+            case "delivery_fail", "return_fail" -> OrderStatus.DELIVERY_FAIL;
+            case "waiting_to_return", "return" -> OrderStatus.UNPAID;
+            case "cancel", "returned", "exception", "damage", "lost" -> OrderStatus.CANCELLED;
+            default -> null;
+        };
     }
 }

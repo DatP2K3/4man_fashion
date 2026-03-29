@@ -27,7 +27,6 @@ import com.fourman.order.application.mapper.CommandMapper;
 import com.fourman.order.application.service.OrderCommandService;
 import com.fourman.order.application.service.OrderQueryService;
 import com.fourman.order.domain.Order;
-import com.fourman.order.domain.OrderItem;
 import com.fourman.order.domain.command.CreateOrderCmd;
 import com.fourman.order.domain.command.UpdateOrderStatusCmd;
 import com.fourman.order.domain.repository.OrderDomainRepository;
@@ -117,16 +116,14 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                 .build();
         cashbackEventRabbitMQService.publishUseCashbackEvent(useCashbackEvent);
 
-        List<ProductVariantSync> productVariantSyncs = new ArrayList<>();
-        for (OrderItem orderItem : order.getOrderItems()) {
-            ProductVariantSync productVariantSync = ProductVariantSync.builder()
-                    .id(orderItem.getProductVariantId())
-                    .productId(orderItem.getProductId())
-                    .totalQuantity(orderItem.getQuantity())
-                    .operationType(OperationType.DECREASE)
-                    .build();
-            productVariantSyncs.add(productVariantSync);
-        }
+        List<ProductVariantSync> productVariantSyncs = order.getOrderItems().stream()
+                .map(orderItem -> ProductVariantSync.builder()
+                        .id(orderItem.getProductVariantId())
+                        .productId(orderItem.getProductId())
+                        .totalQuantity(orderItem.getQuantity())
+                        .operationType(OperationType.DECREASE)
+                        .build())
+                .toList();
         ProductVariantEvent productVariantEvent = new ProductVariantEvent(productVariantSyncs);
         productEventRabbitMQService.publishProductPushEvent(productVariantEvent);
 
@@ -154,22 +151,21 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                 order.cancel();
 
                 PushNotificationEvent pushNotificationEvent = PushNotificationEvent.builder()
-                        .title("Đơn hàng" + order.getOrderCode())
+                        .title("Đơn hàng " + order.getOrderCode())
                         .body("Đơn hàng đã bị hủy")
                         .userId(order.getUserId())
                         .data(Map.of("orderCode", order.getOrderCode()))
                         .build();
                 notiEventRabbitMQService.publishNotiPushEvent(pushNotificationEvent);
 
-                for (OrderItem orderItem : order.getOrderItems()) {
-                    ProductVariantSync productVariantSync = ProductVariantSync.builder()
-                            .id(orderItem.getProductVariantId())
-                            .productId(orderItem.getProductId())
-                            .totalQuantity(orderItem.getQuantity())
-                            .operationType(OperationType.INCREASE)
-                            .build();
-                    productVariantSyncs.add(productVariantSync);
-                }
+                order.getOrderItems().stream()
+                        .map(orderItem -> ProductVariantSync.builder()
+                                .id(orderItem.getProductVariantId())
+                                .productId(orderItem.getProductId())
+                                .totalQuantity(orderItem.getQuantity())
+                                .operationType(OperationType.INCREASE)
+                                .build())
+                        .forEach(productVariantSyncs::add);
             }
         }
         orderDomainRepository.saveAll(orders);
@@ -182,6 +178,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     }
 
     @Override
+    @Transactional
     public List<OrderDTO> createGHNOrder(CreatShippingOrderRequest request) {
         if (request.getOrderIds() == null || request.getOrderIds().isEmpty()) {
             return List.of();
@@ -252,6 +249,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     }
 
     @Override
+    @Transactional
     public void printGHNOrder(List<String> ghnOrderCodes) {
         List<Order> orders = orderDomainRepository.getByGhnOrderCodeIn(ghnOrderCodes);
         for (Order order : orders) {
