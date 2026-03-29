@@ -69,43 +69,8 @@ public class FileCommandServiceImpl implements FileCommandService {
     public List<FileResponse> storeFile(List<MultipartFile> files, boolean isPublic, String description) {
         List<File> fileDomains = new ArrayList<>();
         for (MultipartFile file : files) {
-            try {
-                validateFile(file);
-                int fileWidth = 0;
-                int fileHeight = 0;
-                if (isImage(file)) {
-                    BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
-                    fileWidth = bufferedImage.getWidth();
-                    fileHeight = bufferedImage.getHeight();
-                }
-                StoreFileCmd storeFilecmd = StoreFileCmd.builder()
-                        .originName(file.getOriginalFilename())
-                        .fileType(file.getContentType())
-                        .fileSize(file.getSize())
-                        .fileWidth(fileWidth)
-                        .fileHeight(fileHeight)
-                        .description(description)
-                        .isPublic(isPublic)
-                        .build();
-
-                File fileDomain = new File(storeFilecmd);
-                fileDomain.assignUrl(baseUrl);
-                Path storageLocation = isPublic ? publicStorageLocation : privateStorageLocation;
-                Path targetLocation = storageLocation.resolve(fileDomain.getMd5Name());
-                file.transferTo(targetLocation.toFile());
-
-                WriteHistoryCmd writeHistoryCmd = WriteHistoryCmd.builder()
-                        .fileId(fileDomain.getId())
-                        .action("Store file")
-                        .build();
-                FileHistory fileHistory = new FileHistory(writeHistoryCmd);
-                fileDomain.setHistory(fileHistory);
-                fileDomains.add(fileDomain);
-            } catch (IOException e) {
-                throw new ResponseException(BadRequestError.CANT_STORE_FILE);
-            }
+            fileDomains.add(processAndStoreFile(file, isPublic, description));
         }
-
         fileDomains = fileDomainRepository.saveAll(fileDomains);
         return fileResponseMapper.listDomainModelToListDTO(fileDomains);
     }
@@ -149,6 +114,12 @@ public class FileCommandServiceImpl implements FileCommandService {
 
     @Override
     public FileResponse storeOneFile(MultipartFile file, boolean isPublic, String description) {
+        File fileDomain = processAndStoreFile(file, isPublic, description);
+        fileDomain = fileDomainRepository.save(fileDomain);
+        return fileResponseMapper.domainModelToDTO(fileDomain);
+    }
+
+    private File processAndStoreFile(MultipartFile file, boolean isPublic, String description) {
         try {
             validateFile(file);
             int fileWidth = 0;
@@ -180,8 +151,7 @@ public class FileCommandServiceImpl implements FileCommandService {
                     .build();
             FileHistory fileHistory = new FileHistory(writeHistoryCmd);
             fileDomain.setHistory(fileHistory);
-            fileDomain = fileDomainRepository.save(fileDomain);
-            return fileResponseMapper.domainModelToDTO(fileDomain);
+            return fileDomain;
         } catch (IOException e) {
             throw new ResponseException(BadRequestError.CANT_STORE_FILE);
         }

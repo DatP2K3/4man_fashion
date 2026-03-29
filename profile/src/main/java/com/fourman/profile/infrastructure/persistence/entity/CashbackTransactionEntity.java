@@ -10,7 +10,7 @@ import com.fourman.common.entity.AuditEntity;
 import com.fourman.common.enums.CashbackTransactionType;
 
 import lombok.*;
-
+import lombok.EqualsAndHashCode;
 @Entity
 @Data
 @Builder

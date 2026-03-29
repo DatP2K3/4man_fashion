@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class NotificationConsumerService {
+    private static final String DELIVERY_STATUS_SENT = "SENT";
     private final EmailService emailService;
     private final TemplateCodeMapper templateCodeMapper;
     private final NotificationCommandService notificationCommandService;
@@ -61,8 +62,8 @@ public class NotificationConsumerService {
                     StoreNotificationDeliveryCmd storeNotificationDeliveryCmd = StoreNotificationDeliveryCmd.builder()
                             .notificationId(notification.getId())
                             .deviceRegistrationId(deviceRegistration.getId())
-                            .status("SENT")
-                            .sendAt(Instant.ofEpochSecond(System.currentTimeMillis()))
+                            .status(DELIVERY_STATUS_SENT)
+                            .sendAt(Instant.now())
                             .build();
                     deviceRegistration.addNotificationDelivery(storeNotificationDeliveryCmd);
                     deviceRegistrationDomainRepository.save(deviceRegistration);
@@ -96,8 +97,8 @@ public class NotificationConsumerService {
             StoreNotificationDeliveryCmd storeNotificationDeliveryCmd = StoreNotificationDeliveryCmd.builder()
                     .notificationId(notificationId)
                     .deviceRegistrationId(deviceRegistration.getId())
-                    .status("SENT")
-                    .sendAt(Instant.ofEpochSecond(System.currentTimeMillis()))
+                    .status(DELIVERY_STATUS_SENT)
+                    .sendAt(Instant.now())
                     .build();
             deviceRegistration.addNotificationDelivery(storeNotificationDeliveryCmd);
             deviceRegistrationDomainRepository.save(deviceRegistration);

@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.fourman.common.entity.AuditEntity;
 
 import lombok.*;
-
+import lombok.EqualsAndHashCode;
 @Entity
 @Data
 @Builder

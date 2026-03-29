@@ -12,12 +12,13 @@ import com.fourman.common.enums.DiscountStatus;
 import com.fourman.common.enums.DiscountType;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.EqualsAndHashCode;import lombok.Builder;
+import lombok.EqualsAndHashCode;import lombok.Data;
+import lombok.EqualsAndHashCode;import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
