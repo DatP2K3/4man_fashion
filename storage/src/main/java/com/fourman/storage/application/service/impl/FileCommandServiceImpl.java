@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import jakarta.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,6 +44,9 @@ public class FileCommandServiceImpl implements FileCommandService {
     private final FileDomainRepository fileDomainRepository;
     private final FileResponseMapper fileResponseMapper;
     private final CommandMapper commandMapper;
+
+    @Value("${app.base-url}")
+    private String baseUrl;
 
     @PostConstruct
     public void init() {
@@ -85,6 +89,7 @@ public class FileCommandServiceImpl implements FileCommandService {
                         .build();
 
                 File fileDomain = new File(storeFilecmd);
+                fileDomain.assignUrl(baseUrl);
                 Path storageLocation = isPublic ? publicStorageLocation : privateStorageLocation;
                 Path targetLocation = storageLocation.resolve(fileDomain.getMd5Name());
                 file.transferTo(targetLocation.toFile());
@@ -164,6 +169,7 @@ public class FileCommandServiceImpl implements FileCommandService {
                     .build();
 
             File fileDomain = new File(storeFilecmd);
+            fileDomain.assignUrl(baseUrl);
             Path storageLocation = isPublic ? publicStorageLocation : privateStorageLocation;
             Path targetLocation = storageLocation.resolve(fileDomain.getMd5Name());
             file.transferTo(targetLocation.toFile());

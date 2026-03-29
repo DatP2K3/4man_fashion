@@ -3,6 +3,7 @@ package com.fourman.storage.application.service.impl;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fourman.common.dto.response.FileResponse;
@@ -24,6 +25,9 @@ public class FileQueryServiceImpl implements FileQueryService {
     private final FileResponseMapper fileResponseMapper;
     private final QueryMapper queryMapper;
 
+    @Value("${app.base-url}")
+    private String baseUrl;
+
     @Override
     public PageDTO<FileResponse> search(SearchFileRequest request) {
         SearchFileQuery searchFileQuery = queryMapper.from(request);
@@ -40,7 +44,7 @@ public class FileQueryServiceImpl implements FileQueryService {
     @Override
     public FileResponse getPrivateFile(UUID filedId) {
         File file = fileDomainRepository.getById(filedId);
-        String url = "http://localhost:8080/api/uploads/private/" + file.getMd5Name();
+        String url = baseUrl + "/api/uploads/private/" + file.getMd5Name();
         FileResponse fileResponse = fileResponseMapper.domainModelToDTO(file);
         fileResponse.setUrl(url);
         return fileResponse;
@@ -49,7 +53,7 @@ public class FileQueryServiceImpl implements FileQueryService {
     @Override
     public FileResponse getPublicFile(UUID filedId) {
         File file = fileDomainRepository.getById(filedId);
-        String url = "http://localhost:8080/api/uploads/public/" + file.getMd5Name();
+        String url = baseUrl + "/api/uploads/public/" + file.getMd5Name();
         FileResponse fileResponse = fileResponseMapper.domainModelToDTO(file);
         fileResponse.setUrl(url);
         return fileResponse;

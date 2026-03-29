@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import com.fourman.common.dto.response.MembershipTierDTO;
 import com.fourman.common.exception.ResponseException;
 import com.fourman.profile.application.dto.mapper.MembershipTierDTOMapper;
@@ -22,6 +22,7 @@ import com.fourman.profile.infrastructure.persistence.repository.MembershipTierE
 
 import lombok.RequiredArgsConstructor;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class MembershipTierCommandServiceImpl implements MembershipTierCommandService {

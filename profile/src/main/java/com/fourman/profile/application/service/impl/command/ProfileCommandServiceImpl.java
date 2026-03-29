@@ -8,7 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;import org.springframework.web.multipart.MultipartFile;
 
 import com.fourman.common.dto.response.FileResponse;
 import com.fourman.common.dto.response.ProfileDTO;
@@ -27,6 +27,7 @@ import com.fourman.profile.infrastructure.adapter.storage.FileService;
 
 import lombok.RequiredArgsConstructor;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class ProfileCommandServiceImpl implements ProfileCommandService {

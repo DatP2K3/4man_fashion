@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import com.fourman.banner.application.dto.mapper.BannerDTOMapper;
 import com.fourman.banner.application.dto.request.CreateBannerRequest;
 import com.fourman.banner.application.dto.response.BannerDTO;
@@ -16,6 +16,7 @@ import com.fourman.banner.domain.repository.BannerDomainRepository;
 
 import lombok.RequiredArgsConstructor;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class BannerCommandServiceImpl implements BannerCommandService {

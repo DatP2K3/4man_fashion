@@ -49,10 +49,17 @@ public class File extends Auditor {
         this.description = cmd.getDescription();
         this.isPublic = cmd.getIsPublic();
         this.usageStatus = FileUsageStatus.TEMPORARY;
+    }
+
+    /**
+     * Assign file URL based on base URL and visibility.
+     * Called by application/infrastructure layer after construction.
+     */
+    public void assignUrl(String baseUrl) {
         if (Boolean.TRUE.equals(isPublic)) {
-            this.url = "http://localhost:8080/api/public/file/" + this.id;
+            this.url = baseUrl + "/api/public/file/" + this.id;
         } else {
-            this.url = "http://localhost:8080/api/file/" + this.id;
+            this.url = baseUrl + "/api/file/" + this.id;
         }
     }
 

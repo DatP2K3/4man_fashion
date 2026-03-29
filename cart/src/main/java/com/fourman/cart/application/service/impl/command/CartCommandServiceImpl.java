@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import com.fourman.cart.application.dto.mapper.CartDTOMapper;
 import com.fourman.cart.application.dto.request.UpdateCartRequest;
 import com.fourman.cart.application.mapper.CommandMapper;
@@ -18,6 +18,7 @@ import com.fourman.common.exception.ResponseException;
 
 import lombok.RequiredArgsConstructor;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class CartCommandServiceImpl implements CartCommandService {
