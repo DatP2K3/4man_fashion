@@ -1,5 +1,5 @@
 # Sử dụng Amazon Corretto JDK 21
-FROM eclipse-temurin:21-jre-ubi9-minimal
+FROM eclipse-temurin:21-jre-alpine
 
 # Đặt thư mục làm việc trong container
 WORKDIR /app
