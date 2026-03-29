@@ -11,4 +11,4 @@ COPY ./target/*.jar app.jar
 EXPOSE 6565
 
 # Chạy ứng dụng
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xmx128m", "-Xms64m", "-XX:+UseG1GC", "-jar", "app.jar"]

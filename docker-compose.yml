@@ -4,6 +4,7 @@ services:
     image: postgres:latest
     container_name: my_postgres
     restart: always
+    mem_limit: 512m
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -22,6 +23,7 @@ services:
   rabbitmq:
     image: rabbitmq:4.1.0-rc.2-management
     container_name: my_rabbitmq
+    mem_limit: 256m
     ports:
       - "5672:5672"    # AMQP port
       - "15672:15672"  # Management UI port
@@ -39,10 +41,12 @@ services:
     image: elasticsearch:8.17.3
     container_name: my_elasticsearch
     restart: always
+    mem_limit: 768m
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
       - ELASTICSEARCH_URI=http://elasticsearch:9200
+      - ES_JAVA_OPTS=-Xms256m -Xmx512m
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -61,6 +65,7 @@ services:
     image: quay.io/keycloak/keycloak:latest
     container_name: my_keycloak
     restart: always
+    mem_limit: 512m
     command: ["start-dev"]
     environment:
       - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
@@ -85,6 +90,7 @@ services:
     container_name: my_discovery_service
     image: datp2k3/discovery_service
     restart: always
+    mem_limit: 256m
     ports:
       - "8761:8761"
     environment:
@@ -106,6 +112,7 @@ services:
     container_name: my_storage_service
     image: datp2k3/storage_service
     restart: always
+    mem_limit: 256m
     ports:
       - "8080:8080"
     environment:
@@ -131,6 +138,7 @@ services:
     container_name: my_payment_service
     image: datp2k3/payment_service
     restart: always
+    mem_limit: 320m
     ports:
       - "8008:8008"
     environment:
@@ -164,6 +172,7 @@ services:
     container_name: my_dashboard_service
     image: datp2k3/dashboard_service
     restart: always
+    mem_limit: 320m
     ports:
       - "2222:2222"
     environment:
@@ -191,6 +200,7 @@ services:
     container_name: my_profile_service
     image: datp2k3/profile_service
     restart: always
+    mem_limit: 320m
     ports:
       - "9999:9999"
     environment:
@@ -220,6 +230,7 @@ services:
     container_name: my_banner_service
     image: datp2k3/banner_service
     restart: always
+    mem_limit: 256m
     ports:
       - "6565:6565"
     environment:
@@ -247,6 +258,7 @@ services:
     container_name: my_shopinfo_service
     image: datp2k3/shopinfo_service
     restart: always
+    mem_limit: 256m
     ports:
       - "8222:8222"
     environment:
@@ -273,6 +285,7 @@ services:
     container_name: my_notification_service
     image: datp2k3/notification_service
     restart: always
+    mem_limit: 384m
     ports:
       - "3333:3333"
     environment:
@@ -306,6 +319,7 @@ services:
     container_name: my_location_service
     image: datp2k3/location_service
     restart: always
+    mem_limit: 256m
     ports:
       - "8111:8111"
     environment:
@@ -332,6 +346,7 @@ services:
     container_name: my_product_service
     image: datp2k3/product_service
     restart: always
+    mem_limit: 384m
     ports:
       - "8765:8765"
     environment:
@@ -362,6 +377,7 @@ services:
     container_name: my_order_service
     image: datp2k3/order_service
     restart: always
+    mem_limit: 384m
     ports:
       - "6666:6666"
     environment:
@@ -398,6 +414,7 @@ services:
     container_name: my_gateway_service
     image: datp2k3/gateway_service
     restart: always
+    mem_limit: 256m
     ports:
       - "8686:8686"
     environment:
@@ -422,6 +439,7 @@ services:
     container_name: my_elasticsearch_service
     image: datp2k3/elasticsearch_service
     restart: always
+    mem_limit: 256m
     ports:
       - "5566:5566"
     environment:
@@ -449,6 +467,7 @@ services:
     container_name: my_cart_service
     image: datp2k3/cart_service
     restart: always
+    mem_limit: 320m
     ports:
       - "8000:8000"
     environment:
