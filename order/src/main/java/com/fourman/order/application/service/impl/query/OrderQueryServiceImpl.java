@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import com.fourman.common.dto.request.SearchOrderRequest;
 import com.fourman.common.dto.response.*;
 import com.fourman.common.enums.ShopAddressType;
@@ -27,6 +27,7 @@ import com.fourman.order.infrastructure.persistence.repository.OrderEntityReposi
 
 import lombok.RequiredArgsConstructor;
 
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class OrderQueryServiceImpl implements OrderQueryService {

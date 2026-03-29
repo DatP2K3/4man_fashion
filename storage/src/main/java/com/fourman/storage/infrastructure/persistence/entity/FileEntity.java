@@ -11,9 +11,6 @@ import com.fourman.common.enums.FileUsageStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;import lombok.Builder;
-import lombok.EqualsAndHashCode;import lombok.Data;
-import lombok.EqualsAndHashCode;import lombok.NoArgsConstructor;
-import lombok.EqualsAndHashCode;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)

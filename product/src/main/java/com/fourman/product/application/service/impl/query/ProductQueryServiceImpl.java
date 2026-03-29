@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import com.fourman.common.dto.response.ProductDTO;
 import com.fourman.product.application.dto.mapper.ProductDTOMapper;
 import com.fourman.product.application.service.ProductQueryService;
@@ -13,6 +13,7 @@ import com.fourman.product.domain.repository.ProductDomainRepository;
 
 import lombok.RequiredArgsConstructor;
 
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class ProductQueryServiceImpl implements ProductQueryService {

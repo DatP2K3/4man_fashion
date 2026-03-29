@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import com.fourman.common.exception.ResponseException;
 import com.fourman.product.application.dto.mapper.DiscountDTOMapper;
 import com.fourman.product.application.dto.response.DiscountDTO;
@@ -19,6 +19,7 @@ import com.fourman.product.infrastructure.persistence.repository.DiscountEntityR
 
 import lombok.RequiredArgsConstructor;
 
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class DiscountQueryServiceImpl implements DiscountQueryService {

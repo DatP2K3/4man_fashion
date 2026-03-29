@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import com.fourman.common.dto.response.ShopAddressDTO;
 import com.fourman.shopinfo.application.dto.ShopAddressDTOMapper;
 import com.fourman.shopinfo.application.service.ShopAddressQueryService;
@@ -13,6 +13,7 @@ import com.fourman.shopinfo.infrastructure.persistence.repository.ShopAddressEnt
 
 import lombok.RequiredArgsConstructor;
 
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class ShopAddressQueryServiceImpl implements ShopAddressQueryService {
