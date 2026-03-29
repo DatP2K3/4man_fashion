@@ -66,8 +66,8 @@ public class NotificationConsumerService {
                             .sendAt(Instant.now())
                             .build();
                     deviceRegistration.addNotificationDelivery(storeNotificationDeliveryCmd);
-                    deviceRegistrationDomainRepository.save(deviceRegistration);
                 });
+                deviceRegistrationDomainRepository.saveAll(deviceRegistrations);
             } else {
                 Notification notification = notificationCommandService.storeNotification(event);
                 pushNotificationToUser(event, notification.getId());
@@ -101,7 +101,7 @@ public class NotificationConsumerService {
                     .sendAt(Instant.now())
                     .build();
             deviceRegistration.addNotificationDelivery(storeNotificationDeliveryCmd);
-            deviceRegistrationDomainRepository.save(deviceRegistration);
         });
+        deviceRegistrationDomainRepository.saveAll(deviceRegistrations);
     }
 }

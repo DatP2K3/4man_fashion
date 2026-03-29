@@ -58,6 +58,31 @@ public class DeviceRegistrationDomainRepositoryImpl
     }
 
     @Override
+    @Transactional
+    public List<DeviceRegistration> saveAll(List<DeviceRegistration> deviceRegistrations) {
+        // 1. Collect all NotificationDeliveries from all devices
+        List<NotificationDelivery> allDeliveries = deviceRegistrations.stream()
+                .map(DeviceRegistration::getNotificationDeliveries)
+                .filter(deliveries -> deliveries != null && !deliveries.isEmpty())
+                .flatMap(List::stream)
+                .toList();
+
+        // 2. Batch save all NotificationDeliveries in one query
+        if (!allDeliveries.isEmpty()) {
+            List<NotificationDeliveryEntity> deliveryEntities =
+                    notificationDeliveryEntityMapper.toEntityList(allDeliveries);
+            notificationDeliveryEntityRepository.saveAll(deliveryEntities);
+        }
+
+        // 3. Batch save all DeviceRegistrations in one query
+        List<DeviceRegistrationEntity> entities =
+                deviceRegistrationEntityMapper.toEntityList(deviceRegistrations);
+        entities = deviceRegistrationEntityRepository.saveAll(entities);
+
+        return this.enrichList(deviceRegistrationEntityMapper.toDomainModelList(entities));
+    }
+
+    @Override
     public DeviceRegistration getById(UUID uuid) {
         DeviceRegistrationEntity deviceRegistrationEntity = deviceRegistrationEntityRepository
                 .findById(uuid)
