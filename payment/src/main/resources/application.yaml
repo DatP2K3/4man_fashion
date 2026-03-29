@@ -15,6 +15,7 @@ spring:
     allow-bean-definition-overriding: true
 
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: none
 

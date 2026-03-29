@@ -22,6 +22,7 @@ spring:
       minimum-idle: 2
 
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: none
 
