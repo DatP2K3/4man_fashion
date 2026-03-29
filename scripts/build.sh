@@ -40,3 +40,7 @@ for module in "$@"; do
   fi
   echo ""
 done
+
+# Auto clean old images
+docker image prune -f --filter "dangling=true" > /dev/null 2>&1
+echo "🧹 Old images cleaned"

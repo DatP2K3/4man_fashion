@@ -45,7 +45,9 @@ DURATION=$((END - START))
 echo ""
 echo "════════════════════════════════════════"
 if [ ${#FAILED[@]} -eq 0 ]; then
+  docker image prune -f --filter "dangling=true" > /dev/null 2>&1
   echo "✅ All ${#MODULES[@]} images built successfully (${DURATION}s)"
+  echo "🧹 Old images cleaned"
 else
   echo "❌ Failed: ${FAILED[*]}"
   exit 1
