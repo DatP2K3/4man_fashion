@@ -13,13 +13,13 @@
             clone-on-start: true
             force-pull: true
             username: ${GIT_USERNAME:DATP2K3}
-            password: ${GIT_PASSWORD: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}
+            password: ${GIT_PASSWORD}
 
   server:
     port: ${SERVER_PORT:6969}
 
   encrypt:
-    key: "45D81EC1EF61DF9AD8D3E5BB397F9"
+    key: ${ENCRYPT_KEY}
 
   management:
     endpoints:
