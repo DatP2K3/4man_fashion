@@ -6,7 +6,7 @@ spring:
     endpoints:
       web:
         exposure:
-          include: "*"
+          include: health,info
 
   main:
     banner-mode: off
