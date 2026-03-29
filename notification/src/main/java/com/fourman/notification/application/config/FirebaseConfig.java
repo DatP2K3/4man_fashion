@@ -15,8 +15,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class FirebaseConfig {
     @Bean
     FirebaseMessaging firebaseMessaging() throws IOException {
-        try (var serviceAccountStream =
-                new ClassPathResource("firebase-service-account.json").getInputStream()) {
+        try (var serviceAccountStream = new ClassPathResource("firebase-service-account.json").getInputStream()) {
             GoogleCredentials googleCredentials = GoogleCredentials.fromStream(serviceAccountStream);
 
             FirebaseOptions firebaseOptions =

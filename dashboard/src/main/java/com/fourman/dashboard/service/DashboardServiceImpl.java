@@ -135,7 +135,7 @@ public class DashboardServiceImpl implements DashboardService {
                         entry.getValue().stream()
                                 .mapToLong(OrderDTO::getTotalPrice)
                                 .sum(),
-                        entry.getValue().size()))
+                        (long) entry.getValue().size()))
                 .collect(Collectors.toList());
     }
 

@@ -2,11 +2,11 @@ package com.fourman.profile.presentation.rest;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
 
 import com.fourman.common.dto.response.MembershipTierDTO;
 import com.fourman.common.dto.response.Response;

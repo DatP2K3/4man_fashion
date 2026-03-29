@@ -75,8 +75,7 @@ public class DeviceRegistrationDomainRepositoryImpl
         }
 
         // 3. Batch save all DeviceRegistrations in one query
-        List<DeviceRegistrationEntity> entities =
-                deviceRegistrationEntityMapper.toEntityList(deviceRegistrations);
+        List<DeviceRegistrationEntity> entities = deviceRegistrationEntityMapper.toEntityList(deviceRegistrations);
         entities = deviceRegistrationEntityRepository.saveAll(entities);
 
         return this.enrichList(deviceRegistrationEntityMapper.toDomainModelList(entities));

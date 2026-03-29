@@ -33,8 +33,10 @@ public class File extends Auditor {
     private String description;
     private String url;
     private Boolean isPublic;
+
     @Builder.Default
     private Boolean deleted = false;
+
     private FileHistory history;
     private FileUsageStatus usageStatus;
 

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fourman.elasticsearch.domain.repository.base.DocumentDomainRepository;
 import com.fourman.elasticsearch.infrastructure.persistence.mapper.DocumentMapper;
 
 public abstract class AbstractDocumentDomainRepository<D, E, ID> implements DocumentDomainRepository<D, ID> {

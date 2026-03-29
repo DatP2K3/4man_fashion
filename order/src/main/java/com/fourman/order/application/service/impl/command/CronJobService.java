@@ -52,13 +52,15 @@ public class CronJobService {
                     updatedOrders.add(order);
 
                     String title = "Đơn hàng " + order.getOrderCode();
-                    String body = switch (orderStatus) {
-                        case DELIVERED -> "Đơn hàng đã được giao thành công";
-                        case CANCELLED -> "Đơn hàng đã bị hủy";
-                        case DELIVERY_FAIL -> "Đơn hàng đã giao không thành công";
-                        case WAITING_FOR_PICKUP -> "Đơn hàng " + order.getOrderCode() + " đang chuẩn bị được lấy hàng";
-                        default -> null;
-                    };
+                    String body =
+                            switch (orderStatus) {
+                                case DELIVERED -> "Đơn hàng đã được giao thành công";
+                                case CANCELLED -> "Đơn hàng đã bị hủy";
+                                case DELIVERY_FAIL -> "Đơn hàng đã giao không thành công";
+                                case WAITING_FOR_PICKUP ->
+                                    "Đơn hàng " + order.getOrderCode() + " đang chuẩn bị được lấy hàng";
+                                default -> null;
+                            };
 
                     if (body != null) {
                         PushNotificationEvent pushNotificationEvent = PushNotificationEvent.builder()
@@ -92,8 +94,14 @@ public class CronJobService {
         return switch (ghnStatus) {
             case "ready_to_pick" -> OrderStatus.PENDING_SHIPMENT;
             case "picking", "money_collect_picking" -> OrderStatus.WAITING_FOR_PICKUP;
-            case "picked", "storing", "transporting", "sorting", "delivering",
-                    "money_collect_delivering", "return_transporting", "return_sorting",
+            case "picked",
+                    "storing",
+                    "transporting",
+                    "sorting",
+                    "delivering",
+                    "money_collect_delivering",
+                    "return_transporting",
+                    "return_sorting",
                     "returning" -> OrderStatus.IN_TRANSIT;
             case "delivered" -> OrderStatus.DELIVERED;
             case "delivery_fail", "return_fail" -> OrderStatus.DELIVERY_FAIL;
