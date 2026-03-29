@@ -15,14 +15,16 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class FirebaseConfig {
     @Bean
     FirebaseMessaging firebaseMessaging() throws IOException {
-        GoogleCredentials googleCredentials =
-                GoogleCredentials.fromStream(new ClassPathResource("firebase-service-account.json").getInputStream());
+        try (var serviceAccountStream =
+                new ClassPathResource("firebase-service-account.json").getInputStream()) {
+            GoogleCredentials googleCredentials = GoogleCredentials.fromStream(serviceAccountStream);
 
-        FirebaseOptions firebaseOptions =
-                FirebaseOptions.builder().setCredentials(googleCredentials).build();
+            FirebaseOptions firebaseOptions =
+                    FirebaseOptions.builder().setCredentials(googleCredentials).build();
 
-        FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions, "my-app");
+            FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions, "my-app");
 
-        return FirebaseMessaging.getInstance(app);
+            return FirebaseMessaging.getInstance(app);
+        }
     }
 }

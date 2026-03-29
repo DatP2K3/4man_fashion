@@ -12,11 +12,8 @@ spring:
       minimum-idle: 2
 
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    properties:
-      hibernate:
-        format_sql: true
-    show-sql: true
+    hibernate:
+      ddl-auto: none
 
   liquibase:
     enabled: true

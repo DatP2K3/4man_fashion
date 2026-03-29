@@ -11,11 +11,12 @@ spring:
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
 
   jpa:
     hibernate:
       ddl-auto: none
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
   liquibase:
     enabled: true

@@ -28,7 +28,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
   liquibase:
     change-log: classpath:/db/changelog-master.xml

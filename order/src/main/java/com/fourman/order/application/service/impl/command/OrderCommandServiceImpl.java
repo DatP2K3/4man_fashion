@@ -44,6 +44,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class OrderCommandServiceImpl implements OrderCommandService {
+    private static final int GHN_SERVICE_TYPE_STANDARD = 2;
+    private static final int GHN_PAYMENT_TYPE_COD = 2;
+    private static final int GHN_PAYMENT_TYPE_PREPAID = 1;
+
     private final CommandMapper commandMapper;
     private final CartClient cartClient;
     private final ShopInfoClient shopInfoClient;
@@ -210,14 +214,14 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                     .length(order.getTotalLength())
                     .width(order.getTotalWidth())
                     .height(order.getTotalHeight())
-                    .serviceTypeId(2)
-                    .paymentTypeId(2)
+                    .serviceTypeId(GHN_SERVICE_TYPE_STANDARD)
+                    .paymentTypeId(GHN_PAYMENT_TYPE_COD)
                     .note(order.getNote())
                     .requiredNote("CHOXEMHANGKHONGTHU")
                     .build();
 
             if (order.getPaymentMethod() == PaymentMethod.ONLINE) {
-                createGHNOrderRequest.setPaymentTypeId(1);
+                createGHNOrderRequest.setPaymentTypeId(GHN_PAYMENT_TYPE_PREPAID);
                 createGHNOrderRequest.setCodAmount(0L);
             }
 
