@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jakarta.validation.Valid;
+
 import com.fourman.common.dto.request.UpdateTopicsOfUserRequest;
 import com.fourman.common.dto.response.Response;
 
@@ -26,5 +28,5 @@ public interface UserTopicController {
 
     @Operation(summary = "Update topic of user")
     @PutMapping("/user-token/update")
-    Response<Void> updateTopicOfUser(@RequestBody UpdateTopicsOfUserRequest updateTopicsOfUserRequest);
+    Response<Void> updateTopicOfUser(@Valid @RequestBody UpdateTopicsOfUserRequest updateTopicsOfUserRequest);
 }

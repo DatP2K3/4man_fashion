@@ -2,6 +2,7 @@ package com.fourman.payment.presentation.rest;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -25,7 +26,7 @@ public interface PaymentController {
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/payment")
     Response<String> getPaymentUrl(
-            @RequestBody GetPaymentUrlRequest getPaymentUrlRequest, HttpServletRequest httpServletRequest);
+            @Valid @RequestBody GetPaymentUrlRequest getPaymentUrlRequest, HttpServletRequest httpServletRequest);
 
     @Operation(summary = "VN Pay callback handler")
     @GetMapping("/vn-pay-callback")

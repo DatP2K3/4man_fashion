@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.fourman.common.dto.event.FileEvent;
 import com.fourman.common.dto.event.ProductEvent;
 import com.fourman.common.dto.event.ProductSync;

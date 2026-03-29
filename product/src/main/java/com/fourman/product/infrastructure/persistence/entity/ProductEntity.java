@@ -13,7 +13,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.fourman.common.entity.AuditEntity;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;import lombok.Builder;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)

@@ -7,6 +7,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+
 import com.fourman.common.dto.response.Response;
 import com.fourman.product.application.dto.request.CreateOrUpdateCategoryRequest;
 import com.fourman.product.application.dto.response.CategoryDTO;
@@ -22,12 +24,12 @@ public interface CategoryController {
     @Operation(summary = "Create category")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/category")
-    Response<CategoryDTO> createCategory(@RequestBody CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest);
+    Response<CategoryDTO> createCategory(@Valid @RequestBody CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest);
 
     @Operation(summary = "Update category")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/category")
-    Response<CategoryDTO> updateCategory(@RequestBody CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest);
+    Response<CategoryDTO> updateCategory(@Valid @RequestBody CreateOrUpdateCategoryRequest createOrUpdateCategoryRequest);
 
     @Operation(summary = "Get all categories")
     @GetMapping("/category")

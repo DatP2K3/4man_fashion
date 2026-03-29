@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.fourman.common.dto.response.ShopAddressDTO;
 import com.fourman.shopinfo.application.dto.ShopAddressDTOMapper;
 import com.fourman.shopinfo.application.service.ShopAddressQueryService;

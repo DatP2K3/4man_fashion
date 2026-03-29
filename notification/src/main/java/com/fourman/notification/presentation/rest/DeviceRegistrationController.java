@@ -1,5 +1,7 @@
 package com.fourman.notification.presentation.rest;
 
+import jakarta.validation.Valid;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,9 +22,9 @@ public interface DeviceRegistrationController {
 
     @Operation(summary = "Register device for FCM")
     @PostMapping("/register")
-    Response<Void> registerDevice(@RequestBody RegisterOrUpdateDeviceRequest request);
+    Response<Void> registerDevice(@Valid @RequestBody RegisterOrUpdateDeviceRequest request);
 
     @Operation(summary = "Unregister device from FCM")
     @DeleteMapping("/unregister")
-    Response<Void> unRegisterDevice(@RequestBody UnRegisterDeviceRequest unRegisterDeviceRequest);
+    Response<Void> unRegisterDevice(@Valid @RequestBody UnRegisterDeviceRequest unRegisterDeviceRequest);
 }

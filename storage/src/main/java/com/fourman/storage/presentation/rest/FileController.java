@@ -3,6 +3,8 @@ package com.fourman.storage.presentation.rest;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -48,12 +50,12 @@ public interface FileController {
     @Operation(summary = "Search files")
     @PreAuthorize("hasPermission(null, 'file.admin')")
     @GetMapping("/file")
-    PagingResponse<FileResponse> searchFiles(@RequestBody SearchFileRequest searchFileRequest);
+    PagingResponse<FileResponse> searchFiles(@Valid @RequestBody SearchFileRequest searchFileRequest);
 
     @Operation(summary = "Update file")
     @PreAuthorize("hasRole('USER')")
     @PutMapping("file/update")
-    Response<FileResponse> updateFile(@RequestBody UpdateFileRequest updateFileRequest);
+    Response<FileResponse> updateFile(@Valid @RequestBody UpdateFileRequest updateFileRequest);
 
     @Operation(summary = "Delete file")
     @PreAuthorize("hasRole('USER')")

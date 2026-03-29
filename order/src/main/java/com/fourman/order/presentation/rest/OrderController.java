@@ -3,6 +3,8 @@ package com.fourman.order.presentation.rest;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +32,7 @@ public interface OrderController {
     @Operation(summary = "Delete order")
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/orders")
-    Response<Void> deleteOrder(@RequestBody CancelOrderRequest cancelOrderRequest);
+    Response<Void> deleteOrder(@Valid @RequestBody CancelOrderRequest cancelOrderRequest);
 
     @Operation(summary = "Get orders of user")
     @PreAuthorize("hasRole('USER')")
@@ -45,7 +47,7 @@ public interface OrderController {
     @Operation(summary = "Create order")
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/orders")
-    Response<OrderDTO> createOrder(@RequestBody CreateOrderRequest request);
+    Response<OrderDTO> createOrder(@Valid @RequestBody CreateOrderRequest request);
 
     @Operation(summary = "Get order by order code")
     @PreAuthorize("hasRole('USER')")
@@ -55,10 +57,10 @@ public interface OrderController {
     @Operation(summary = "Create GHN order")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/orders/ghn")
-    Response<List<OrderDTO>> createGHNOrder(@RequestBody CreatShippingOrderRequest request);
+    Response<List<OrderDTO>> createGHNOrder(@Valid @RequestBody CreatShippingOrderRequest request);
 
     @Operation(summary = "Print GHN order")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/orders/ghn-order/print")
-    String printGHNOrder(@RequestBody PrintOrCancelGHNOrderRequest request);
+    String printGHNOrder(@Valid @RequestBody PrintOrCancelGHNOrderRequest request);
 }

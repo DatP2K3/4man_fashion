@@ -11,6 +11,7 @@ import com.fourman.common.entity.AuditEntity;
 
 import lombok.*;
 import lombok.EqualsAndHashCode;
+
 @Entity
 @Data
 @Builder

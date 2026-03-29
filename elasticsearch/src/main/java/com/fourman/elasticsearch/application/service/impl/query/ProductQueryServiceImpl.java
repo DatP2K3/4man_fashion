@@ -9,7 +9,8 @@ import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;import org.springframework.util.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.fourman.common.dto.response.PageDTO;
 import com.fourman.elasticsearch.application.dto.mapper.ProductDocumentDTOMapper;

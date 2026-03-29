@@ -3,6 +3,8 @@ package com.fourman.cart.presentation.rest;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +38,7 @@ public interface CartController {
     @Operation(summary = "Update cart")
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/carts")
-    Response<CartDTO> updateCart(@RequestBody UpdateCartRequest updateCartRequest);
+    Response<CartDTO> updateCart(@Valid @RequestBody UpdateCartRequest updateCartRequest);
 
     @Operation(summary = "Empty cart")
     @PreAuthorize("hasRole('USER')")

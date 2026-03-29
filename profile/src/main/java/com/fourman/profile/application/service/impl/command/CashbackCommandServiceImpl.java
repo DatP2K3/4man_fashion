@@ -1,7 +1,5 @@
 package com.fourman.profile.application.service.impl.command;
 
-import java.util.UUID;
-
 import jakarta.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
@@ -41,8 +39,8 @@ public class CashbackCommandServiceImpl implements CashbackCommandService {
             membershipTier = membershipTierDomainRepository.getDefaultMembershipTier();
         }
 
-        Long cashbackAmount =
-                Math.round(processCashbackCmd.getOrderAmount() * membershipTier.getCashbackPercentage() / PERCENTAGE_DIVISOR);
+        Long cashbackAmount = Math.round(
+                processCashbackCmd.getOrderAmount() * membershipTier.getCashbackPercentage() / PERCENTAGE_DIVISOR);
         processCashbackCmd.setCashbackAmount(cashbackAmount);
         processCashbackCmd.setDescription("Hoàn tiền từ đơn hàng: " + processCashbackCmd.getOrderId());
 
@@ -51,8 +49,8 @@ public class CashbackCommandServiceImpl implements CashbackCommandService {
 
         profile.updateUserWallet(cashbackAmount, CashbackTransactionType.EARNED);
 
-        membershipTierCommandService.handleMembershipTierChange(
-                profile.getUserWallet().getCashbackBalance())
+        membershipTierCommandService
+                .handleMembershipTierChange(profile.getUserWallet().getCashbackBalance())
                 .ifPresent(profile::setMembershipTierId);
 
         profileDomainRepository.save(profile);

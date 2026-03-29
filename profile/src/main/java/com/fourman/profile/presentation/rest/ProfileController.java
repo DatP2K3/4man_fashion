@@ -1,5 +1,7 @@
 package com.fourman.profile.presentation.rest;
 
+import jakarta.validation.Valid;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,17 +30,17 @@ public interface ProfileController {
     @Operation(summary = "Create shipping address")
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/profiles/shipping-address")
-    Response<ProfileDTO> createShippingAddress(@RequestBody CreateOrUpdateAddressRequest request);
+    Response<ProfileDTO> createShippingAddress(@Valid @RequestBody CreateOrUpdateAddressRequest request);
 
     @Operation(summary = "Update shipping address")
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/profiles/shipping-address")
-    Response<ProfileDTO> updateShippingAddress(@RequestBody CreateOrUpdateAddressRequest request);
+    Response<ProfileDTO> updateShippingAddress(@Valid @RequestBody CreateOrUpdateAddressRequest request);
 
     @Operation(summary = "Update profile")
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/profiles")
-    Response<ProfileDTO> updateProfile(@RequestBody UpdateProfileInfoRequest request);
+    Response<ProfileDTO> updateProfile(@Valid @RequestBody UpdateProfileInfoRequest request);
 
     @Operation(summary = "Change avatar")
     @PreAuthorize("hasRole('USER')")

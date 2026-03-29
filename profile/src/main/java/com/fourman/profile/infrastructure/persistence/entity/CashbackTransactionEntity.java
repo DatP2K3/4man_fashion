@@ -11,6 +11,7 @@ import com.fourman.common.enums.CashbackTransactionType;
 
 import lombok.*;
 import lombok.EqualsAndHashCode;
+
 @Entity
 @Data
 @Builder

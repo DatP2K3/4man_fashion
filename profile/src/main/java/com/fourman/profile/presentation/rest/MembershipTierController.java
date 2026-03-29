@@ -6,6 +6,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+
 import com.fourman.common.dto.response.MembershipTierDTO;
 import com.fourman.common.dto.response.Response;
 import com.fourman.profile.application.dto.request.CreateOrUpdateMembershipTierRequest;
@@ -22,13 +24,13 @@ public interface MembershipTierController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/membership-tiers")
     Response<MembershipTierDTO> createMembershipTier(
-            @RequestBody CreateOrUpdateMembershipTierRequest createMembershipTierRequest);
+            @Valid @RequestBody CreateOrUpdateMembershipTierRequest createMembershipTierRequest);
 
     @Operation(summary = "Update membership tier")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/membership-tiers")
     Response<MembershipTierDTO> updateMembershipTier(
-            @RequestBody CreateOrUpdateMembershipTierRequest updateMembershipTierRequest);
+            @Valid @RequestBody CreateOrUpdateMembershipTierRequest updateMembershipTierRequest);
 
     @Operation(summary = "Get all membership tiers")
     @PreAuthorize("hasRole('ADMIN')")

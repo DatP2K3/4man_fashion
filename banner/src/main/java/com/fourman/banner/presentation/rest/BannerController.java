@@ -3,6 +3,8 @@ package com.fourman.banner.presentation.rest;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +29,7 @@ public interface BannerController {
     @Operation(summary = "Create banner")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/banners")
-    Response<BannerDTO> createBanner(@RequestBody CreateBannerRequest request);
+    Response<BannerDTO> createBanner(@Valid @RequestBody CreateBannerRequest request);
 
     @Operation(summary = "Get all banners")
     @GetMapping("/banners")

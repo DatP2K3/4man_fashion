@@ -10,7 +10,9 @@ import com.fourman.common.entity.AuditEntity;
 import com.fourman.common.enums.FileUsageStatus;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;import lombok.Builder;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)

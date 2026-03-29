@@ -2,6 +2,8 @@ package com.fourman.shopinfo.presentation.rest;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +26,7 @@ public interface ShopAddressController {
     @Operation(summary = "Update shop address")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/shop-address")
-    Response<ShopAddressDTO> updateShopAddress(@RequestBody CreateOrUpdateShopAddressRequest request);
+    Response<ShopAddressDTO> updateShopAddress(@Valid @RequestBody CreateOrUpdateShopAddressRequest request);
 
     @Operation(summary = "Get all shop addresses")
     @PreAuthorize("hasRole('USER')")

@@ -47,7 +47,8 @@ public class DashboardServiceImpl implements DashboardService {
                 .flatMap(year -> IntStream.rangeClosed(1, 12).mapToObj(month -> YearMonth.of(year, month)))
                 .collect(Collectors.toList());
 
-        Instant startDate = yearMonths.get(0).atDay(1).atStartOfDay(VIETNAM_ZONE).toInstant();
+        Instant startDate =
+                yearMonths.get(0).atDay(1).atStartOfDay(VIETNAM_ZONE).toInstant();
         Instant endDate = endOfToday();
 
         List<OrderDTO> allOrders = fetchOrders(startDate, endDate);
@@ -65,9 +66,14 @@ public class DashboardServiceImpl implements DashboardService {
         LocalDate today = LocalDate.now(VIETNAM_ZONE);
 
         Instant startDate = YearMonth.from(today.minusMonths(2))
-                .atDay(1).atStartOfDay(VIETNAM_ZONE).toInstant();
+                .atDay(1)
+                .atStartOfDay(VIETNAM_ZONE)
+                .toInstant();
         Instant endDate = YearMonth.from(today)
-                .atEndOfMonth().atTime(LocalTime.MAX).atZone(VIETNAM_ZONE).toInstant();
+                .atEndOfMonth()
+                .atTime(LocalTime.MAX)
+                .atZone(VIETNAM_ZONE)
+                .toInstant();
 
         List<OrderDTO> allOrders = fetchOrders(startDate, endDate);
 
@@ -83,15 +89,17 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     private DashboardDTO getTodayDashboardData() {
-        Instant startDate = LocalDate.now(VIETNAM_ZONE).withDayOfMonth(1)
-                .atStartOfDay(VIETNAM_ZONE).toInstant();
+        Instant startDate = LocalDate.now(VIETNAM_ZONE)
+                .withDayOfMonth(1)
+                .atStartOfDay(VIETNAM_ZONE)
+                .toInstant();
         Instant endDate = endOfToday();
 
         List<OrderDTO> allOrders = fetchOrders(startDate, endDate);
 
         // Group by day label (dd/MM)
-        Function<OrderDTO, String> dayGrouper = order ->
-                toLocalDate(order).format(DateTimeFormatter.ofPattern("dd/MM"));
+        Function<OrderDTO, String> dayGrouper =
+                order -> toLocalDate(order).format(DateTimeFormatter.ofPattern("dd/MM"));
 
         return buildDashboard(allOrders, startDate, endDate, dayGrouper);
     }
@@ -102,8 +110,8 @@ public class DashboardServiceImpl implements DashboardService {
      * Build a complete DashboardDTO from orders, using the provided grouping function
      * for revenue/orders chart labels.
      */
-    private DashboardDTO buildDashboard(List<OrderDTO> allOrders, Instant startDate, Instant endDate,
-                                         Function<OrderDTO, String> labelGrouper) {
+    private DashboardDTO buildDashboard(
+            List<OrderDTO> allOrders, Instant startDate, Instant endDate, Function<OrderDTO, String> labelGrouper) {
         List<RevenueAndOrdersDTO> revenueAndOrders = buildRevenueAndOrders(allOrders, labelGrouper);
         List<OrderStatisticByCityDTO> orderByCity = buildOrderByCity(allOrders);
         SummaryTodayDTO todaySummary = buildTodaySummary(allOrders, startDate, endDate);
@@ -118,15 +126,15 @@ public class DashboardServiceImpl implements DashboardService {
     /**
      * Group orders by label and calculate revenue + count per group.
      */
-    private List<RevenueAndOrdersDTO> buildRevenueAndOrders(List<OrderDTO> orders,
-                                                             Function<OrderDTO, String> labelGrouper) {
-        return orders.stream()
-                .collect(Collectors.groupingBy(labelGrouper))
-                .entrySet().stream()
+    private List<RevenueAndOrdersDTO> buildRevenueAndOrders(
+            List<OrderDTO> orders, Function<OrderDTO, String> labelGrouper) {
+        return orders.stream().collect(Collectors.groupingBy(labelGrouper)).entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
                 .map(entry -> new RevenueAndOrdersDTO(
                         entry.getKey(),
-                        entry.getValue().stream().mapToLong(OrderDTO::getTotalPrice).sum(),
+                        entry.getValue().stream()
+                                .mapToLong(OrderDTO::getTotalPrice)
+                                .sum(),
                         entry.getValue().size()))
                 .collect(Collectors.toList());
     }
@@ -137,7 +145,8 @@ public class DashboardServiceImpl implements DashboardService {
     private List<OrderStatisticByCityDTO> buildOrderByCity(List<OrderDTO> orders) {
         return orders.stream()
                 .collect(Collectors.groupingBy(OrderDTO::getToCity, Collectors.counting()))
-                .entrySet().stream()
+                .entrySet()
+                .stream()
                 .map(entry -> new OrderStatisticByCityDTO(entry.getKey().toString(), entry.getValue()))
                 .collect(Collectors.toList());
     }
@@ -152,9 +161,11 @@ public class DashboardServiceImpl implements DashboardService {
                 .filter(order -> toLocalDate(order).equals(today))
                 .toList();
 
-        long totalRevenue = todayOrders.stream().mapToLong(OrderDTO::getTotalPrice).sum();
+        long totalRevenue =
+                todayOrders.stream().mapToLong(OrderDTO::getTotalPrice).sum();
         long totalOrders = todayOrders.size();
-        long totalNewUsers = profileClient.searchProfiles("", startDate, endDate).getPage().getTotal();
+        long totalNewUsers =
+                profileClient.searchProfiles("", startDate, endDate).getPage().getTotal();
 
         return new SummaryTodayDTO(totalRevenue, totalOrders, totalNewUsers);
     }
@@ -162,7 +173,8 @@ public class DashboardServiceImpl implements DashboardService {
     // ===== Utility methods =====
 
     private List<OrderDTO> fetchOrders(Instant startDate, Instant endDate) {
-        return orderClient.searchOrders("", null, null, startDate, endDate, null, 1, 10000, null)
+        return orderClient
+                .searchOrders("", null, null, startDate, endDate, null, 1, 10000, null)
                 .getData();
     }
 
@@ -171,6 +183,9 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     private Instant endOfToday() {
-        return LocalDate.now(VIETNAM_ZONE).atTime(LocalTime.MAX).atZone(VIETNAM_ZONE).toInstant();
+        return LocalDate.now(VIETNAM_ZONE)
+                .atTime(LocalTime.MAX)
+                .atZone(VIETNAM_ZONE)
+                .toInstant();
     }
 }

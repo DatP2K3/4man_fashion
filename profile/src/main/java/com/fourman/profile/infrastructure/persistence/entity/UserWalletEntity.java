@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import lombok.*;
 import lombok.EqualsAndHashCode;
+
 @Entity
 @Data
 @Builder
