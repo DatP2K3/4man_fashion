@@ -99,9 +99,9 @@ public class ProfileCommandServiceImpl implements ProfileCommandService {
     @Override
     public void delete(UUID id, boolean deleted) {
         Profile profile = profileDomainRepository.getById(id);
-        profile.setDeleted(true);
+        profile.setDeleted(deleted);
         profileDomainRepository.save(profile);
-        keycloakService.lockUser(id, false);
+        keycloakService.lockUser(id, !deleted);
     }
 
     @Override

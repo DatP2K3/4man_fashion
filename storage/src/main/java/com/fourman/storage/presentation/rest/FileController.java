@@ -3,6 +3,7 @@ package com.fourman.storage.presentation.rest;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,10 +35,15 @@ public interface FileController {
     Response<FileResponse> storeOneFile(
             @RequestPart MultipartFile file, @RequestParam boolean isPublic, @RequestParam String description);
 
-    @Operation(summary = "Get file by ID")
+    @Operation(summary = "Get file metadata by ID")
     @PreAuthorize("hasPermission(null, 'file.read')")
     @GetMapping("/file/{filedId}")
     Response<FileResponse> getFile(@PathVariable UUID filedId);
+
+    @Operation(summary = "Get private file content (returns image/file bytes directly)")
+    @PreAuthorize("hasPermission(null, 'file.read')")
+    @GetMapping("/file/{fileId}/download")
+    ResponseEntity<org.springframework.core.io.Resource> downloadPrivateFile(@PathVariable UUID fileId);
 
     @Operation(summary = "Search files")
     @PreAuthorize("hasPermission(null, 'file.admin')")
@@ -54,5 +60,3 @@ public interface FileController {
     @DeleteMapping("file/delete/{fileId}")
     Response<Void> deleteFile(@PathVariable UUID fileId);
 }
-
-// TODO: Chuyển đổi get private file không trả về url nữa mà gender ảnh luôn//tham khảo Quân
