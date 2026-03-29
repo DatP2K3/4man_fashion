@@ -101,7 +101,7 @@ public class ProfileCommandServiceImpl implements ProfileCommandService {
         Profile profile = profileDomainRepository.getById(id);
         profile.setDeleted(true);
         profileDomainRepository.save(profile);
-        // TODO: lock profile in keycloak
+        keycloakService.lockUser(id, false);
     }
 
     @Override

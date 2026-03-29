@@ -20,5 +20,4 @@ public class SearchOrderRequest extends PagingRequest {
     private Instant startDate;
     private Instant endDate;
     private Boolean printed;
-    // TODO: Add more fields for searching (kiểm tra in chưa)
 }
