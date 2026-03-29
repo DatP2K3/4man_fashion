@@ -99,8 +99,8 @@ public class RabbitMQConsumerConfig {
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(jsonMessageConverter());
         factory.setRetryTemplate(retryTemplate());
-        factory.setConcurrentConsumers(3);
-        factory.setMaxConcurrentConsumers(10);
+        factory.setConcurrentConsumers(1);
+        factory.setMaxConcurrentConsumers(3);
         return factory;
     }
 }
