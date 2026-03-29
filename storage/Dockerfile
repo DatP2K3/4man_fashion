@@ -1,4 +1,4 @@
-# Sử dụng Amazon Corretto JDK 21
+# Eclipse Temurin JRE 21 on Alpine Linux
 FROM eclipse-temurin:21-jre-alpine
 
 # Đặt thư mục làm việc trong container
@@ -7,7 +7,7 @@ WORKDIR /app
 # Copy file JAR đã build vào container
 COPY ./target/*.jar app.jar
 
-# Mở cổng 8080
+# Mở cổng
 EXPOSE 8080
 
 # Chạy ứng dụng

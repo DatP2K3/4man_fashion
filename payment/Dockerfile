@@ -1,4 +1,4 @@
-# Sử dụng Amazon Corretto JDK 21
+# Eclipse Temurin JRE 21 on Alpine Linux
 FROM eclipse-temurin:21-jre-alpine
 
 # Đặt thư mục làm việc trong container
