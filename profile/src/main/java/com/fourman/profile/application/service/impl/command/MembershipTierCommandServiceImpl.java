@@ -2,6 +2,7 @@ package com.fourman.profile.application.service.impl.command;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -78,16 +79,16 @@ public class MembershipTierCommandServiceImpl implements MembershipTierCommandSe
     }
 
     @Override
-    public UUID handleMembershipTierChange(Long amount) {
+    public Optional<UUID> handleMembershipTierChange(Long amount) {
         List<MembershipTierEntity> membershipTiers = membershipTierEntityRepository.findAll();
         membershipTiers.sort(
                 Comparator.comparing(MembershipTierEntity::getMinPoints).reversed());
         for (MembershipTierEntity tier : membershipTiers) {
             if (amount >= tier.getMinPoints()) {
-                return tier.getId();
+                return Optional.of(tier.getId());
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override

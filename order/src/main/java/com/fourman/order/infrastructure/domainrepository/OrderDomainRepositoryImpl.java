@@ -113,8 +113,8 @@ public class OrderDomainRepositoryImpl extends AbstractDomainRepository<Order, O
     }
 
     @Override
-    public List<Order> getByGHNOrderCodeIn(List<String> orderCodes) {
-        List<OrderEntity> orderEntities = orderEntityRepository.getByGHNOrderCodeIn(orderCodes);
+    public List<Order> getByGhnOrderCodeIn(List<String> orderCodes) {
+        List<OrderEntity> orderEntities = orderEntityRepository.getByGhnOrderCodeIn(orderCodes);
         return this.enrichList(orderEntityMapper.toDomainModelList(orderEntities));
     }
 }

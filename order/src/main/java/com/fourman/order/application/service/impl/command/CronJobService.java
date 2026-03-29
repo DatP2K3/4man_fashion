@@ -35,8 +35,8 @@ public class CronJobService {
         List<OrderStatus> orderStatuses =
                 Arrays.asList(OrderStatus.PENDING_SHIPMENT, OrderStatus.WAITING_FOR_PICKUP, OrderStatus.IN_TRANSIT);
         List<Order> orders = orderDomainRepository.getAllOrderWithStatusIn(orderStatuses);
-        orders.stream().filter(order -> order.getGHNOrderCode() != null).forEach(order -> {
-            GetGHNOrderDetailRequest getGHNFeeRequest = new GetGHNOrderDetailRequest(order.getGHNOrderCode());
+        orders.stream().filter(order -> order.getGhnOrderCode() != null).forEach(order -> {
+            GetGHNOrderDetailRequest getGHNFeeRequest = new GetGHNOrderDetailRequest(order.getGhnOrderCode());
             GHNOrderDetailDTO ghnOrderDetailDTO =
                     ghnClient.getOrderDetail(getGHNFeeRequest).getData();
             List<GHNOrderLogDTO> logs = ghnOrderDetailDTO.getLog();

@@ -62,7 +62,7 @@ public class OrderDTO {
     private int totalLength;
     private Boolean printed;
     private String paymentUrl;
-    private String GHNOrderCode;
+    private String ghnOrderCode;
     protected String createdBy;
     protected UUID lastModifiedBy;
     protected Instant createdAt;

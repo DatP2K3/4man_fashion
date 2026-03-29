@@ -1,5 +1,6 @@
 package com.fourman.profile.application.service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import com.fourman.common.dto.response.MembershipTierDTO;
@@ -14,7 +15,7 @@ public interface MembershipTierCommandService {
 
     void delete(UUID id, boolean deleted);
 
-    UUID handleMembershipTierChange(Long amount);
+    Optional<UUID> handleMembershipTierChange(Long amount);
 
     void toggleVisibility(String id);
 }

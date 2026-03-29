@@ -143,8 +143,8 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         List<UUID> orderIds = cancelOrderRequest.getOrderIds();
         List<Order> orders = orderDomainRepository.getByIds(orderIds);
         List<String> ghnOrderCodes = orders.stream()
-                .filter(order -> order.getGHNOrderCode() != null)
-                .map(Order::getGHNOrderCode)
+                .filter(order -> order.getGhnOrderCode() != null)
+                .map(Order::getGhnOrderCode)
                 .toList();
 
         List<ProductVariantSync> productVariantSyncs = new ArrayList<>();
@@ -253,7 +253,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
 
     @Override
     public void printGHNOrder(List<String> ghnOrderCodes) {
-        List<Order> orders = orderDomainRepository.getByGHNOrderCodeIn(ghnOrderCodes);
+        List<Order> orders = orderDomainRepository.getByGhnOrderCodeIn(ghnOrderCodes);
         for (Order order : orders) {
             order.markAsPrinted();
         }

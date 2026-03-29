@@ -166,7 +166,7 @@ public class OrderEntity extends AuditEntity {
     private Boolean printed;
 
     @Column(name = "ghn_order_code")
-    private String GHNOrderCode;
+    private String ghnOrderCode;
 
     @Column(name = "payment_url", columnDefinition = "TEXT")
     private String paymentUrl;

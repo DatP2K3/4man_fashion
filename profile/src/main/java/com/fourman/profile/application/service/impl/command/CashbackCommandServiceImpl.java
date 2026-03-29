@@ -51,11 +51,9 @@ public class CashbackCommandServiceImpl implements CashbackCommandService {
 
         profile.updateUserWallet(cashbackAmount, CashbackTransactionType.EARNED);
 
-        UUID membershipTierId = membershipTierCommandService.handleMembershipTierChange(
-                profile.getUserWallet().getCashbackBalance());
-        if (membershipTierId != null) {
-            profile.setMembershipTierId(membershipTierId);
-        }
+        membershipTierCommandService.handleMembershipTierChange(
+                profile.getUserWallet().getCashbackBalance())
+                .ifPresent(profile::setMembershipTierId);
 
         profileDomainRepository.save(profile);
     }

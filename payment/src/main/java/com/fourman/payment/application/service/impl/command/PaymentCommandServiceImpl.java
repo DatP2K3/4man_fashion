@@ -1,12 +1,14 @@
 package com.fourman.payment.application.service.impl.command;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -83,7 +85,7 @@ public class PaymentCommandServiceImpl implements PaymentCommandService {
     private String encode(String value) {
         try {
             return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
-        } catch (Exception e) {
+        } catch (UnsupportedEncodingException e) {
             return value;
         }
     }
@@ -95,7 +97,7 @@ public class PaymentCommandServiceImpl implements PaymentCommandService {
 
             ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
             return localDateTime.atZone(zoneId).toInstant();
-        } catch (Exception e) {
+        } catch (DateTimeParseException e) {
             log.warn("Failed to parse VNPay date '{}', falling back to current time", vnpayDate, e);
             return Instant.now();
         }

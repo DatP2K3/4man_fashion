@@ -67,7 +67,7 @@ public class Order extends Auditor {
     private int totalLength;
     private String paymentUrl;
     private Boolean printed;
-    private String GHNOrderCode;
+    private String ghnOrderCode;
     private List<OrderItem> orderItems;
 
     public Order(CreateOrderCmd createOrderCmd) {
@@ -183,7 +183,7 @@ public class Order extends Auditor {
      * Assign GHN shipping order and transition status to WAITING_FOR_PICKUP.
      */
     public void assignShipping(String ghnOrderCode) {
-        this.GHNOrderCode = ghnOrderCode;
+        this.ghnOrderCode = ghnOrderCode;
         this.orderStatus = OrderStatus.WAITING_FOR_PICKUP;
     }
 

@@ -20,6 +20,6 @@ public interface OrderEntityRepository extends JpaRepository<OrderEntity, UUID>,
 
     List<OrderEntity> findByUserId(UUID userId);
 
-    @Query("SELECT o FROM OrderEntity o WHERE o.GHNOrderCode IN :orderCodes")
-    List<OrderEntity> getByGHNOrderCodeIn(List<String> orderCodes);
+    @Query("SELECT o FROM OrderEntity o WHERE o.ghnOrderCode IN :orderCodes")
+    List<OrderEntity> getByGhnOrderCodeIn(List<String> orderCodes);
 }
