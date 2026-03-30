@@ -20,7 +20,7 @@ START=$(date +%s)
 # 1. Maven build all JARs
 echo ""
 echo "📦 Step 1: Maven package (skip tests)..."
-mvn clean package -DskipTests -Dspotless.check.skip=true -Dspotless.apply.skip=true -q
+mvn clean package -DskipTests -Dspotless.check.skip=true -Dspotless.apply.skip=true -pl '!elasticsearch' -q
 echo "✅ Maven build done"
 
 # 2. Docker build all images

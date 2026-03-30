@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+        <modelVersion>4.0.0</modelVersion>
+
+        <groupId>com.fourman</groupId>
+        <artifactId>fourman-fashion</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <packaging>pom</packaging>
+
+        <name>4Man Fashion</name>
+        <description>4Man Fashion Microservices — Root Aggregator</description>
+
+        <!-- Common phải build trước vì các module khác depend on nó -->
+        <modules>
+                <module>common</module>
+                <module>config</module>
+                <module>discovery</module>
+                <module>gateway</module>
+                <module>banner</module>
+                <module>shopinfo</module>
+                <module>location</module>
+                <module>storage</module>
+                <module>profile</module>
+                <module>cart</module>
+                <module>payment</module>
+                <module>dashboard</module>
+                <module>notification</module>
+                <module>product</module>
+                <module>order</module>
+                <module>elasticsearch</module>
+        </modules>
+</project>

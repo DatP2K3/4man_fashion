@@ -9,9 +9,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.fourman.common.entity.AuditEntity;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;import lombok.Builder;
+import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
