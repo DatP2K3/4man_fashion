@@ -1,7 +1,7 @@
 name: datp2k3_microservice
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:17
     container_name: my_postgres
     restart: always
     mem_limit: 384m
