@@ -22,7 +22,13 @@ import lombok.extern.slf4j.Slf4j;
 @EnableWebFluxSecurity
 public class HttpSecurityConfiguration {
     private final String[] PUBLIC_ENDPOINTS = {
-        "/elasticsearch/**", "/location/**",
+        "/elasticsearch/**",
+        "/location/**",
+        "/product/api/category/**",
+        "/product/api/product/**",
+        "/banner/**",
+        "/shopinfo/**",
+        "/notification/api/device-registration/**",
     };
 
     @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")

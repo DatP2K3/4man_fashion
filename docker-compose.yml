@@ -82,6 +82,7 @@ services:
       - "8180:8080"
     volumes:
       - keycloak_data:/opt/keycloak/data
+      - ./keycloak/4manfashion:/opt/keycloak/themes/4manfashion
     depends_on:
       - postgres
     networks:
