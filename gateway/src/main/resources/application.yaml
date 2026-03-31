@@ -45,8 +45,8 @@ spring:
           filters:
             - StripPrefix=1
 
-        - id: banner-service
-          uri: lb://banner-service
+        - id: public-info-banner
+          uri: lb://public-info-service
           predicates:
             - Path=/banner/**
           filters:
@@ -59,15 +59,15 @@ spring:
           filters:
             - StripPrefix=1
 
-        - id: location-service
-          uri: lb://location-service
+        - id: public-info-location
+          uri: lb://public-info-service
           predicates:
             - Path=/location/**
           filters:
             - StripPrefix=1
 
-        - id: shopinfo-service
-          uri: lb://shopinfo-service
+        - id: public-info-shopinfo
+          uri: lb://public-info-service
           predicates:
             - Path=/shopinfo/**
           filters:

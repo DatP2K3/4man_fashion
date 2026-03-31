@@ -1,2 +1,2 @@
-com.evo.common.storage.client.StorageClientFallback
-com.evo.common.FeignClientAutoConfiguration
+com.fourman.common.storage.client.StorageClientFallback
+com.fourman.common.FeignClientAutoConfiguration

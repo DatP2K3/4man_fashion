@@ -7,8 +7,8 @@ spring:
 
   datasource:
     url: ${DBMS_CONNECTION:jdbc:postgresql://localhost:5433/product_db}
-    username: ${DBMS_USERNAME:postgres}
-    password: ${DBMS_PASSWORD}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:14062003}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 3
@@ -40,8 +40,8 @@ spring:
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
     port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USERNAME:admin}
-    password: ${RABBITMQ_PASSWORD}
+    username: ${RABBITMQ_USER:admin}
+    password: ${RABBITMQ_PASS:admin}
 
 rabbitmq:
   exchange:

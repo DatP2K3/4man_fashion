@@ -44,9 +44,7 @@
   <component name="ProjectResources">
     <resource url="http://www.liquibase.org/xml/ns/dbchangelog" location="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="21" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/out" />
-  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" project-jdk-name="21" project-jdk-type="JavaSDK" />
   <component name="com.github.lipiridi.spotless.applier.ui.settings.ModuleSettingsState">
     <option name="selectedModules">
       <list>

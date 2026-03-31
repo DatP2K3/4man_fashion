@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: public-info-service
+
+  main:
+    banner-mode: off
+    allow-bean-definition-overriding: true
+
+  datasource:
+    url: ${DBMS_CONNECTION:jdbc:postgresql://localhost:5433/public_info_db}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:14062003}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog-master.xml
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${JWK_URI:http://localhost:8180/realms/IamService}
+
+  doc:
+    swagger-ui:
+      path: /swagger-doc/public-info/swagger-ui.html
+    api-docs:
+      path: /swagger-doc/v3/api-docs/public-info
+
+server:
+  port: ${SERVER_PORT:6565}
+
+storage-service:
+  url: ${STORAGE_SERVICE_URL:http://localhost:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true

@@ -1,7 +1,6 @@
-com.evo.common.webapp.config.HttpSecurityConfiguration
-com.evo.common.webapp.config.jackson.JacksonConfiguration
-com.evo.common.webapp.config.ActionLogFilter
-com.evo.common.webapp.config.KeycloakRoleConverter
-com.evo.common.webapp.config.AuditConfig
-com.evo.common.webapp.config.AuditorAwareImpl
-
+com.fourman.common.webapp.config.HttpSecurityConfiguration
+com.fourman.common.webapp.config.jackson.JacksonConfiguration
+com.fourman.common.webapp.config.ActionLogFilter
+com.fourman.common.webapp.config.KeycloakRoleConverter
+com.fourman.common.webapp.config.AuditConfig
+com.fourman.common.webapp.config.AuditorAwareImpl

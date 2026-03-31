@@ -8,9 +8,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="common-client" />
+        <module name="config" />
         <module name="discovery" />
       </profile>
-      <profile name="Annotation profile for common" enabled="true">
+      <profile name="Annotation profile for common-model" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -18,47 +19,49 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
         </processorPath>
         <module name="common-model" />
+      </profile>
+      <profile name="Annotation profile for common-web" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
+        </processorPath>
         <module name="common-web" />
       </profile>
-      <profile name="Annotation profile for storage" enabled="true">
+      <profile name="Annotation profile for 4Man Fashion" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.6.3/mapstruct-1.6.3.jar" />
         </processorPath>
         <module name="product" />
         <module name="profile" />
-        <module name="banner" />
+        <module name="public-info" />
         <module name="storage" />
         <module name="cart" />
-        <module name="shopinfo" />
         <module name="notification" />
         <module name="elasticsearch" />
         <module name="payment" />
-        <module name="location" />
-        <module name="gateway" />
         <module name="dashboard" />
+        <module name="gateway" />
         <module name="order" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="baseddd" target="21" />
-      <module name="common-persistence" target="21" />
-      <module name="config" target="21" />
-      <module name="spring-boot-starter-parent" target="1.5" />
+      <module name="banner" target="21" />
+      <module name="location" target="21" />
+      <module name="shopinfo" target="21" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="banner" options="-parameters" />
-      <module name="baseddd" options="-parameters" />
       <module name="cart" options="-parameters" />
       <module name="common-client" options="-parameters" />
       <module name="common-model" options="-parameters" />
-      <module name="common-persistence" options="-parameters" />
       <module name="common-web" options="-parameters" />
       <module name="config" options="-parameters" />
       <module name="dashboard" options="-parameters" />
@@ -71,6 +74,7 @@
       <module name="payment" options="-parameters" />
       <module name="product" options="-parameters" />
       <module name="profile" options="-parameters" />
+      <module name="public-info" options="-parameters" />
       <module name="shopinfo" options="-parameters" />
       <module name="storage" options="-parameters" />
     </option>

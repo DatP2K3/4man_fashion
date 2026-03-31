@@ -123,10 +123,14 @@ services:
       - "8080:8080"
     environment:
       - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/storage_db
-      - DBMS_USERNAME=${POSTGRES_USER}
-      - DBMS_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - JWK_URI=http://keycloak:8080/realms/IamService
       - EUREKA_URL=http://discovery-service:8761/eureka
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASS=${RABBITMQ_PASS}
     depends_on:
       postgres:
         condition: service_healthy
@@ -151,13 +155,14 @@ services:
     environment:
       - SERVER_PORT=8008
       - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/payment_db
-      - DBMS_USERNAME=${POSTGRES_USER}
-      - DBMS_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - EUREKA_URL=http://discovery-service:8761/eureka
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USER}
-      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PASS}
+      - JWK_URI=http://keycloak:8080/realms/IamService
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASS=${RABBITMQ_PASS}
       - VNPAY_TMNCODE=${VNPAY_TMNCODE}
       - VNPAY_SECRET_KEY=${VNPAY_SECRET_KEY}
       - VNPAY_RETURN_URL=${VNPAY_RETURN_URL}
@@ -184,13 +189,11 @@ services:
     ports:
       - "2222:2222"
     environment:
-      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/profile_db
-      - DBMS_USERNAME=${POSTGRES_USER}
-      - DBMS_PASSWORD=${POSTGRES_PASSWORD}
       - SERVER_PORT=2222
       - JWK_URI=http://keycloak:8080/realms/IamService
       - EUREKA_URL=http://discovery-service:8761/eureka
-      - STORAGE_SERVICE_URL=http://my_storage_service:8080
+      - ORDER_SERVICE_URL=http://my_order_service:6666
+      - PROFILE_SERVICE_URL=http://my_profile_service:9999
     depends_on:
       postgres:
         condition: service_healthy
@@ -215,13 +218,17 @@ services:
     environment:
       - KEYCLOAK_URL=http://keycloak:8080
       - KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID}
-      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/banner_db
-      - DBMS_USERNAME=${POSTGRES_USER}
-      - DBMS_PASSWORD=${POSTGRES_PASSWORD}
+      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/profile_db
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET}
       - JWK_URI=http://keycloak:8080/realms/IamService
       - EUREKA_URL=http://discovery-service:8761/eureka
-      - ORDER_SERVICE_URL=http://my_order_service:6666
+      - STORAGE_SERVICE_URL=http://my_storage_service:8080
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASS=${RABBITMQ_PASS}
     depends_on:
       postgres:
         condition: service_healthy
@@ -232,12 +239,12 @@ services:
     networks:
       - 4man_network
 
-  banner-service:
+  public-info-service:
     build:
-      context: ./banner
+      context: ./public-info
       dockerfile: Dockerfile
-    container_name: my_banner_service
-    image: datp2k3/banner_service
+    container_name: my_public_info_service
+    image: datp2k3/public_info_service
     restart: always
     mem_limit: 256m
     cpus: 0.25
@@ -246,39 +253,11 @@ services:
     environment:
       - JWK_URI=http://keycloak:8080/realms/IamService
       - EUREKA_URL=http://discovery-service:8761/eureka
-      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/banner_db
-      - DBMS_USERNAME=${POSTGRES_USER}
-      - DBMS_PASSWORD=${POSTGRES_PASSWORD}
+      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/public_info_db
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - SERVER_PORT=6565
       - STORAGE_SERVICE_URL=http://my_storage_service:8080
-    depends_on:
-      postgres:
-        condition: service_healthy
-      keycloak:
-        condition: service_started
-      elasticsearch:
-        condition: service_started
-    networks:
-      - 4man_network
-
-  shopinfo-service:
-    build:
-      context: ./shopinfo
-      dockerfile: Dockerfile
-    container_name: my_shopinfo_service
-    image: datp2k3/shopinfo_service
-    restart: always
-    mem_limit: 256m
-    cpus: 0.25
-    ports:
-      - "8222:8222"
-    environment:
-      - JWK_URI=http://keycloak:8080/realms/IamService
-      - EUREKA_URL=http://discovery-service:8761/eureka
-      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/location_db
-      - DBMS_USERNAME=${POSTGRES_USER}
-      - DBMS_PASSWORD=${POSTGRES_PASSWORD}
-      - SERVER_PORT=8222
     depends_on:
       postgres:
         condition: service_healthy
@@ -302,45 +281,17 @@ services:
       - "3333:3333"
     environment:
       - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/noti
-      - DBMS_USERNAME=${POSTGRES_USER}
-      - DBMS_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_PORT=5672
-      - RABBITMQ_USERNAME=${RABBITMQ_USER}
-      - RABBITMQ_PASSWORD=${RABBITMQ_PASS}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASS=${RABBITMQ_PASS}
       - SERVER_PORT=3333
       - EUREKA_URL=http://discovery-service:8761/eureka
       - PRODUCT_SERVICE_URL=http://my_product_service:8765
       - MAIL_USERNAME=${MAIL_USERNAME}
       - MAIL_PASSWORD=${MAIL_PASSWORD}
-      - JWK_URI=http://keycloak:8080/realms/IamService
-    depends_on:
-      postgres:
-        condition: service_healthy
-      keycloak:
-        condition: service_started
-      elasticsearch:
-        condition: service_started
-    networks:
-      - 4man_network
-
-  location-service:
-    build:
-      context: ./location
-      dockerfile: Dockerfile
-    container_name: my_location_service
-    image: datp2k3/location_service
-    restart: always
-    mem_limit: 256m
-    cpus: 0.25
-    ports:
-      - "8111:8111"
-    environment:
-      - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/location_db
-      - DBMS_USERNAME=${POSTGRES_USER}
-      - DBMS_PASSWORD=${POSTGRES_PASSWORD}
-      - SERVER_PORT=8111
-      - EUREKA_URL=http://discovery-service:8761/eureka
       - JWK_URI=http://keycloak:8080/realms/IamService
     depends_on:
       postgres:
@@ -365,12 +316,12 @@ services:
       - "8765:8765"
     environment:
       - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/product_db
-      - DBMS_USERNAME=${POSTGRES_USER}
-      - DBMS_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_PORT=5672
-      - RABBITMQ_USERNAME=${RABBITMQ_USER}
-      - RABBITMQ_PASSWORD=${RABBITMQ_PASS}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASS=${RABBITMQ_PASS}
       - SERVER_PORT=8765
       - EUREKA_URL=http://discovery-service:8761/eureka
       - JWK_URI=http://keycloak:8080/realms/IamService
@@ -397,16 +348,16 @@ services:
       - "6666:6666"
     environment:
       - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/order_db
-      - DBMS_USERNAME=${POSTGRES_USER}
-      - DBMS_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_PORT=5672
-      - RABBITMQ_USERNAME=${RABBITMQ_USER}
-      - RABBITMQ_PASSWORD=${RABBITMQ_PASS}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASS=${RABBITMQ_PASS}
       - EUREKA_URL=http://discovery-service:8761/eureka
       - CART_SERVICE_URL=http://my_cart_service:8000
       - PROFILE_SERVICE_URL=http://my_profile_service:9999
-      - SHOPINFO_SERVICE_URL=http://my_shopinfo_service:8222
+      - PUBLIC_INFO_SERVICE_URL=http://my_public_info_service:6565
       - PAYMENT_SERVICE_URL=http://my_payment_service:8008
       - GHN_URL=${GHN_URL}
       - GHN_TOKEN=${GHN_TOKEN}
@@ -465,8 +416,8 @@ services:
       - EUREKA_URL=http://discovery-service:8761/eureka
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_PORT=5672
-      - RABBITMQ_USERNAME=${RABBITMQ_USER}
-      - RABBITMQ_PASSWORD=${RABBITMQ_PASS}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASS=${RABBITMQ_PASS}
     depends_on:
       postgres:
         condition: service_healthy
@@ -490,10 +441,11 @@ services:
       - "8000:8000"
     environment:
       - DBMS_CONNECTION=jdbc:postgresql://postgres:5432/cart_db
-      - DBMS_USERNAME=${POSTGRES_USER}
-      - DBMS_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - SERVER_PORT=8000
       - EUREKA_URL=http://discovery-service:8761/eureka
+      - JWK_URI=http://keycloak:8080/realms/IamService
       - PRODUCT_SERVICE_URL=http://my_product_service:8765
     depends_on:
       postgres:

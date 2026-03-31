@@ -10,7 +10,7 @@ export JAVA_HOME=$(/usr/libexec/java_home -v 21 2>/dev/null || echo "$JAVA_HOME"
 
 MODULES=(
   order product notification profile cart payment
-  dashboard banner shopinfo storage location
+  dashboard public-info storage
   gateway discovery config elasticsearch
 )
 
@@ -20,7 +20,7 @@ START=$(date +%s)
 # 1. Maven build all JARs
 echo ""
 echo "📦 Step 1: Maven package (skip tests)..."
-mvn clean package -DskipTests -Dspotless.check.skip=true -Dspotless.apply.skip=true -pl '!elasticsearch' -q
+mvn clean package -DskipTests -Dspotless.check.skip=true -Dspotless.apply.skip=true -q
 echo "✅ Maven build done"
 
 # 2. Docker build all images

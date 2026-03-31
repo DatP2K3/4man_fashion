@@ -8,7 +8,7 @@
 		<version>3.3.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.evotek</groupId>
+	<groupId>com.fourman</groupId>
 	<artifactId>notification</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>notification</name>
@@ -97,6 +97,11 @@
 			<version>${common.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.fourman.common</groupId>
+			<artifactId>common-web</artifactId>
+			<version>${common.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.google.firebase</groupId>
 			<artifactId>firebase-admin</artifactId>
 			<version>9.4.3</version>
@@ -150,7 +155,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>

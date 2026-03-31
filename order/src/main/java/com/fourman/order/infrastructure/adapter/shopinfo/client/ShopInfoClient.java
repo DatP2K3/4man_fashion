@@ -10,8 +10,8 @@ import com.fourman.common.dto.response.ShopAddressDTO;
 import com.fourman.order.infrastructure.adapter.shopinfo.config.ShopInfoClientConfiguration;
 
 @FeignClient(
-        name = "shopInfo-service",
-        url = "${app.shopinfo-service.url:}",
+        name = "public-info-service",
+        url = "${app.public-info-service.url:}",
         contextId = "shopInfo-with-token",
         configuration = ShopInfoClientConfiguration.class,
         fallbackFactory = ShopInfoClientFallback.class)

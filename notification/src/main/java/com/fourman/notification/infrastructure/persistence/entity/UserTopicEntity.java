@@ -5,7 +5,6 @@ import java.util.UUID;
 import jakarta.persistence.*;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import com.fourman.common.entity.AuditEntity;
 
@@ -21,7 +20,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EnableJpaAuditing
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "user_topics")
 public class UserTopicEntity extends AuditEntity {

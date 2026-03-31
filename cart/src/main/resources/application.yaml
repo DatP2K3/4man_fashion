@@ -2,10 +2,13 @@ spring:
   application:
     name: cart-service
 
+  config:
+    import: "optional:configserver:${CONFIG_SERVER_URL:http://localhost:6969}"
+
   datasource:
     url: ${DBMS_CONNECTION:jdbc:postgresql://localhost:5433/cart_db}
-    username: ${DBMS_USERNAME:postgres}
-    password: ${DBMS_PASSWORD}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:14062003}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 2
