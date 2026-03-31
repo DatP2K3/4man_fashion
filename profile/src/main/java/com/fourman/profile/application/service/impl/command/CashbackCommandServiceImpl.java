@@ -1,8 +1,7 @@
 package com.fourman.profile.application.service.impl.command;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fourman.common.enums.CashbackTransactionType;
 import com.fourman.profile.application.dto.mapper.CashbackTransactionDTOMapper;

@@ -5,6 +5,11 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+  data:
+    jpa:
+      repositories:
+        enabled: false
+
   config:
     import: "optional:configserver:http://localhost:6969/"
 

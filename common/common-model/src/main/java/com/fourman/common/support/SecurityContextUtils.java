@@ -28,7 +28,7 @@ public class SecurityContextUtils {
     private static final String LOCALHOST_IPV6 = "0:0:0:0:0:0:0:1";
     private static final String LOCALHOST_IPV4 = "127.0.0.1";
     private static final String SEPARATOR_COMMA = ",";
-    
+
     // Header names for IP extraction
     private static final String[] IP_HEADER_NAMES = {
         "X-Forwarded-For",
@@ -66,7 +66,7 @@ public class SecurityContextUtils {
     // Device Types
     private static final String DEVICE_TABLET = "Tablet";
     private static final String DEVICE_MOBILE = "Mobile";
-    
+
     // Display Formats
     private static final String DISPLAY_IPAD = " (iPad)";
     private static final String DISPLAY_TABLET = " (Tablet)";

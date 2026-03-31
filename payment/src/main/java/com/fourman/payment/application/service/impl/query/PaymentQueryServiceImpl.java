@@ -2,8 +2,6 @@ package com.fourman.payment.application.service.impl.query;
 
 import java.util.Map;
 
-
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

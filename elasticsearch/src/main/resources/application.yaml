@@ -2,6 +2,12 @@ spring:
   application:
     name: elasticsearch-service
 
+  data:
+    jpa:
+      repositories:
+        enabled: false
+
+
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
     port: ${RABBITMQ_PORT:5672}
