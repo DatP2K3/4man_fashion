@@ -1,6 +1,6 @@
 package com.fourman.profile.application.service.impl.command;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.stereotype.Service;
 

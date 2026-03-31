@@ -3,7 +3,7 @@ package com.fourman.common.webapp.config.inbound;
 import java.time.Instant;
 import java.util.UUID;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
