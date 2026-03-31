@@ -1,0 +1,47 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet author="DatDZ2k3" id="2026_03_31_inbound_request_logs">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="request_logs"/>
+            </not>
+        </preConditions>
+        <createTable tableName="request_logs">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="request_logs_pkey"/>
+            </column>
+            <column name="method" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="path" type="VARCHAR(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="query_string" type="VARCHAR(2048)"/>
+            <column name="client_ip" type="VARCHAR(45)"/>
+            <column name="client_os" type="VARCHAR(100)"/>
+            <column name="client_browser" type="VARCHAR(100)"/>
+            <column name="client_device" type="VARCHAR(50)"/>
+            <column name="user_agent" type="TEXT"/>
+            <column name="request_body" type="TEXT"/>
+            <column name="response_body" type="TEXT"/>
+            <column name="request_at" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="response_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="duration_ms" type="BIGINT"/>
+            <column name="status" type="INTEGER"/>
+            <column name="created_by" type="UUID"/>
+        </createTable>
+
+        <createIndex tableName="request_logs" indexName="idx_request_logs_request_at">
+            <column name="request_at"/>
+        </createIndex>
+        <createIndex tableName="request_logs" indexName="idx_request_logs_path">
+            <column name="path"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

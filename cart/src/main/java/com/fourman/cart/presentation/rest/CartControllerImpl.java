@@ -10,9 +10,11 @@ import com.fourman.cart.application.service.CartCommandService;
 import com.fourman.cart.application.service.CartQueryService;
 import com.fourman.common.dto.response.CartDTO;
 import com.fourman.common.dto.response.Response;
+import com.fourman.common.webapp.config.inbound.InboundRequest;
 
 import lombok.RequiredArgsConstructor;
 
+@InboundRequest
 @RestController
 @RequiredArgsConstructor
 public class CartControllerImpl implements CartController {

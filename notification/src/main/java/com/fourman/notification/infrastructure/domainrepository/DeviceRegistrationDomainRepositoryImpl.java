@@ -43,7 +43,7 @@ public class DeviceRegistrationDomainRepositoryImpl
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public DeviceRegistration save(DeviceRegistration deviceRegistration) {
 
         DeviceRegistrationEntity deviceRegistrationEntity = deviceRegistrationEntityMapper.toEntity(deviceRegistration);
@@ -58,7 +58,7 @@ public class DeviceRegistrationDomainRepositoryImpl
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public List<DeviceRegistration> saveAll(List<DeviceRegistration> deviceRegistrations) {
         // 1. Collect all NotificationDeliveries from all devices
         List<NotificationDelivery> allDeliveries = deviceRegistrations.stream()

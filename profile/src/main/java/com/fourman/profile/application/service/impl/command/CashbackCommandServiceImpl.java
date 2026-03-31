@@ -30,7 +30,7 @@ public class CashbackCommandServiceImpl implements CashbackCommandService {
     private final MembershipTierCommandService membershipTierCommandService;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void processCashback(ProcessCashbackCmd processCashbackCmd) {
         Profile profile = profileDomainRepository.getById(processCashbackCmd.getUserId());
 
@@ -57,7 +57,7 @@ public class CashbackCommandServiceImpl implements CashbackCommandService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void useCashback(UseCashbackCmd useCashbackCmd) {
         Profile profile = profileDomainRepository.getById(useCashbackCmd.getUserId());
 

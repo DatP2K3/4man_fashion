@@ -18,7 +18,7 @@ public abstract class AbstractDomainRepository<D, E, ID> implements DomainReposi
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public D save(D domainModel) {
         List<D> domainModels = this.saveAll(List.of(domainModel));
         return domainModels.getFirst();
@@ -32,7 +32,7 @@ public abstract class AbstractDomainRepository<D, E, ID> implements DomainReposi
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public List<D> saveAll(List<D> domains) {
         List<E> entities = this.entityMapper.toEntityList(domains);
         entities = this.repository.saveAll(entities);

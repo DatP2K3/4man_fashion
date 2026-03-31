@@ -1,8 +1,7 @@
 package com.fourman.payment.application.service;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 public interface PaymentCommandService {
-    void handlePaymentCallback(HttpServletRequest request, HttpServletResponse response);
+    String handlePaymentCallback(Map<String, String> params);
 }

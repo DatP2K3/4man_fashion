@@ -19,14 +19,14 @@ public abstract class AbstractDocumentDomainRepository<D, E, ID> implements Docu
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public D save(D domainModel) {
         List<D> domainModels = this.saveAll(List.of(domainModel));
         return domainModels.getFirst();
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public List<D> saveAll(List<D> domains) {
         Iterable<E> documents = this.documentMapper.toDocumentList(domains);
         documents = this.repository.saveAll(documents);

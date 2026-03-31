@@ -31,7 +31,7 @@ import com.fourman.product.infrastructure.adapter.rabbitmq.ProductEventRabbitMQS
 
 import lombok.RequiredArgsConstructor;
 
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 @Service
 @RequiredArgsConstructor
 class ProductCommandServiceImpl implements ProductCommandService {

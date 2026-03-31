@@ -15,6 +15,8 @@ import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import com.fourman.common.support.StrUtils;
+
 /**
  * Reads correlation ID from gateway header and puts it into SLF4J MDC.
  * Every log line in the service will automatically include the correlation ID.
@@ -34,7 +36,7 @@ public class CorrelationIdFilter implements Filter {
 
         // Đọc correlation ID từ header (do Gateway gửi xuống)
         String correlationId = httpRequest.getHeader(CORRELATION_ID_HEADER);
-        if (correlationId == null || correlationId.isBlank()) {
+        if (StrUtils.isNullOrEmpty(correlationId)) {
             // Gọi trực tiếp (không qua Gateway) → tạo mới
             correlationId = UUID.randomUUID().toString();
         }

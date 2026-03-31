@@ -19,7 +19,7 @@ import com.fourman.common.exception.ResponseException;
 
 import lombok.RequiredArgsConstructor;
 
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 @Service
 @RequiredArgsConstructor
 public class CartCommandServiceImpl implements CartCommandService {

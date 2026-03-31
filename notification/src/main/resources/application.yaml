@@ -5,7 +5,7 @@ spring:
   datasource:
     url: ${DBMS_CONNECTION:jdbc:postgresql://localhost:5433/noti}
     username: ${POSTGRES_USER:postgres}
-    password: ${POSTGRES_PASSWORD:14062003}
+    password: ${POSTGRES_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 3
@@ -23,7 +23,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: ${MAIL_USERNAME:testmailsender2k3@gmail.com}
-    password: ${MAIL_PASSWORD:uwifdbtmbhrymcfu}
+    password: ${MAIL_PASSWORD:your_app_password}
     properties:
       mail:
         smtp:

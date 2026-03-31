@@ -23,7 +23,7 @@ import com.fourman.profile.infrastructure.persistence.repository.MembershipTierE
 
 import lombok.RequiredArgsConstructor;
 
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 @Service
 @RequiredArgsConstructor
 public class MembershipTierCommandServiceImpl implements MembershipTierCommandService {

@@ -23,6 +23,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import com.fourman.common.webapp.support.CachedHttpServletRequestWrapper;
 import com.fourman.common.webapp.support.SecurityUtils;
+import com.fourman.common.webapp.support.StringPool;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -107,9 +108,9 @@ public class ActionLogFilter extends OncePerRequestFilter {
     }
 
     private String getRemoteIp(HttpServletRequest request) {
-        String ip = request.getHeader("X-Forwarded-For");
-        if (StringUtils.hasLength(ip) && !"unKnown".equalsIgnoreCase(ip)) {
-            int index = ip.indexOf(",");
+        String ip = request.getHeader(StringPool.X_FORWARDED_FOR);
+        if (StringUtils.hasLength(ip) && !StringPool.UNKNOWN.equalsIgnoreCase(ip)) {
+            int index = ip.indexOf(StringPool.COMMA);
             if (index != -1) {
                 log.info("get remote ip: {}", ip);
                 return ip.substring(0, index);
@@ -117,8 +118,8 @@ public class ActionLogFilter extends OncePerRequestFilter {
                 return ip;
             }
         }
-        ip = request.getHeader("X-Real-IP");
-        if (StringUtils.hasLength(ip) && !"unKnown".equalsIgnoreCase(ip)) {
+        ip = request.getHeader(StringPool.X_REAL_IP);
+        if (StringUtils.hasLength(ip) && !StringPool.UNKNOWN.equalsIgnoreCase(ip)) {
             return ip;
         }
         return request.getRemoteAddr();

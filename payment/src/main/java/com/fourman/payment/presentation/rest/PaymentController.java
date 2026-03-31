@@ -1,14 +1,16 @@
 package com.fourman.payment.presentation.rest;
 
+import java.util.Map;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fourman.common.dto.request.GetPaymentUrlRequest;
@@ -30,5 +32,5 @@ public interface PaymentController {
 
     @Operation(summary = "VN Pay callback handler")
     @GetMapping("/vn-pay-callback")
-    Response<Void> payCallbackHandler(HttpServletRequest request, HttpServletResponse response);
+    ResponseEntity<Void> payCallbackHandler(@RequestParam Map<String, String> params);
 }

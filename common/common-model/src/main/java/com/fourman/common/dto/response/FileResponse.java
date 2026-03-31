@@ -1,6 +1,6 @@
 package com.fourman.common.dto.response;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.UUID;
 
 import com.fourman.common.enums.FileUsageStatus;
@@ -26,8 +26,8 @@ public class FileResponse {
     private String description;
     private Boolean isPublic;
     private FileUsageStatus usageStatus;
-    private Date createdAt;
-    private Date updatedAt;
+    private Instant createdAt;
+    private Instant updatedAt;
     private String createdBy;
     private String lastModifiedBy;
 }

@@ -2,7 +2,7 @@ package com.fourman.payment.application.service.impl.query;
 
 import java.util.Map;
 
-import jakarta.servlet.http.HttpServletRequest;
+
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +22,11 @@ public class PaymentQueryServiceImpl implements PaymentQueryService {
     private final VNPAYConfig vnPayConfig;
 
     @Override
-    public String getPaymentUrl(GetPaymentUrlRequest getPaymentUrlRequest, HttpServletRequest request) {
+    public String getPaymentUrl(GetPaymentUrlRequest getPaymentUrlRequest, String clientIp) {
         long amount = getPaymentUrlRequest.getTotalPrice() * VNPAY_AMOUNT_MULTIPLIER;
         Map<String, String> vnpParamsMap = vnPayConfig.getVNPayConfig();
         vnpParamsMap.put("vnp_Amount", String.valueOf(amount));
-        vnpParamsMap.put("vnp_IpAddr", VNPayUtil.getIpAddress(request));
+        vnpParamsMap.put("vnp_IpAddr", clientIp);
         vnpParamsMap.put("vnp_TxnRef", getPaymentUrlRequest.getOrderCode());
         vnpParamsMap.put("vnp_OrderInfo", "Thanh toan don hang: " + getPaymentUrlRequest.getOrderCode());
         String queryUrl = VNPayUtil.getPaymentURL(vnpParamsMap, true);

@@ -17,7 +17,7 @@ import com.fourman.product.domain.repository.CategoryDomainRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 @Service
 @RequiredArgsConstructor
 public class CategoryCommandServiceImpl implements CategoryCommandService {

@@ -16,7 +16,7 @@ import com.fourman.publicinfo.shopinfo.domain.repository.ShopAddressDomainReposi
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 @Service
 @Slf4j
 @RequiredArgsConstructor

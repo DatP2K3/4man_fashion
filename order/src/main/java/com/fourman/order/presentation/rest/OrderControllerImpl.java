@@ -9,6 +9,7 @@ import com.fourman.common.dto.request.SearchOrderRequest;
 import com.fourman.common.dto.response.OrderDTO;
 import com.fourman.common.dto.response.PagingResponse;
 import com.fourman.common.dto.response.Response;
+import com.fourman.common.webapp.config.inbound.InboundRequest;
 import com.fourman.order.application.dto.request.*;
 import com.fourman.order.application.dto.response.OrderFeeDTO;
 import com.fourman.order.application.service.OrderCommandService;
@@ -16,6 +17,7 @@ import com.fourman.order.application.service.OrderQueryService;
 
 import lombok.RequiredArgsConstructor;
 
+@InboundRequest
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor

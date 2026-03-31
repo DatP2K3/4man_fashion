@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.fourman.common.dto.response.OrderDTO;
 import com.fourman.common.enums.DashboardTime;
+import com.fourman.common.webapp.support.DateUtils;
 import com.fourman.dashboard.adapter.order.client.OrderClient;
 import com.fourman.dashboard.adapter.user.client.ProfileClient;
 import com.fourman.dashboard.dto.response.*;
@@ -23,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class DashboardServiceImpl implements DashboardService {
-    private static final ZoneId VIETNAM_ZONE = ZoneId.of("Asia/Ho_Chi_Minh");
 
     private final OrderClient orderClient;
     private final ProfileClient profileClient;
@@ -40,16 +40,15 @@ public class DashboardServiceImpl implements DashboardService {
     // ===== Time period methods =====
 
     private DashboardDTO getMonthDashboardData() {
-        int currentYear = LocalDate.now(VIETNAM_ZONE).getYear();
+        int currentYear = LocalDate.now(DateUtils.VIETNAM_ZONE).getYear();
 
         List<YearMonth> yearMonths = IntStream.rangeClosed(currentYear - 1, currentYear)
                 .boxed()
                 .flatMap(year -> IntStream.rangeClosed(1, 12).mapToObj(month -> YearMonth.of(year, month)))
                 .collect(Collectors.toList());
 
-        Instant startDate =
-                yearMonths.get(0).atDay(1).atStartOfDay(VIETNAM_ZONE).toInstant();
-        Instant endDate = endOfToday();
+        Instant startDate = DateUtils.getStartOfDayInstant(yearMonths.get(0).atDay(1));
+        Instant endDate = DateUtils.getEndOfTodayInstant();
 
         List<OrderDTO> allOrders = fetchOrders(startDate, endDate);
 
@@ -63,17 +62,11 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     private DashboardDTO getWeekDashboardData() {
-        LocalDate today = LocalDate.now(VIETNAM_ZONE);
+        LocalDate today = LocalDate.now(DateUtils.VIETNAM_ZONE);
 
-        Instant startDate = YearMonth.from(today.minusMonths(2))
-                .atDay(1)
-                .atStartOfDay(VIETNAM_ZONE)
-                .toInstant();
-        Instant endDate = YearMonth.from(today)
-                .atEndOfMonth()
-                .atTime(LocalTime.MAX)
-                .atZone(VIETNAM_ZONE)
-                .toInstant();
+        Instant startDate = DateUtils.getStartOfDayInstant(
+                YearMonth.from(today.minusMonths(2)).atDay(1));
+        Instant endDate = DateUtils.getEndOfMonthInstant(today);
 
         List<OrderDTO> allOrders = fetchOrders(startDate, endDate);
 
@@ -89,11 +82,8 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     private DashboardDTO getTodayDashboardData() {
-        Instant startDate = LocalDate.now(VIETNAM_ZONE)
-                .withDayOfMonth(1)
-                .atStartOfDay(VIETNAM_ZONE)
-                .toInstant();
-        Instant endDate = endOfToday();
+        Instant startDate = DateUtils.getStartOfCurrentMonthInstant();
+        Instant endDate = DateUtils.getEndOfTodayInstant();
 
         List<OrderDTO> allOrders = fetchOrders(startDate, endDate);
 
@@ -155,7 +145,7 @@ public class DashboardServiceImpl implements DashboardService {
      * Build today's summary: revenue, order count, new users.
      */
     private SummaryTodayDTO buildTodaySummary(List<OrderDTO> allOrders, Instant startDate, Instant endDate) {
-        LocalDate today = LocalDate.now(VIETNAM_ZONE);
+        LocalDate today = LocalDate.now(DateUtils.VIETNAM_ZONE);
 
         List<OrderDTO> todayOrders = allOrders.stream()
                 .filter(order -> toLocalDate(order).equals(today))
@@ -179,13 +169,6 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     private LocalDate toLocalDate(OrderDTO order) {
-        return order.getCreatedAt().atZone(VIETNAM_ZONE).toLocalDate();
-    }
-
-    private Instant endOfToday() {
-        return LocalDate.now(VIETNAM_ZONE)
-                .atTime(LocalTime.MAX)
-                .atZone(VIETNAM_ZONE)
-                .toInstant();
+        return DateUtils.toLocalDate(order.getCreatedAt());
     }
 }

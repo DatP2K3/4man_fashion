@@ -27,7 +27,7 @@ public class ProductEventListener {
     private final ProductVariantEntityRepository productVariantEntityRepository;
 
     @RabbitListener(queues = "${rabbitmq.queue.product.update-variant}")
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void handleProductVariantUpdated(ProductVariantEvent event) {
         List<ProductVariantSync> syncs = event.getProductVariantSyncs();
         if (syncs == null || syncs.isEmpty()) {

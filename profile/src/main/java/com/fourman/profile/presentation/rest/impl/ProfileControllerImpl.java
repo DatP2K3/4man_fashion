@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fourman.common.dto.response.PagingResponse;
 import com.fourman.common.dto.response.ProfileDTO;
 import com.fourman.common.dto.response.Response;
+import com.fourman.common.webapp.config.inbound.InboundRequest;
 import com.fourman.profile.application.dto.request.CreateOrUpdateAddressRequest;
 import com.fourman.profile.application.dto.request.SearchProfileRequest;
 import com.fourman.profile.application.dto.request.UpdateProfileInfoRequest;
@@ -15,6 +16,7 @@ import com.fourman.profile.presentation.rest.ProfileController;
 
 import lombok.RequiredArgsConstructor;
 
+@InboundRequest
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor

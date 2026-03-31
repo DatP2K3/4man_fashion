@@ -8,7 +8,7 @@ spring:
   datasource:
     url: ${DBMS_CONNECTION:jdbc:postgresql://localhost:5433/order_db}
     username: ${POSTGRES_USER:postgres}
-    password: ${POSTGRES_PASSWORD:14062003}
+    password: ${POSTGRES_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 3

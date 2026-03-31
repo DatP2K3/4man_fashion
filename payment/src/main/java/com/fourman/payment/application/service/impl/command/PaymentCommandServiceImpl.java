@@ -1,19 +1,17 @@
 package com.fourman.payment.application.service.impl.command;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.util.Map;
+import java.net.URLEncoder;
 
 import org.springframework.beans.factory.annotation.Value;
+
+import com.fourman.common.webapp.support.DateUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 @Service
 @RequiredArgsConstructor
 public class PaymentCommandServiceImpl implements PaymentCommandService {
@@ -40,13 +38,14 @@ public class PaymentCommandServiceImpl implements PaymentCommandService {
     private String redirectUrl;
 
     @Override
-    public void handlePaymentCallback(HttpServletRequest request, HttpServletResponse response) {
-        Long amount = Long.parseLong(request.getParameter("vnp_Amount"));
-        String orderCode = request.getParameter("vnp_TxnRef");
-        String transactionStatus = request.getParameter("vnp_ResponseCode");
-        String transactionCode = request.getParameter("vnp_TransactionNo");
-        String transactionDate = request.getParameter("vnp_PayDate");
-        String transactionInfo = request.getParameter("vnp_OrderInfo");
+    public String handlePaymentCallback(Map<String, String> params) {
+        String amountStr = params.get("vnp_Amount");
+        Long amount = amountStr != null ? Long.parseLong(amountStr) : 0L;
+        String orderCode = params.get("vnp_TxnRef");
+        String transactionStatus = params.get("vnp_ResponseCode");
+        String transactionCode = params.get("vnp_TransactionNo");
+        String transactionDate = params.get("vnp_PayDate");
+        String transactionInfo = params.get("vnp_OrderInfo");
 
         TransactionStatus status = "00".equals(transactionStatus) ? TransactionStatus.SUCCESS : TransactionStatus.FAIL;
 
@@ -71,25 +70,18 @@ public class PaymentCommandServiceImpl implements PaymentCommandService {
         String queryParams = String.format(
                 "?status=%s&orderCode=%s&amount=%d&transactionCode=%s&payDate=%s&transactionInfo=%s",
                 encode(status.name()),
-                encode(orderCode),
+                encode(orderCode != null ? orderCode : ""),
                 amount,
-                encode(transactionCode),
-                encode(transactionDate),
-                encode(transactionInfo));
+                encode(transactionCode != null ? transactionCode : ""),
+                encode(transactionDate != null ? transactionDate : ""),
+                encode(transactionInfo != null ? transactionInfo : ""));
 
-        try {
-            response.sendRedirect(redirectUrl + queryParams);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to redirect to payment result page", e);
-        }
+        return redirectUrl + queryParams;
     }
 
     private String encode(String value) {
-        try {
-            return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
-        } catch (UnsupportedEncodingException e) {
-            return value;
-        }
+        if (value == null) return "";
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 
     private Instant formatPayDate(String vnpayDate) {
@@ -97,8 +89,7 @@ public class PaymentCommandServiceImpl implements PaymentCommandService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
             LocalDateTime localDateTime = LocalDateTime.parse(vnpayDate, formatter);
 
-            ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
-            return localDateTime.atZone(zoneId).toInstant();
+            return DateUtils.toInstant(localDateTime);
         } catch (DateTimeParseException e) {
             log.warn("Failed to parse VNPay date '{}', falling back to current time", vnpayDate, e);
             return Instant.now();

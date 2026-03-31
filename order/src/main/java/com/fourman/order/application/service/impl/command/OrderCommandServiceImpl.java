@@ -62,7 +62,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     private final ProductEventRabbitMQService productEventRabbitMQService;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public OrderDTO create(CreateOrderRequest request) {
         CreateOrderCmd createOrderCmd = commandMapper.from(request);
         ProfileDTO profileDTO = profileClient.getProfile().getData();
@@ -135,7 +135,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void delete(CancelOrderRequest cancelOrderRequest) {
         if (cancelOrderRequest.getOrderIds() == null
                 || cancelOrderRequest.getOrderIds().isEmpty()) {
@@ -182,7 +182,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public List<OrderDTO> createGHNOrder(CreatShippingOrderRequest request) {
         if (request.getOrderIds() == null || request.getOrderIds().isEmpty()) {
             return List.of();
@@ -253,7 +253,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void printGHNOrder(List<String> ghnOrderCodes) {
         List<Order> orders = orderDomainRepository.getByGhnOrderCodeIn(ghnOrderCodes);
         for (Order order : orders) {

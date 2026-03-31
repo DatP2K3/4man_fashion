@@ -17,7 +17,7 @@ import com.fourman.publicinfo.banner.domain.repository.BannerDomainRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 @Service
 @RequiredArgsConstructor
 public class BannerCommandServiceImpl implements BannerCommandService {

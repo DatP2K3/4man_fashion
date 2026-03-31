@@ -28,7 +28,7 @@ import com.fourman.profile.infrastructure.adapter.storage.FileService;
 
 import lombok.RequiredArgsConstructor;
 
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 @Service
 @RequiredArgsConstructor
 public class ProfileCommandServiceImpl implements ProfileCommandService {
